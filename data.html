@@ -35,22 +35,29 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
 </head>
 <body>
 <div id="app">
-  <nav class="sidebar">
+ <nav class="sidebar">
     <div class="brand-logo">Bubbit Hub</div>
     <a href="index.html" class="nav-item">01 통합 대시보드</a>
-    <a href="content.html" class="nav-item">02 제품 및 콘텐츠 허브</a>
+    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
     <a href="campaign.html" class="nav-item">03 일정 및 캠페인</a>
-    <a href="guide.html" class="nav-item">04 브랜드 가이드라인</a>
-    <a href="data.html" class="nav-item active">05 빅데이터 연동</a>
-    <a href="account_issue.html" class="nav-item">06 계정 및 이슈 관리</a>
+    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
+    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
+    <a href="issue.html" class="nav-item">06 이슈 로그</a>
+    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
+    <a href="data.html" class="nav-item">08 빅데이터 연동</a>
+    <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
   <main class="main-content">
-    <header class="topbar">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <a href="index.html" class="btn" style="text-decoration: none; padding: 6px 10px; font-size: 16px;" title="통합 대시보드로 이동">🏠</a>
-        <span>빅데이터 연동 허브</span>
+   <header class="topbar">
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <a href="index.html" class="btn" style="text-decoration: none; padding: 6px 10px; font-size: 16px;" title="홈으로 이동">🏠</a>
+      <span>현재 페이지 이름 쓰기 (예: 일정 및 캠페인)</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <input type="text" id="search-input" class="input-field" style="width: 200px; margin: 0;" placeholder="🔍 내용 검색..." onkeyup="searchTable()">
       </div>
-    </header>
+  </header>
     <div class="view-container">
       <div class="grid-3">
         <div style="border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--bg-surface);">
@@ -112,6 +119,21 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
     const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
   }
+  // 🔹 테이블(표) 내용 실시간 검색 기능
+  window.searchTable = function() {
+    const keyword = document.getElementById('search-input').value.toLowerCase();
+    // 데이터가 들어가는 tbody 안의 모든 tr 태그를 찾습니다.
+    const rows = document.querySelectorAll('tbody tr'); 
+    
+    rows.forEach(row => {
+      // 입력한 키워드가 행(row)의 텍스트에 포함되어 있으면 보여주고, 아니면 숨깁니다.
+      if (row.innerText.toLowerCase().includes(keyword)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  };
 </script>
 </body>
 </html>
