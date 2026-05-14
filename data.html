@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>빅데이터 연동 - 버빗 허브</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+:root { --primary: #111827; --bg-app: #F9FAFB; --bg-surface: #FFFFFF; --text-main: #111827; --text-sub: #4B5563; --border: #E5E7EB; --font: 'Pretendard', sans-serif; --radius: 8px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg-app); color: var(--text-main); display: flex; height: 100vh; font-size: 13px; }
+#app { display: flex; width: 100%; }
+.sidebar { width: 240px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px 0; }
+.nav-item { display: flex; align-items: center; padding: 10px 24px; color: var(--text-sub); text-decoration: none; font-weight: 500; }
+.nav-item.active { background: #F3F4F6; color: var(--text-main); border-left: 2px solid var(--text-main); font-weight: 700; }
+.main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { height: 60px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; font-size: 16px; font-weight: 700; }
+.view-container { flex: 1; overflow-y: auto; padding: 32px; }
+.card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.card-title { font-size: 14px; font-weight: 700; margin-bottom: 20px; display: block; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+.btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; }
+.btn-primary { background: var(--primary); color: #fff; border: none; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #e0f2fe; color: #0284c7; }
+#toast { position: fixed; bottom: 24px; right: 24px; background: var(--text-main); color: #fff; padding: 12px 24px; border-radius: 6px; opacity: 0; transition: 0.3s; }
+#toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="app">
+  <nav class="sidebar">
+    <div style="padding: 0 24px 32px; font-weight: 800; font-size: 18px;">Bubbit Hub</div>
+    <a href="index.html" class="nav-item">01 통합 대시보드</a>
+    <a href="content.html" class="nav-item">02 제품 및 콘텐츠 허브</a>
+    <a href="campaign.html" class="nav-item">03 일정 및 캠페인</a>
+    <a href="guide.html" class="nav-item">04 브랜드 가이드라인</a>
+    <a href="data.html" class="nav-item active">05 빅데이터 연동</a>
+    <a href="account_issue.html" class="nav-item">06 계정 및 이슈 관리</a>
+  </nav>
+  <main class="main-content">
+    <header class="topbar">빅데이터 연동 허브</header>
+    <div class="view-container">
+      
+      <div class="grid-3">
+        <div style="border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--bg-surface);">
+          <div style="font-weight: 700; margin-bottom: 8px;">Instagram (Mock)</div>
+          <div style="font-size: 12px; color: var(--text-sub);">최근 7일 도달: 45,000</div>
+        </div>
+        <div style="border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--bg-surface);">
+          <div style="font-weight: 700; margin-bottom: 8px;">Meta Ads (Mock)</div>
+          <div style="font-size: 12px; color: var(--text-sub);">최근 지출: ₩1,200,000</div>
+        </div>
+        <div style="border: 1px solid var(--border); padding: 16px; border-radius: 8px; background: var(--bg-surface);">
+          <div style="font-weight: 700; margin-bottom: 8px;">Cafe24 (Mock)</div>
+          <div style="font-size: 12px; color: var(--text-sub);">이번 주 전환: 154건</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <span class="card-title" style="margin: 0;">외부 API 연동 상태</span>
+          <button class="btn btn-primary" onclick="addIntegration()">+ 새 연동 설정</button>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>플랫폼명</th><th>상태</th><th>연동 날짜</th><th>관리</th></tr></thead>
+          <tbody id="integration-list"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+<div id="toast">메시지</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com",
+    projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app",
+    messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39"
+  };
+  const db = getFirestore(initializeApp(firebaseConfig));
+
+  // 새 플랫폼 연동 정보 저장
+  window.addIntegration = async () => {
+    const platform = prompt("연동할 외부 플랫폼 이름을 입력하세요 (예: Google Analytics, Slack):");
+    if (!platform) return;
+
+    try {
+      await addDoc(collection(db, "integrations"), {
+        platform: platform, status: "연동 완료", date: new Date().toLocaleDateString()
+      });
+      showToast(platform + " 연동 설정이 저장되었습니다.");
+    } catch (e) {
+      showToast("저장에 실패했습니다.");
+    }
+  };
+
+  // 서버에서 연동 목록 실시간 불러오기
+  onSnapshot(collection(db, "integrations"), (snap) => {
+    const tbody = document.getElementById('integration-list');
+    tbody.innerHTML = '';
+    snap.forEach(doc => {
+      const d = doc.data();
+      tbody.innerHTML += `<tr>
+        <td><strong>${d.platform}</strong></td>
+        <td><span class="badge">${d.status}</span></td>
+        <td>${d.date}</td>
+        <td><button class="btn" style="padding: 4px 8px; font-size: 11px;">수정</button></td>
+      </tr>`;
+    });
+  });
+
+  function showToast(msg) {
+    const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
