@@ -30,31 +30,51 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
   <nav class="sidebar">
     <div class="brand-logo">Bubbit Hub</div>
     <a href="index.html" class="nav-item">01 통합 대시보드</a>
-    <a href="content.html" class="nav-item active">02 제품 및 콘텐츠 허브</a>
+    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
     <a href="campaign.html" class="nav-item">03 일정 및 캠페인</a>
-    <a href="guide.html" class="nav-item">04 브랜드 가이드라인</a>
-    <a href="data.html" class="nav-item">05 빅데이터 연동</a>
-    <a href="account_issue.html" class="nav-item">06 계정 및 이슈 관리</a>
+    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
+    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
+    <a href="issue.html" class="nav-item">06 이슈 로그</a>
+    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
+    <a href="data.html" class="nav-item">08 빅데이터 연동</a>
+    <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
   <main class="main-content">
-    <header class="topbar">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <a href="index.html" class="btn" style="text-decoration: none; padding: 6px 10px; font-size: 16px;" title="통합 대시보드로 이동">🏠</a>
-        <span>제품 및 콘텐츠 허브</span>
-      </div>
-    </header>
+   <header class="topbar">
+  <div style="display: flex; align-items: center; gap: 16px;">
+    <a href="index.html" class="btn" style="text-decoration: none; padding: 6px 10px; font-size: 16px;" title="홈으로 이동">🏠</a>
+    <span>제품 및 콘텐츠 허브</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <input type="text" id="search-input" class="input-field" style="width: 200px; margin: 0;" placeholder="🔍 에셋 검색..." onkeyup="searchContent()">
+  </div>
+</header>
     <div class="view-container">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">에셋 라이브러리 (준비 중)</span>
-          <button class="btn" onclick="alert('스토리지 세팅 후 활성화됩니다.')">+ 에셋 업로드</button>
-        </div>
-        <div style="height:200px; display:flex; align-items:center; justify-content:center; background:#F9FAFB; color:#9CA3AF; border-radius: 8px; border: 1px dashed #E5E7EB;">
-          파일 업로드 기능 연동 예정
-        </div>
-      </div>
+  <div class="card searchable-item"> <div class="card-header">
+      <span class="card-title">에셋 라이브러리 (준비 중)</span>
+      <button class="btn" onclick="alert('스토리지 세팅 후 활성화됩니다.')">+ 에셋 업로드</button>
     </div>
+    <div style="height:200px; display:flex; align-items:center; justify-content:center; background:#F9FAFB; color:#9CA3AF; border-radius: 8px; border: 1px dashed #E5E7EB;">
+      파일 업로드 기능 연동 예정
+    </div>
+  </div>
+</div>
   </main>
 </div>
+  <script>
+  // 🔹 3번: 실시간 콘텐츠 검색 함수
+  window.searchContent = function() {
+    const keyword = document.getElementById('search-input').value.toLowerCase();
+    // 'searchable-item' 클래스를 가진 모든 요소(카드 등)를 찾습니다.
+    const items = document.querySelectorAll('.searchable-item'); 
+    
+    items.forEach(item => {
+      const text = item.innerText.toLowerCase();
+      // 키워드가 포함되어 있으면 보이고, 없으면 숨깁니다.
+      item.style.display = text.includes(keyword) ? '' : 'none';
+    });
+  };
+</script>
 </body>
 </html>
