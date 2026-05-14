@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>브랜드 가이드라인 - 버빗 허브</title>
 <style>
-/* ─── 모든 페이지 공통 UI (이 부분을 다른 html에도 복사하면 UI가 완벽히 통일됩니다) ─── */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 :root { 
   --primary: #111827; --primary-hover: #374151; --bg-app: #F4F5F7; --bg-surface: #FFFFFF; 
@@ -16,39 +15,28 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font); background: var(--bg-app); color: var(--text-main); display: flex; height: 100vh; font-size: 13px; letter-spacing: -0.3px; }
 #app { display: flex; width: 100%; }
-
-/* 사이드바 */
 .sidebar { width: 240px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px 0; z-index: 10; }
 .brand-logo { padding: 0 24px 32px; font-weight: 800; font-size: 18px; color: var(--text-main); }
 .nav-item { display: flex; align-items: center; padding: 12px 24px; color: var(--text-sub); text-decoration: none; font-weight: 500; transition: all 0.2s; border-left: 3px solid transparent; }
 .nav-item:hover { background: var(--bg-app); color: var(--text-main); }
 .nav-item.active { background: #F3F4F6; color: var(--text-main); border-left-color: var(--text-main); font-weight: 700; }
-
-/* 메인 콘텐츠 영역 */
 .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.topbar { height: 64px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; font-size: 18px; font-weight: 700; z-index: 5; }
+.topbar { height: 64px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; font-size: 18px; font-weight: 700; z-index: 5; }
 .view-container { flex: 1; overflow-y: auto; padding: 32px; display: flex; flex-direction: column; gap: 24px; }
-
-/* 컴포넌트 (카드, 버튼, 입력창) */
 .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
-.card-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-
+.card-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin: 0; }
 .btn { padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text-main); font-family: var(--font); transition: all 0.2s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .btn:hover { background: var(--bg-app); border-color: var(--text-sub); }
 .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
 .btn-primary:hover { background: var(--primary-hover); color: #fff; }
 .btn-danger { background: #fee2e2; color: #991b1b; border: none; }
 .btn-danger:hover { background: #fca5a5; }
-
 .input-field { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; outline: none; font-family: var(--font); width: 100%; transition: all 0.2s; }
 .input-field:focus { border-color: var(--text-main); }
-
-/* ─── 가이드라인 전용 UI ─── */
 .upload-area { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px; text-align: center; background: #fafafa; transition: all 0.2s; margin-bottom: 24px; }
 .upload-area:hover { border-color: var(--text-main); background: #f3f4f6; }
 .upload-row { display: flex; gap: 12px; margin-top: 16px; align-items: center; justify-content: center; }
-
 .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
 .asset-card { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; display: flex; flex-direction: column; transition: transform 0.2s; }
 .asset-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
@@ -59,7 +47,6 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
 .asset-name { font-weight: 700; font-size: 14px; color: var(--text-main); }
 .asset-date { font-size: 11px; color: var(--text-light); }
 .asset-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 12px; }
-
 #toast { position: fixed; bottom: 24px; right: 24px; background: var(--text-main); color: #fff; padding: 12px 24px; border-radius: var(--radius-sm); font-weight: 600; opacity: 0; transition: 0.3s; z-index: 1000; box-shadow: var(--shadow); }
 #toast.show { opacity: 1; transform: translateY(-10px); }
 </style>
@@ -77,14 +64,19 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
   </nav>
 
   <main class="main-content">
-    <header class="topbar">브랜드 가이드라인 & 에셋</header>
+    <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="index.html" class="btn" style="text-decoration: none; padding: 6px 10px; font-size: 16px;" title="통합 대시보드로 이동">🏠</a>
+        <span>브랜드 가이드라인 & 에셋</span>
+      </div>
+    </header>
     <div class="view-container">
       
       <div class="card">
         <div class="card-header">
           <span class="card-title">✍️ 브랜드 톤 앤 매너 가이드 (자동 저장)</span>
         </div>
-        <textarea id="guide-input" class="input-field" style="height: 180px; resize: vertical; line-height: 1.6;" onblur="autoSaveGuide()" placeholder="예시)&#10;1. 핵심 키워드: 친근함, 전문성, 신뢰&#10;2. 작성 규칙: 고객을 부를 때는 '~고객님' 대신 '~여러분' 사용&#10;3. 이모지 사용: 과도한 이모지 금지 (게시물 당 최대 3개)&#10;&#10;내용을 작성하고 다른 곳을 클릭하면 즉시 서버에 저장됩니다."></textarea>
+        <textarea id="guide-input" class="input-field" style="height: 180px; resize: vertical; line-height: 1.6;" onblur="autoSaveGuide()" placeholder="예시)&#10;1. 핵심 키워드: 친근함, 전문성, 신뢰&#10;2. 작성 규칙: 고객을 부를 때는 '~고객님' 대신 '~여러분' 사용&#10;&#10;내용을 작성하고 다른 곳을 클릭하면 즉시 서버에 저장됩니다."></textarea>
       </div>
 
       <div class="card">
@@ -110,9 +102,7 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
           <div id="file-name-display" style="margin-top: 12px; font-weight: 600; color: var(--primary);"></div>
         </div>
 
-        <div class="asset-grid" id="asset-list-container">
-          </div>
-
+        <div class="asset-grid" id="asset-list-container"></div>
       </div>
     </div>
   </main>
@@ -124,7 +114,6 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, doc, setDoc, collection, addDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
   
-  // 사용자님의 Firebase 설정값
   const firebaseConfig = {
     apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com",
     projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app",
@@ -133,15 +122,13 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  let selectedFileBase64 = null; // 압축된 이미지 데이터를 담을 변수
+  let selectedFileBase64 = null;
 
-  // 공통 토스트 알림 함수
   window.showToast = function(msg) {
     const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // ─── 1. 톤 앤 매너 자동 저장 기능 ───
   window.autoSaveGuide = async function() {
     const textContent = document.getElementById('guide-input').value;
     try {
@@ -150,85 +137,50 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
     } catch (e) { showToast("저장에 실패했습니다."); }
   };
 
-  // 실시간 텍스트 불러오기
   onSnapshot(doc(db, "settings", "guide"), (docSnap) => {
     if (docSnap.exists() && document.activeElement !== document.getElementById('guide-input')) {
       document.getElementById('guide-input').value = docSnap.data().content;
     }
   });
 
-  // ─── 2. 에셋 파일 선택 및 Base64 압축 (카드 등록 우회 기술) ───
   window.handleFileSelect = function(event) {
     const file = event.target.files[0];
     if (!file) return;
-
-    // 용량 제한 (1.5MB 제한)
-    if (file.size > 1.5 * 1024 * 1024) {
-      alert("무료 서버 데이터베이스의 한계로 파일 용량은 1.5MB 이하만 가능합니다. 이미지를 압축해주세요!");
-      event.target.value = '';
-      return;
-    }
+    if (file.size > 1.5 * 1024 * 1024) { alert("1.5MB 이하만 가능합니다. 이미지를 압축해주세요!"); event.target.value = ''; return; }
 
     document.getElementById('file-name-display').innerText = `선택된 파일: ${file.name}`;
     document.getElementById('upload-btn').disabled = false;
 
-    // 파일을 문자열(Base64)로 변환하여 Firestore에 텍스트처럼 저장 준비
     const reader = new FileReader();
-    reader.onload = function(e) {
-      selectedFileBase64 = e.target.result;
-    };
+    reader.onload = function(e) { selectedFileBase64 = e.target.result; };
     reader.readAsDataURL(file);
   };
 
-  // ─── 3. 에셋 업로드 (Firestore에 저장) ───
   window.uploadAsset = async function() {
     const title = document.getElementById('asset-title').value.trim();
     const category = document.getElementById('asset-category').value;
-
     if (!title) { alert("파일 제목을 입력해주세요!"); return; }
-    if (!selectedFileBase64) { alert("파일이 정상적으로 처리되지 않았습니다."); return; }
+    if (!selectedFileBase64) return;
 
     const uploadBtn = document.getElementById('upload-btn');
-    uploadBtn.innerText = "업로드 중...";
-    uploadBtn.disabled = true;
+    uploadBtn.innerText = "업로드 중..."; uploadBtn.disabled = true;
 
     try {
-      await addDoc(collection(db, "guide_assets"), {
-        title: title,
-        category: category,
-        imageData: selectedFileBase64, // 이미지 텍스트 데이터
-        date: new Date().toLocaleDateString()
-      });
-
+      await addDoc(collection(db, "guide_assets"), { title: title, category: category, imageData: selectedFileBase64, date: new Date().toLocaleDateString() });
       showToast("에셋이 성공적으로 업로드되었습니다!");
-      
-      // 입력창 초기화
-      document.getElementById('asset-title').value = '';
-      document.getElementById('asset-file').value = '';
-      document.getElementById('file-name-display').innerText = '';
-      selectedFileBase64 = null;
-      uploadBtn.innerText = "서버에 업로드";
-      
+      document.getElementById('asset-title').value = ''; document.getElementById('asset-file').value = ''; document.getElementById('file-name-display').innerText = '';
+      selectedFileBase64 = null; uploadBtn.innerText = "서버에 업로드";
     } catch (e) {
-      console.error(e);
-      alert("업로드 실패: 파일 용량이 너무 크거나 인터넷 연결이 불안정합니다.");
-      uploadBtn.innerText = "서버에 업로드";
-      uploadBtn.disabled = false;
+      alert("업로드 실패"); uploadBtn.innerText = "서버에 업로드"; uploadBtn.disabled = false;
     }
   };
 
-  // ─── 4. 에셋 다운로드 기능 ───
   window.downloadAsset = function(dataUrl, fileName) {
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = fileName + ".png"; // 기본 PNG로 다운로드
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const link = document.createElement("a"); link.href = dataUrl; link.download = fileName + ".png";
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
     showToast("다운로드가 시작되었습니다.");
   };
 
-  // ─── 5. 에셋 삭제 기능 ───
   window.deleteAsset = async function(docId) {
     if(confirm("정말로 이 에셋을 삭제하시겠습니까?")) {
       await deleteDoc(doc(db, "guide_assets", docId));
@@ -236,38 +188,22 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
     }
   };
 
-  // ─── 6. 에셋 실시간 불러오기 및 렌더링 ───
   onSnapshot(collection(db, "guide_assets"), (snap) => {
     const container = document.getElementById('asset-list-container');
-    container.innerHTML = ''; // 초기화
-
-    if (snap.empty) {
-      container.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-light);">아직 등록된 에셋이 없습니다. 위에서 첫 번째 파일을 업로드해보세요!</div>`;
-      return;
-    }
-
+    container.innerHTML = '';
+    if (snap.empty) { container.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-light);">아직 등록된 에셋이 없습니다.</div>`; return; }
     snap.forEach(docSnap => {
-      const data = docSnap.data();
-      const docId = docSnap.id;
-      
-      const card = document.createElement('div');
-      card.className = 'asset-card';
-      
-      // 이미지 클릭 시 원본 보기 기능 추가
+      const data = docSnap.data(); const docId = docSnap.id;
+      const card = document.createElement('div'); card.className = 'asset-card';
       card.innerHTML = `
-        <div class="asset-preview">
-          <img src="${data.imageData}" alt="${data.title}">
-        </div>
+        <div class="asset-preview"><img src="${data.imageData}" alt="${data.title}"></div>
         <div class="asset-info">
-          <span class="asset-type">${data.category}</span>
-          <span class="asset-name">${data.title}</span>
-          <span class="asset-date">등록일: ${data.date}</span>
+          <span class="asset-type">${data.category}</span><span class="asset-name">${data.title}</span><span class="asset-date">등록일: ${data.date}</span>
           <div class="asset-actions">
             <button class="btn" style="flex:1" onclick="downloadAsset('${data.imageData}', '${data.title}')">⬇ 다운로드</button>
             <button class="btn btn-danger" onclick="deleteAsset('${docId}')">삭제</button>
           </div>
-        </div>
-      `;
+        </div>`;
       container.appendChild(card);
     });
   });
