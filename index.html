@@ -195,10 +195,147 @@ body { font-family: var(--font); background-color: var(--bg-app); color: var(--t
            </div>
       </div>
 
-      <div id="view-campaign" class="view"><div class="card"><div class="card-header"><span class="card-title">캠페인 캘린더 모듈 로드 중...</span></div></div></div>
-      <div id="view-guide" class="view"><div class="card"><div class="card-header"><span class="card-title">브랜드 가이드라인 데이터 로드 중...</span></div></div></div>
-      <div id="view-data" class="view"><div class="card"><div class="card-header"><span class="card-title">빅데이터 API 호출 중...</span></div></div></div>
-      <div id="view-settings" class="view"><div class="card"><div class="card-header"><span class="card-title">설정 데이터 로드 중...</span></div></div></div>
+      <div id="view-campaign" class="view">
+  <div class="inner-tabs">
+    <div class="inner-tab active">캠페인 목록</div>
+    <div class="inner-tab">캘린더 뷰</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">진행 중인 캠페인</span>
+      <button class="btn btn-primary" onclick="addCampaign()">+ 새 캠페인 추가 (서버에 저장)</button>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>캠페인명</th>
+          <th>채널</th>
+          <th>상태</th>
+          <th>관리</th>
+        </tr>
+      </thead>
+      <tbody id="campaign-list-body">
+        </tbody>
+    </table>
+  </div>
+</div>
+
+    <div id="view-guide" class="view">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">브랜드 에셋 & 템플릿</span>
+            <button class="btn btn-primary" onclick="alert('파일 업로드는 스토리지 세팅 후 열립니다!')">+ 새 에셋 업로드</button>
+          </div>
+          <table class="data-table">
+            <tbody id="guide-asset-list">
+              <tr>
+                <td><strong>버빗 공식 로고팩 (AI, PNG)</strong></td>
+                <td><button class="btn">다운로드</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">톤 앤 매너 가이드 (자동 저장)</span>
+          </div>
+          <textarea id="tone-manner-text" class="input-field" style="width: 100%; height: 180px; resize: vertical; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; line-height: 1.6;" onblur="autoSaveGuide()" placeholder="여기에 브랜드 가이드를 작성하고 마우스를 다른 곳에 클릭하면 서버에 자동 저장됩니다."></textarea>
+          <div style="font-size: 11px; color: var(--text-light); margin-top: 8px;">* 내용을 작성/수정하고 바깥 영역을 클릭하면 즉시 저장됩니다.</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="view-data" class="view">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">채널별 실시간 성과</span>
+          <button class="btn">↻ 새로고침</button>
+        </div>
+        <div class="grid-3" id="data-metrics-board">
+          <div style="border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
+            <div style="font-weight: 700; margin-bottom: 8px;">Instagram (연동됨)</div>
+            <div style="font-size: 12px; color: var(--text-sub);">최근 7일 도달: 45,000</div>
+            <div style="font-size: 12px; color: var(--text-sub);">참여율: 3.2%</div>
+          </div>
+          <div style="border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
+            <div style="font-weight: 700; margin-bottom: 8px;">Meta Ads (연동됨)</div>
+            <div style="font-size: 12px; color: var(--text-sub);">지출 금액: ₩1,200,000</div>
+            <div style="font-size: 12px; color: var(--text-sub);">전환: 154건</div>
+          </div>
+          <div style="border: 1px dashed var(--border); padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--bg-app); cursor: pointer;">
+            <span style="color: var(--text-light); font-weight: 600;">+ 외부 API 연동 추가</span>
+          </div>
+        </div>
+      </div>
+    </div>
+          <div id="view-settings" class="view">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">팀원 계정 및 권한 관리</span>
+                <button class="btn btn-primary">+ 팀원 초대</button>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>이름</th>
+                    <th>역할</th>
+                    <th>상태</th>
+                    <th>관리</th>
+                  </tr>
+                </thead>
+                <tbody id="settings-team-table">
+                  <tr>
+                    <td style="font-weight: 600;">김디자인</td>
+                    <td>디자이너 (콘텐츠 업로드)</td>
+                    <td><span class="badge approved">활성</span></td>
+                    <td><button class="btn" style="padding: 4px 8px; font-size: 11px;">수정</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">이마켓</td>
+                    <td>마케터 (캠페인/게시 권한)</td>
+                    <td><span class="badge approved">활성</span></td>
+                    <td><button class="btn" style="padding: 4px 8px; font-size: 11px;">수정</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">박리더</td>
+                    <td>관리자 (모든 권한)</td>
+                    <td><span class="badge approved">활성</span></td>
+                    <td><button class="btn" style="padding: 4px 8px; font-size: 11px;">수정</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">외부 시스템 플러그인</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border);">
+            <div>
+              <div style="font-weight: 600;">Slack 연동</div>
+              <div style="font-size: 11px; color: var(--text-sub);">승인 요청 및 게시 알림 전송</div>
+            </div>
+            <button class="btn">해제</button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border);">
+            <div>
+              <div style="font-weight: 600;">Cafe24 연동</div>
+              <div style="font-size: 11px; color: var(--text-sub);">재고 및 판매 데이터 동기화</div>
+            </div>
+            <button class="btn">설정</button>
+          </div>
+           <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+            <div>
+              <div style="font-weight: 600;">Jira 연동</div>
+              <div style="font-size: 11px; color: var(--text-sub);">개발/디자인 태스크 동기화</div>
+            </div>
+            <button class="btn btn-primary">연결하기</button>
+          </div>
+        </div>
+    </div>
+
 
     </div>
   </main>
@@ -210,7 +347,7 @@ body { font-family: var(--font); background-color: var(--bg-app); color: var(--t
 <script type="module">
   // 1. 파이어베이스 라이브러리 불러오기 (CDN 방식)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   // 2. 내 파이어베이스 프로젝트의 고유 열쇠 (파이어베이스 콘솔에서 복사한 값을 여기에 덮어쓰세요)
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -264,6 +401,69 @@ const firebaseConfig = {
       window.showToast("저장에 실패했습니다. 콘솔 창을 확인해주세요.");
     }
   };
+// --- 1. [자동 저장] 가이드라인 텍스트 저장하기 ---
+  window.autoSaveGuide = async function() {
+    const textContent = document.getElementById('tone-manner-text').value;
+    try {
+      // 'settings' 폴더 안에 'guide'라는 이름의 문서로 텍스트를 저장/덮어쓰기 합니다.
+      await setDoc(doc(db, "settings", "guide"), { content: textContent });
+      window.showToast("가이드라인이 자동 저장되었습니다!");
+    } catch (e) {
+      console.error(e);
+      window.showToast("저장 중 오류가 발생했습니다.");
+    }
+  };
+
+  // --- 2. [추가] 새 캠페인 DB에 저장하기 ---
+  window.addCampaign = async function() {
+    const campaignName = prompt("새 캠페인 이름을 입력하세요:");
+    if (!campaignName) return; // 취소 누르면 중단
+
+    try {
+      // 'campaigns' 폴더에 새 데이터 추가
+      await addDoc(collection(db, "campaigns"), {
+        title: campaignName,
+        channel: "Instagram",
+        status: "준비중",
+        createdAt: new Date().toISOString()
+      });
+      window.showToast("캠페인이 추가되었습니다.");
+    } catch (e) {
+      window.showToast("캠페인 추가 실패!");
+    }
+  };
+
+  // --- 3. [불러오기] 서버에 저장된 데이터를 화면에 실시간으로 그리기 ---
+  // 이 부분은 페이지가 로드될 때 바로 실행되게 합니다.
+  window.addEventListener('DOMContentLoaded', () => {
+    
+    // (A) 가이드라인 텍스트 실시간 불러오기
+    onSnapshot(doc(db, "settings", "guide"), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById('tone-manner-text').value = data.content;
+      }
+    });
+
+    // (B) 캠페인 목록 실시간 불러오기
+    onSnapshot(collection(db, "campaigns"), (snapshot) => {
+      const tbody = document.getElementById('campaign-list-body');
+      tbody.innerHTML = ''; // 기존 목록 비우기
+      snapshot.forEach((docSnap) => {
+        const item = docSnap.data();
+        tbody.innerHTML += `
+          <tr>
+            <td style="font-weight: 600;">${item.title}</td>
+            <td>${item.channel}</td>
+            <td><span class="badge draft">${item.status}</span></td>
+            <td><button class="btn" style="padding: 4px 8px; font-size: 11px;">수정</button></td>
+          </tr>
+        `;
+      });
+    });
+
+  });
+
 
   // 초기화면 세팅
   window.addEventListener('DOMContentLoaded', () => {
