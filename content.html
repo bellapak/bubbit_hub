@@ -6,39 +6,48 @@
 <title>콘텐츠 허브 - 버빗 허브</title>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-:root { --primary: #111827; --bg-app: #F9FAFB; --bg-surface: #FFFFFF; --text-main: #111827; --text-sub: #4B5563; --border: #E5E7EB; --font: 'Pretendard', sans-serif; --radius: 8px; }
+:root { --primary: #111827; --primary-hover: #374151; --bg-app: #F4F5F7; --bg-surface: #FFFFFF; --text-main: #111827; --text-sub: #4B5563; --text-light: #9CA3AF; --border: #E5E7EB; --font: 'Pretendard', sans-serif; --radius: 12px; --radius-sm: 8px; --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font); background: var(--bg-app); color: var(--text-main); display: flex; height: 100vh; font-size: 13px; }
+body { font-family: var(--font); background: var(--bg-app); color: var(--text-main); display: flex; height: 100vh; font-size: 13px; letter-spacing: -0.3px; }
 #app { display: flex; width: 100%; }
-.sidebar { width: 240px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px 0; }
-.nav-item { display: flex; align-items: center; padding: 10px 24px; color: var(--text-sub); text-decoration: none; font-weight: 500; }
-.nav-item.active { background: #F3F4F6; color: var(--text-main); border-left: 2px solid var(--text-main); font-weight: 700; }
+.sidebar { width: 240px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 24px 0; z-index: 10; }
+.brand-logo { padding: 0 24px 32px; font-weight: 800; font-size: 18px; color: var(--text-main); }
+.nav-item { display: flex; align-items: center; padding: 12px 24px; color: var(--text-sub); text-decoration: none; font-weight: 500; transition: all 0.2s; border-left: 3px solid transparent; }
+.nav-item:hover { background: var(--bg-app); color: var(--text-main); }
+.nav-item.active { background: #F3F4F6; color: var(--text-main); border-left-color: var(--text-main); font-weight: 700; }
 .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.topbar { height: 60px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; font-size: 16px; font-weight: 700; }
-.view-container { flex: 1; overflow-y: auto; padding: 32px; }
-.card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.card-title { font-size: 14px; font-weight: 700; }
-.btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; }
+.topbar { height: 64px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; font-size: 18px; font-weight: 700; z-index: 5; }
+.view-container { flex: 1; overflow-y: auto; padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+.card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+.card-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin: 0; }
+.btn { padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text-main); font-family: var(--font); transition: all 0.2s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn:hover { background: var(--bg-app); border-color: var(--text-sub); }
 </style>
 </head>
 <body>
 <div id="app">
   <nav class="sidebar">
-    <div style="padding: 0 24px 32px; font-weight: 800; font-size: 18px;">Bubbit Hub</div>
+    <div class="brand-logo">Bubbit Hub</div>
     <a href="index.html" class="nav-item">01 통합 대시보드</a>
     <a href="content.html" class="nav-item active">02 제품 및 콘텐츠 허브</a>
     <a href="campaign.html" class="nav-item">03 일정 및 캠페인</a>
     <a href="guide.html" class="nav-item">04 브랜드 가이드라인</a>
-    <a href="account_issue.html" class="nav-item">05 계정 및 이슈 관리</a>
+    <a href="data.html" class="nav-item">05 빅데이터 연동</a>
+    <a href="account_issue.html" class="nav-item">06 계정 및 이슈 관리</a>
   </nav>
   <main class="main-content">
-    <header class="topbar">콘텐츠 허브</header>
+    <header class="topbar">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="index.html" class="btn" style="text-decoration: none; padding: 6px 10px; font-size: 16px;" title="통합 대시보드로 이동">🏠</a>
+        <span>제품 및 콘텐츠 허브</span>
+      </div>
+    </header>
     <div class="view-container">
       <div class="card">
         <div class="card-header">
           <span class="card-title">에셋 라이브러리 (준비 중)</span>
-          <button class="btn" onclick="alert('스토리지(파일 저장소) 세팅 후 활성화됩니다.')">+ 에셋 업로드</button>
+          <button class="btn" onclick="alert('스토리지 세팅 후 활성화됩니다.')">+ 에셋 업로드</button>
         </div>
         <div style="height:200px; display:flex; align-items:center; justify-content:center; background:#F9FAFB; color:#9CA3AF; border-radius: 8px; border: 1px dashed #E5E7EB;">
           파일 업로드 기능 연동 예정
