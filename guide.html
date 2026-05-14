@@ -214,6 +214,21 @@ body { font-family: var(--font); background: var(--bg-app); color: var(--text-ma
       container.appendChild(card);
     });
   });
+  // 🔹 테이블(표) 내용 실시간 검색 기능
+  window.searchTable = function() {
+    const keyword = document.getElementById('search-input').value.toLowerCase();
+    // 데이터가 들어가는 tbody 안의 모든 tr 태그를 찾습니다.
+    const rows = document.querySelectorAll('tbody tr'); 
+    
+    rows.forEach(row => {
+      // 입력한 키워드가 행(row)의 텍스트에 포함되어 있으면 보여주고, 아니면 숨깁니다.
+      if (row.innerText.toLowerCase().includes(keyword)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  };
 </script>
 </body>
 </html>
