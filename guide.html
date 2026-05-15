@@ -4,43 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>브랜드 가이드라인 - 버빗 허브</title>
-<style>
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-:root{--primary:#191F28;--bg-app:#F2F4F6;--bg-surface:#FFFFFF;--text-main:#191F28;--text-sub:#8B95A1;--text-light:#B0B8C1;--border:#E5E8EB;--blue:#3182F6;--font:'Pretendard',sans-serif;--radius:24px;--radius-sm:12px;--shadow:0 8px 24px rgba(0,0,0,0.04);}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font);background:var(--bg-app);color:var(--text-main);display:flex;height:100vh;font-size:15px;letter-spacing:-0.3px;-webkit-font-smoothing:antialiased;}
-a{text-decoration:none;color:inherit;}
-#app{display:flex;width:100%;}
-.sidebar{width:260px;background:var(--bg-surface);display:flex;flex-direction:column;padding:32px 16px;border-right:1px solid var(--border);z-index:10;overflow-y:auto;}
-.brand-logo{padding:0 16px 32px;font-weight:800;font-size:22px;letter-spacing:-1px;}
-.nav-item{display:flex;align-items:center;padding:14px 16px;color:var(--text-sub);font-weight:600;border-radius:12px;transition:0.2s;margin-bottom:4px;}
-.nav-item:hover{background:var(--bg-app);color:var(--text-main);}
-.nav-item.active{background:var(--primary);color:#fff;}
-.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.topbar{height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;flex-shrink:0;}
-.topbar-title{font-size:22px;font-weight:800;display:flex;align-items:center;gap:12px;}
-.view-container{flex:1;overflow-y:auto;padding:0 40px 40px;display:flex;flex-direction:column;gap:24px;}
-.card{background:var(--bg-surface);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
-.card-title{font-size:20px;font-weight:800;margin:0;}
-.btn{padding:12px 20px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;border:none;background:var(--bg-app);color:var(--text-main);transition:0.2s;font-size:14px;font-family:var(--font);display:inline-flex;align-items:center;gap:6px;}
-.btn:hover{background:var(--border);}
-.btn-primary{background:var(--primary);color:#fff;}
-.btn-primary:hover{background:#333D4B;}
-.btn-danger{background:#FEECEF;color:#F04452;}
-.btn-danger:hover{background:#FCDCE0;}
-.input-field{padding:14px 16px;border:none;background:var(--bg-app);border-radius:var(--radius-sm);font-size:14px;outline:none;font-family:var(--font);width:100%;font-weight:500;transition:0.2s;color:var(--text-main);}
-.input-field:focus{box-shadow:0 0 0 2px var(--blue) inset;background:#fff;}
-.upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;background:#F9FAFB;transition:0.2s;margin-bottom:24px;}
-.upload-area:hover{border-color:var(--blue);background:#F0F6FF;}
-.asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;}
-.asset-card{border-radius:var(--radius);overflow:hidden;background:#fff;display:flex;flex-direction:column;box-shadow:0 4px 16px rgba(0,0,0,0.04);border:1px solid var(--border);}
-.asset-preview{height:180px;background:#F9FAFB;display:flex;align-items:center;justify-content:center;padding:16px;}
-.asset-preview img{width:100%;height:100%;object-fit:contain;}
-.asset-info{padding:20px;display:flex;flex-direction:column;gap:8px;}
-#toast{position:fixed;bottom:32px;right:32px;background:var(--text-main);color:#fff;padding:16px 24px;border-radius:16px;font-weight:600;opacity:0;transition:0.3s;z-index:1000;box-shadow:var(--shadow);}
-#toast.show{opacity:1;transform:translateY(-10px);}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
@@ -56,31 +20,28 @@ a{text-decoration:none;color:inherit;}
     <a href="data.html" class="nav-item">08 빅데이터 연동</a>
     <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
-
   <main class="main-content">
     <header class="topbar">
       <div class="topbar-title">
-        <a href="index.html" class="btn" style="padding:10px 14px;font-size:16px;">🏠</a>
-        <span>브랜드 가이드라인 & 에셋</span>
+        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
+        <span>브랜드 가이드라인 및 에셋</span>
       </div>
       <div style="display:flex; gap:12px;">
-        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="🔍 에셋 검색..." onkeyup="searchTable()">
+        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="에셋 검색" onkeyup="searchTable()">
       </div>
     </header>
-
     <div class="view-container">
       <div class="card">
-        <div class="card-header"><span class="card-title">✍️ 브랜드 톤 앤 매너 가이드 (자동 저장)</span></div>
+        <div class="card-header"><span class="card-title">브랜드 톤 앤 매너 가이드 (자동 저장)</span></div>
         <textarea id="guide-input" class="input-field" style="height:180px; resize:vertical; line-height:1.6;" onblur="autoSaveGuide()" placeholder="작성 후 바깥 영역을 클릭하면 즉시 자동 저장됩니다."></textarea>
       </div>
-
       <div class="card">
-        <div class="card-header"><span class="card-title">📁 공식 디자인 에셋 라이브러리</span></div>
+        <div class="card-header"><span class="card-title">공식 디자인 에셋 라이브러리</span></div>
         <div class="upload-area">
-          <h4 style="margin-bottom:8px; font-weight:800;">에셋 업로드 (1.5MB 이하 이미지 권장)</h4>
+          <div style="margin-bottom:8px; font-weight:700; font-size:16px;">에셋 업로드 (1.5MB 이하 이미지 권장)</div>
           <div style="display:flex; gap:12px; margin-top:20px; align-items:center; justify-content:center;">
             <select id="asset-category" class="input-field" style="width:140px;">
-              <option value="로고">로고</option><option value="폰트/컬러">폰트/컬러</option><option value="템플릿">템플릿</option>
+              <option value="로고">로고</option><option value="폰트/컬러">폰트 컬러</option><option value="템플릿">템플릿</option>
             </select>
             <input type="text" id="asset-title" class="input-field" style="width:220px;" placeholder="파일 제목">
             <input type="file" id="asset-file" accept="image/*" style="display:none;" onchange="handleFileSelect(event)">
@@ -89,15 +50,12 @@ a{text-decoration:none;color:inherit;}
           </div>
           <div id="file-name-display" style="margin-top:16px; font-weight:600; color:var(--blue);"></div>
         </div>
-
         <div class="asset-grid" id="asset-list-container"></div>
       </div>
     </div>
   </main>
 </div>
-
 <div id="toast">메시지</div>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, doc, setDoc, collection, addDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -108,7 +66,7 @@ a{text-decoration:none;color:inherit;}
 
   window.autoSaveGuide = async function() {
     const textContent = document.getElementById('guide-input').value;
-    try { await setDoc(doc(db, "settings", "guide"), { content: textContent }); showToast("가이드라인 자동 저장됨!"); } catch (e) {}
+    try { await setDoc(doc(db, "settings", "guide"), { content: textContent }); showToast("자동 저장됨"); } catch (e) {}
   };
 
   onSnapshot(doc(db, "settings", "guide"), (docSnap) => {
@@ -136,7 +94,7 @@ a{text-decoration:none;color:inherit;}
     const uploadBtn = document.getElementById('upload-btn'); uploadBtn.innerText = "업로드 중..."; uploadBtn.disabled = true;
     try {
       await addDoc(collection(db, "guide_assets"), { title: title, category: category, imageData: selectedFileBase64, date: new Date().toLocaleDateString() });
-      showToast("업로드되었습니다!");
+      showToast("업로드되었습니다");
       document.getElementById('asset-title').value = ''; document.getElementById('asset-file').value = ''; document.getElementById('file-name-display').innerText = '';
       selectedFileBase64 = null; uploadBtn.innerText = "서버에 업로드";
     } catch (e) { alert("업로드 실패"); uploadBtn.innerText = "서버에 업로드"; uploadBtn.disabled = false; }
@@ -145,7 +103,7 @@ a{text-decoration:none;color:inherit;}
   window.downloadAsset = function(dataUrl, fileName) {
     const link = document.createElement("a"); link.href = dataUrl; link.download = fileName + ".png";
     document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    showToast("다운로드가 시작되었습니다.");
+    showToast("다운로드가 시작되었습니다");
   };
 
   window.deleteAsset = async function(docId) { if(confirm("삭제하시겠습니까?")) await deleteDoc(doc(db, "guide_assets", docId)); };
