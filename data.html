@@ -4,40 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>빅데이터 연동 - 버빗 허브</title>
-<style>
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-:root{--primary:#191F28;--bg-app:#F2F4F6;--bg-surface:#FFFFFF;--text-main:#191F28;--text-sub:#8B95A1;--text-light:#B0B8C1;--border:#E5E8EB;--blue:#3182F6;--font:'Pretendard',sans-serif;--radius:24px;--radius-sm:12px;--shadow:0 8px 24px rgba(0,0,0,0.04);}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font);background:var(--bg-app);color:var(--text-main);display:flex;height:100vh;font-size:15px;letter-spacing:-0.3px;-webkit-font-smoothing:antialiased;}
-a{text-decoration:none;color:inherit;}
-#app{display:flex;width:100%;}
-.sidebar{width:260px;background:var(--bg-surface);display:flex;flex-direction:column;padding:32px 16px;border-right:1px solid var(--border);z-index:10;overflow-y:auto;}
-.brand-logo{padding:0 16px 32px;font-weight:800;font-size:22px;letter-spacing:-1px;}
-.nav-item{display:flex;align-items:center;padding:14px 16px;color:var(--text-sub);font-weight:600;border-radius:12px;transition:0.2s;margin-bottom:4px;}
-.nav-item:hover{background:var(--bg-app);color:var(--text-main);}
-.nav-item.active{background:var(--primary);color:#fff;}
-.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.topbar{height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;flex-shrink:0;}
-.topbar-title{font-size:22px;font-weight:800;display:flex;align-items:center;gap:12px;}
-.view-container{flex:1;overflow-y:auto;padding:0 40px 40px;display:flex;flex-direction:column;gap:24px;}
-.card{background:var(--bg-surface);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
-.card-title{font-size:20px;font-weight:800;margin:0;}
-.btn{padding:12px 20px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;border:none;background:var(--bg-app);color:var(--text-main);transition:0.2s;font-size:14px;font-family:var(--font);display:inline-flex;align-items:center;gap:6px;}
-.btn:hover{background:var(--border);}
-.btn-primary{background:var(--primary);color:#fff;}
-.btn-primary:hover{background:#333D4B;}
-.input-field{padding:14px 16px;border:none;background:var(--bg-app);border-radius:var(--radius-sm);font-size:14px;outline:none;font-family:var(--font);width:100%;font-weight:500;transition:0.2s;color:var(--text-main);}
-.input-field:focus{box-shadow:0 0 0 2px var(--blue) inset;background:#fff;}
-.data-table{width:100%;border-collapse:collapse;}
-.data-table th, .data-table td{padding:16px 8px;text-align:left;border-bottom:1px solid var(--border);}
-.data-table th{color:var(--text-sub);font-weight:600;font-size:14px;}
-.data-table td{font-weight:500;}
-.badge{padding:6px 10px;border-radius:8px;font-size:12px;font-weight:700;background:var(--bg-app);color:var(--text-sub);}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-#toast{position:fixed;bottom:32px;right:32px;background:var(--text-main);color:#fff;padding:16px 24px;border-radius:16px;font-weight:600;opacity:0;transition:0.3s;z-index:1000;box-shadow:var(--shadow);}
-#toast.show{opacity:1;transform:translateY(-10px);}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
@@ -53,18 +20,16 @@ a{text-decoration:none;color:inherit;}
     <a href="data.html" class="nav-item active">08 빅데이터 연동</a>
     <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
-
   <main class="main-content">
     <header class="topbar">
       <div class="topbar-title">
-        <a href="index.html" class="btn" style="padding:10px 14px;font-size:16px;">🏠</a>
+        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
         <span>빅데이터 연동 허브</span>
       </div>
       <div style="display:flex; gap:12px;">
-        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="🔍 내용 검색..." onkeyup="searchTable()">
+        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="내용 검색" onkeyup="searchTable()">
       </div>
     </header>
-
     <div class="view-container">
       <div class="grid-3">
         <div class="card" style="padding:24px;">
@@ -83,7 +48,7 @@ a{text-decoration:none;color:inherit;}
       <div class="card">
         <div class="card-header">
           <span class="card-title">외부 API 연동 상태</span>
-          <button class="btn btn-primary" onclick="addIntegration()">+ 새 연동 설정</button>
+          <button class="btn btn-primary" onclick="addIntegration()">새 연동 설정</button>
         </div>
         <table class="data-table">
           <thead><tr><th>플랫폼명</th><th>상태</th><th>연동 날짜</th><th>관리</th></tr></thead>
@@ -94,7 +59,6 @@ a{text-decoration:none;color:inherit;}
   </main>
 </div>
 <div id="toast">메시지</div>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
