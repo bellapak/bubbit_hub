@@ -2,37 +2,162 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>로그인 - 버빗 허브</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  .login-container { max-width: 400px; margin: 100px auto; }
+  body { align-items: flex-start; justify-content: center; }
+  .login-container { width: 100%; max-width: 400px; margin: 100px auto; }
+  .login-help { margin-top: 12px; font-size: 13px; line-height: 1.5; color: var(--text-sub); }
+  .login-error { display:none; margin: -8px 0 16px; padding: 12px 14px; border-radius: 12px; background:#FEECEF; color:#F04452; font-size:13px; font-weight:700; line-height:1.45; }
+  .login-success { display:none; margin: -8px 0 16px; padding: 12px 14px; border-radius: 12px; background:#E8F8F0; color:#11894C; font-size:13px; font-weight:700; line-height:1.45; }
+  .login-actions { display:flex; flex-direction:column; gap:10px; }
+  .btn-secondary { width:100%; height:50px; justify-content:center; background:#F2F4F6; color:var(--text-main); }
+  .btn-primary { justify-content:center; }
 </style>
 </head>
 <body>
 <div class="login-container">
   <div class="card">
     <h2 style="font-size:24px; font-weight:800; margin-bottom:32px;">로그인</h2>
-    <input type="email" id="email" class="input-field" placeholder="이메일" style="margin-bottom:12px;">
-    <input type="password" id="password" class="input-field" placeholder="비밀번호" style="margin-bottom:24px;">
-    <button class="btn btn-primary" style="width:100%; height:50px;" onclick="login()">로그인</button>
+
+    <input type="email" id="email" class="input-field" placeholder="이메일" autocomplete="email" style="margin-bottom:12px;">
+    <input type="password" id="password" class="input-field" placeholder="비밀번호" autocomplete="current-password" style="margin-bottom:24px;">
+
+    <div id="login-error" class="login-error"></div>
+    <div id="login-success" class="login-success"></div>
+
+    <div class="login-actions">
+      <button id="login-btn" class="btn btn-primary" style="width:100%; height:50px;" onclick="login()">로그인</button>
+      <button id="signup-btn" class="btn btn-secondary" onclick="setPassword()">처음 접속 / 비밀번호 설정</button>
+    </div>
+
+    <p class="login-help">
+      아직 비밀번호를 설정하지 않았다면 이메일과 사용할 비밀번호를 입력한 뒤<br>
+      <strong>처음 접속 / 비밀번호 설정</strong>을 눌러주세요.
+    </p>
   </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  
-  const firebaseConfig = { /* 동일한 설정값 입력 */ };
-  const auth = getAuth(initializeApp(firebaseConfig));
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs",
+    authDomain: "bubbit-hub.firebaseapp.com",
+    projectId: "bubbit-hub",
+    storageBucket: "bubbit-hub.firebasestorage.app",
+    messagingSenderId: "183100911164",
+    appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const emailEl = document.getElementById('email');
+  const passwordEl = document.getElementById('password');
+  const errorEl = document.getElementById('login-error');
+  const successEl = document.getElementById('login-success');
+  const loginBtn = document.getElementById('login-btn');
+  const signupBtn = document.getElementById('signup-btn');
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) window.location.href = 'index.html';
+  });
+
+  function setLoading(isLoading) {
+    loginBtn.disabled = isLoading;
+    signupBtn.disabled = isLoading;
+    loginBtn.innerText = isLoading ? '확인 중...' : '로그인';
+  }
+
+  function showMessage(type, message) {
+    errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+    const target = type === 'success' ? successEl : errorEl;
+    target.innerText = message;
+    target.style.display = 'block';
+  }
+
+  function validateInput() {
+    const email = emailEl.value.trim();
+    const password = passwordEl.value.trim();
+
+    if (!email) {
+      showMessage('error', '이메일을 입력해주세요.');
+      emailEl.focus();
+      return null;
+    }
+    if (!password) {
+      showMessage('error', '비밀번호를 입력해주세요. 비밀번호를 아직 만들지 않았다면 아래 설정 버튼을 눌러주세요.');
+      passwordEl.focus();
+      return null;
+    }
+    if (password.length < 6) {
+      showMessage('error', '비밀번호는 6자리 이상으로 입력해주세요.');
+      passwordEl.focus();
+      return null;
+    }
+    return { email, password };
+  }
+
+  function authErrorMessage(error) {
+    switch (error.code) {
+      case 'auth/invalid-email':
+        return '이메일 형식이 올바르지 않습니다. 다시 입력해주세요.';
+      case 'auth/user-not-found':
+      case 'auth/invalid-credential':
+      case 'auth/wrong-password':
+        return '이메일 또는 비밀번호가 맞지 않습니다. 다시 입력해주세요.';
+      case 'auth/email-already-in-use':
+        return '이미 등록된 이메일입니다. 설정한 비밀번호로 로그인해주세요.';
+      case 'auth/weak-password':
+        return '비밀번호는 6자리 이상으로 설정해주세요.';
+      case 'auth/network-request-failed':
+        return '네트워크 연결이 불안정합니다. 잠시 후 다시 시도해주세요.';
+      case 'auth/operation-not-allowed':
+        return 'Firebase에서 이메일/비밀번호 로그인이 비활성화되어 있습니다. Authentication > Sign-in method에서 Email/Password를 활성화해주세요.';
+      default:
+        return '로그인 중 문제가 발생했습니다. 입력값을 확인한 뒤 다시 시도해주세요.';
+    }
+  }
 
   window.login = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const values = validateInput();
+    if (!values) return;
+
+    setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      showMessage('success', '로그인되었습니다. 대시보드로 이동합니다.');
       window.location.href = 'index.html';
-    } catch(e) { alert("로그인 실패: 이메일과 비밀번호를 확인하세요."); }
+    } catch (error) {
+      showMessage('error', authErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
   };
+
+  window.setPassword = async () => {
+    const values = validateInput();
+    if (!values) return;
+
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      showMessage('success', '비밀번호가 설정되었습니다. 대시보드로 이동합니다.');
+      window.location.href = 'index.html';
+    } catch (error) {
+      showMessage('error', authErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  passwordEl.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') window.login();
+  });
 </script>
 </body>
 </html>

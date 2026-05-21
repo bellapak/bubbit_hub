@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>브랜드 가이드라인 - 버빗 허브</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+ <nav class="sidebar">
+    <div class="brand-logo">Bubbit Hub</div>
+    
+    <div class="nav-label">WORKSPACE</div>
+    <a href="index.html" class="nav-item">01 통합 대시보드</a>
+    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
+    <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
+    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
+    
+    <div class="nav-label">MANAGEMENT</div>
+    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
+    <a href="issue.html" class="nav-item">06 이슈 로그</a>
+    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
+    <a href="data.html" class="nav-item">08 빅데이터 연동</a>
+    <a href="account_issue.html" class="nav-item">09 계정 관리</a>
+  </nav>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-title">
+        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
+        <span>브랜드 가이드라인 및 에셋</span>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="에셋 검색" onkeyup="searchTable()">
+      </div>
+    </header>
+    <div class="view-container">
+      <div class="card">
+        <div class="card-header"><span class="card-title">브랜드 톤 앤 매너 가이드 (자동 저장)</span></div>
+        <textarea id="guide-input" class="input-field" style="height:180px; resize:vertical; line-height:1.6;" onblur="autoSaveGuide()" placeholder="작성 후 바깥 영역을 클릭하면 즉시 자동 저장됩니다."></textarea>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">공식 디자인 에셋 라이브러리</span></div>
+        <div class="upload-area">
+          <div style="margin-bottom:8px; font-weight:700; font-size:16px;">에셋 업로드 (1.5MB 이하 이미지 권장)</div>
+          <div style="display:flex; gap:12px; margin-top:20px; align-items:center; justify-content:center;">
+            <select id="asset-category" class="input-field" style="width:140px;">
+              <option value="로고">로고</option><option value="폰트/컬러">폰트 컬러</option><option value="템플릿">템플릿</option>
+            </select>
+            <input type="text" id="asset-title" class="input-field" style="width:220px;" placeholder="파일 제목">
+            <input type="file" id="asset-file" accept="image/*" style="display:none;" onchange="handleFileSelect(event)">
+            <button class="btn" onclick="document.getElementById('asset-file').click()">파일 찾기</button>
+            <button class="btn btn-primary" id="upload-btn" onclick="uploadAsset()" disabled>서버에 업로드</button>
+          </div>
+          <div id="file-name-display" style="margin-top:16px; font-weight:600; color:var(--blue);"></div>
+        </div>
+        <div class="asset-grid" id="asset-list-container"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="toast">메시지</div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, collection, addDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
+  const db = getFirestore(initializeApp(firebaseConfig));
+
+  let selectedFileBase64 = null;
+
+  window.autoSaveGuide = async function() {
+    const textContent = document.getElementById('guide-input').value;
+    try { await setDoc(doc(db, "settings", "guide"), { content: textContent }); showToast("자동 저장됨"); } catch (e) {}
+  };
+
+  onSnapshot(doc(db, "settings", "guide"), (docSnap) => {
+    if (docSnap.exists() && document.activeElement !== document.getElementById('guide-input')) {
+      document.getElementById('guide-input').value = docSnap.data().content;
+    }
+  });
+
+  window.handleFileSelect = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 1.5 * 1024 * 1024) { alert("1.5MB 이하만 가능합니다. 이미지를 압축해주세요!"); event.target.value = ''; return; }
+    document.getElementById('file-name-display').innerText = `선택된 파일: ${file.name}`;
+    document.getElementById('upload-btn').disabled = false;
+    const reader = new FileReader();
+    reader.onload = function(e) { selectedFileBase64 = e.target.result; };
+    reader.readAsDataURL(file);
+  };
+
+  window.uploadAsset = async function() {
+    const title = document.getElementById('asset-title').value.trim();
+    const category = document.getElementById('asset-category').value;
+    if (!title) return alert("파일 제목을 입력해주세요!");
+    if (!selectedFileBase64) return;
+    const uploadBtn = document.getElementById('upload-btn'); uploadBtn.innerText = "업로드 중..."; uploadBtn.disabled = true;
+    try {
+      await addDoc(collection(db, "guide_assets"), { title: title, category: category, imageData: selectedFileBase64, date: new Date().toLocaleDateString() });
+      showToast("업로드되었습니다");
+      document.getElementById('asset-title').value = ''; document.getElementById('asset-file').value = ''; document.getElementById('file-name-display').innerText = '';
+      selectedFileBase64 = null; uploadBtn.innerText = "서버에 업로드";
+    } catch (e) { alert("업로드 실패"); uploadBtn.innerText = "서버에 업로드"; uploadBtn.disabled = false; }
+  };
+
+  window.downloadAsset = function(dataUrl, fileName) {
+    const link = document.createElement("a"); link.href = dataUrl; link.download = fileName + ".png";
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    showToast("다운로드가 시작되었습니다");
+  };
+
+  window.deleteAsset = async function(docId) { if(confirm("삭제하시겠습니까?")) await deleteDoc(doc(db, "guide_assets", docId)); };
+
+  onSnapshot(collection(db, "guide_assets"), (snap) => {
+    const container = document.getElementById('asset-list-container'); container.innerHTML = '';
+    snap.forEach(docSnap => {
+      const data = docSnap.data(); const docId = docSnap.id;
+      const card = document.createElement('div'); card.className = 'asset-card searchable-item';
+      card.innerHTML = `
+        <div class="asset-preview"><img src="${data.imageData}"></div>
+        <div class="asset-info">
+          <span style="font-size:12px; font-weight:800; color:var(--blue);">${data.category}</span>
+          <span style="font-weight:800; font-size:16px;">${data.title}</span>
+          <span style="font-size:12px; color:var(--text-sub);">등록일: ${data.date}</span>
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button class="btn" style="flex:1;" onclick="downloadAsset('${data.imageData}', '${data.title}')">다운로드</button>
+            <button class="btn btn-danger" onclick="deleteAsset('${docId}')">삭제</button>
+          </div>
+        </div>`;
+      container.appendChild(card);
+    });
+  });
+
+  window.searchTable = function() {
+    const keyword = document.getElementById('search-input').value.toLowerCase();
+    document.querySelectorAll('.searchable-row, .searchable-item').forEach(el => {
+      el.style.display = el.innerText.toLowerCase().includes(keyword) ? '' : 'none';
+    });
+  };
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500);
+  }
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+const auth = getAuth();
+
+// 페이지 접속 시 로그인 상태 확인
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = 'login.html'; // 로그인 안 되어 있으면 로그인 페이지로 강제 이동
+  } else {
+    // 🔹 지정된 이메일만 허용하는 화이트리스트 로직
+    const allowedEmails = ["admin@bubbit.com", "member@bubbit.com"]; 
+    if (!allowedEmails.includes(user.email)) {
+      alert("접근 권한이 없습니다.");
+      window.location.href = 'login.html';
+    }
+  }
+});
+</script>
+</body>
+</html>
