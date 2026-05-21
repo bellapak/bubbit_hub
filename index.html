@@ -8,13 +8,13 @@
 </head>
 <body>
 <div id="app">
-<nav class="sidebar">
+  <nav class="sidebar">
     <div class="brand-logo">Bubbit Hub</div>
     
     <div class="nav-label">WORKSPACE</div>
-    <a href="index.html" class="nav-item">01 통합 대시보드</a>
+    <a href="index.html" class="nav-item active">01 통합 대시보드</a>
     <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
-    <a href="campaign.html" class="nav-item">03 일정 및 캘린더</a>
+    <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
     <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
     
     <div class="nav-label">MANAGEMENT</div>
@@ -32,32 +32,42 @@
       </div>
       <div style="display:flex; gap:12px;">
         <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="내용 검색" onkeyup="searchTable()">
-        <button class="btn btn-primary" onclick="openTaskModal()">캠페인·일정 등록</button>
+        <button class="btn btn-primary" onclick="openTaskModal()">새 일정 등록</button>
       </div>
     </header>
     <div class="view-container">
+      
       <div class="grid-3">
         <div class="card">
-          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">진행 중 캠페인</div>
-          <div id="dash-camp-cnt" style="font-size:32px; font-weight:700;">0건</div>
+          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">진행 중 일정</div>
+          <div id="dash-active-cnt" style="font-size:32px; font-weight:700; color:var(--blue);">0건</div>
         </div>
         <div class="card">
-          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">등록된 타임라인</div>
-          <div id="dash-task-cnt" style="font-size:32px; font-weight:700;">0건</div>
+          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">높은 우선순위 리스크</div>
+          <div id="dash-high-cnt" style="font-size:32px; font-weight:700; color:#F04452;">0건</div>
         </div>
         <div class="card">
-          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">브랜드 계정 수</div>
+          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">연동된 브랜드 계정</div>
           <div id="dash-acc-cnt" style="font-size:32px; font-weight:700;">0개</div>
         </div>
       </div>
+      
       <div class="grid-2">
         <div class="card">
-          <div class="card-header"><span class="card-title">최근 등록된 캠페인·일정</span></div>
+          <div class="card-header"><span class="card-title">전체 일정 및 중요도 요약</span></div>
           <table class="data-table">
-            <thead><tr><th>캠페인명 및 기한</th><th>채널</th><th>상태</th></tr></thead>
+            <thead>
+              <tr>
+                <th>일정 정보 및 기한</th>
+                <th>채널</th>
+                <th>우선순위</th>
+                <th>상태</th>
+              </tr>
+            </thead>
             <tbody id="dash-recent-list"></tbody>
           </table>
         </div>
+        
         <div class="card">
           <div class="card-header">
             <span class="card-title">브랜드 계정 요약</span>
@@ -74,20 +84,38 @@
 </div>
 
 <div id="task-modal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">캠페인 및 일정 등록</h3>
-    <input id="task-title" class="input-field" placeholder="캠페인 / 일정 제목" style="margin-bottom: 12px;">
+  <div class="modal-box" style="width: 440px;">
+    <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 등록</h3>
+    
+    <input id="task-title" class="input-field" placeholder="일정 제목" style="margin-bottom: 12px;">
     <input type="date" id="task-date" class="input-field" style="margin-bottom: 12px;" title="목표 기한">
+    <input id="task-owner" class="input-field" placeholder="담당자 이름" style="margin-bottom: 12px;">
+    
+    <select id="task-status" class="input-field" style="margin-bottom: 12px;">
+      <option value="예정">예정</option>
+      <option value="진행중">진행중</option>
+      <option value="완료">완료</option>
+      <option value="보류">보류</option>
+    </select>
+    
+    <select id="task-priority" class="input-field" style="margin-bottom: 12px;">
+      <option value="보통">보통</option>
+      <option value="높음">높음</option>
+      <option value="낮음">낮음</option>
+    </select>
+    
     <select id="task-channel" class="input-field" style="margin-bottom: 12px;">
       <option value="Instagram">Instagram</option>
-      <option value="Meta Ads">Meta</option>
+      <option value="Meta Ads">Meta Ads</option>
       <option value="자사몰">자사몰</option>
-      <option value="기타(내부일정)">기타(내부일정)</option>
+      <option value="내부행사">내부행사</option>
     </select>
+    
     <textarea id="task-desc" class="input-field" rows="4" placeholder="상세 내용 요약" style="margin-bottom: 24px; resize:vertical;"></textarea>
+    
     <div style="display: flex; gap: 10px; justify-content: flex-end;">
       <button class="btn" onclick="closeTaskModal()">취소</button>
-      <button class="btn btn-primary" onclick="saveNewTask()">저장하기</button>
+      <button class="btn btn-primary" onclick="saveNewSchedule()">저장하기</button>
     </div>
   </div>
 </div>
@@ -103,60 +131,79 @@
   window.openTaskModal = () => document.getElementById('task-modal').style.display = 'flex';
   window.closeTaskModal = () => document.getElementById('task-modal').style.display = 'none';
 
-  window.saveNewTask = async () => {
-    const title = document.getElementById('task-title').value;
-    const targetDate = document.getElementById('task-date').value;
+  // 캘린더와 공동으로 사용하는 새 데이터 모델 저장 로직
+  window.saveNewSchedule = async () => {
+    const title = document.getElementById('task-title').value.trim();
+    const date = document.getElementById('task-date').value;
+    const owner = document.getElementById('task-owner').value.trim();
+    const status = document.getElementById('task-status').value;
+    const priority = document.getElementById('task-priority').value;
     const channel = document.getElementById('task-channel').value;
-    const desc = document.getElementById('task-desc').value;
-    if(!title) return;
+    const desc = document.getElementById('task-desc').value.trim();
+
+    if(!title || !date) { alert("제목과 날짜를 입력해주세요."); return; }
+    
     try {
-      await addDoc(collection(db, "tasks"), { 
-        title: title, 
-        targetDate: targetDate || "-", // 날짜 데이터 추가
-        channel: channel, 
-        description: desc, 
-        status: "대기중", 
-        createdAt: new Date().toISOString() 
+      await addDoc(collection(db, "brand_schedules"), { 
+        title, date, owner, status, priority, channel, desc, createdAt: new Date().toISOString() 
       });
-      closeTaskModal(); showToast("저장되었습니다");
-      
-      // 입력창 초기화
-      document.getElementById('task-title').value = '';
-      document.getElementById('task-date').value = '';
-      document.getElementById('task-desc').value = '';
+      closeTaskModal(); 
+      showToast("저장되었습니다.");
+      clearForm();
     } catch (e) { showToast("실패했습니다"); }
   };
 
-  onSnapshot(collection(db, "tasks"), (snap) => {
-    document.getElementById('dash-task-cnt').innerText = snap.docs.length + "건";
-    const tbody = document.getElementById('dash-recent-list'); tbody.innerHTML = '';
+  function clearForm() {
+    document.getElementById('task-title').value = '';
+    document.getElementById('task-date').value = '';
+    document.getElementById('task-owner').value = '';
+    document.getElementById('task-desc').value = '';
+  }
+
+  // 통합 노션형 데이터 모델(brand_schedules) 리스너 세팅
+  onSnapshot(collection(db, "brand_schedules"), (snap) => {
+    const docs = snap.docs.map(doc => doc.data());
     
-    // 최신순 정렬
-    const docs = snap.docs.map(doc => doc.data()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // 실시간 중요도 및 진행 상태 수집 분석
+    const activeCount = docs.filter(d => d.status === '진행중').length;
+    const highPriorityCount = docs.filter(d => d.priority === '높음').length;
+    
+    document.getElementById('dash-active-cnt').innerText = activeCount + "건";
+    document.getElementById('dash-high-cnt').innerText = highPriorityCount + "건";
+
+    const tbody = document.getElementById('dash-recent-list'); 
+    tbody.innerHTML = '';
+    
+    // 생성일 기준 최신순 정렬
+    docs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     docs.slice(0, 5).forEach(d => {
-      // 제목 아래에 날짜를 토스 스타일로 작게 표시
+      // 정보 중요도(우선순위) 시인성 극대화 컬러링 가이드
+      let priorityStyle = 'background:#F2F4F6;color:#8B95A1;';
+      if(d.priority === '높음') priorityStyle = 'background:#FEECEF;color:#F04452;';
+      if(d.priority === '낮음') priorityStyle = 'background:#F2F4F6;color:#B0B8C1;';
+
       tbody.innerHTML += `<tr class="searchable-row">
         <td>
-          <strong>${d.title}</strong>
-          <div style="font-size:12px; color:var(--text-sub); margin-top:4px; font-weight:500;">기한: ${d.targetDate}</div>
+          <strong style="font-size:15px;">${d.title}</strong>
+          <div style="font-size:12px; color:var(--text-sub); margin-top:4px; font-weight:500;">기한: ${d.date} | 담당: ${d.owner || '-'}</div>
         </td>
-        <td>${d.channel}</td>
-        <td><span class="badge" style="background:#F2F4F6;color:#8B95A1">${d.status}</span></td>
+        <td><span style="font-weight:600; color:var(--text-main);">${d.channel}</span></td>
+        <td><span class="badge" style="${priorityStyle}">${d.priority}</span></td>
+        <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${d.status}</span></td>
       </tr>`;
     });
   });
 
+  // 브랜드 계정 정보 동기화 리스너
   onSnapshot(collection(db, "accounts"), (snap) => {
     document.getElementById('dash-acc-cnt').innerText = snap.docs.length + "개";
     const tbody = document.getElementById('dash-acc-list'); tbody.innerHTML = '';
     snap.docs.slice(0, 5).forEach(doc => {
       const d = doc.data();
-      tbody.innerHTML += `<tr class="searchable-row"><td>${d.service}</td><td style="color:var(--text-sub)">${d.id}</td></tr>`;
+      tbody.innerHTML += `<tr class="searchable-row"><td><strong>${d.service}</strong></td><td style="color:var(--text-sub)">${d.id}</td></tr>`;
     });
   });
-
-  onSnapshot(collection(db, "campaigns"), (snap) => document.getElementById('dash-camp-cnt').innerText = snap.docs.length + "건");
 
   window.searchTable = function() {
     const keyword = document.getElementById('search-input').value.toLowerCase();
@@ -164,6 +211,7 @@
       el.style.display = el.innerText.toLowerCase().includes(keyword) ? '' : 'none';
     });
   };
+  
   window.showToast = function(msg) {
     const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
