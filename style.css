@@ -82,3 +82,86 @@ a { text-decoration: none; color: inherit; }
 .cal-event.meta { background: #FEECEF; color: #F04452; }
 .cal-event.mall { background: #E8F8F0; color: #11894C; }
 .cal-event.etc { background: var(--bg-app); color: var(--text-sub); }
+
+/* ─── 달력(Calendar) 전용 스타일 ─── */
+.calendar { 
+  border: 1px solid var(--border); 
+  border-radius: var(--radius-sm); 
+  overflow: hidden; 
+  background: var(--border); /* 1px 틈새를 선(border)처럼 보이게 만듭니다 */
+}
+
+.calendar-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 20px 24px; 
+  background: #fff; 
+  border-bottom: 1px solid var(--border); 
+}
+
+.calendar-title { 
+  font-size: 20px; 
+  font-weight: 800; 
+  margin: 0; 
+  color: var(--text-main); 
+}
+
+.calendar-grid { 
+  display: grid; 
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 1px; /* 달력 칸 사이의 간격 (테두리 역할) */
+}
+
+.calendar-dow { 
+  background: #fff; 
+  text-align: center; 
+  padding: 12px 0; 
+  font-size: 14px; 
+  font-weight: 700; 
+  color: var(--text-sub); 
+  border-bottom: 1px solid var(--border); 
+}
+
+.calendar-day { 
+  background: #fff; 
+  min-height: 140px; 
+  padding: 12px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+}
+
+.calendar-day.empty { 
+  background: #F9FAFB; 
+}
+
+.day-num { 
+  font-size: 14px; 
+  font-weight: 700; 
+  color: var(--text-main); 
+  margin-bottom: 4px; 
+  text-align: left; 
+}
+
+.cal-event { 
+  font-size: 12px; 
+  padding: 6px 8px; 
+  border-radius: 6px; 
+  font-weight: 700; 
+  cursor: pointer; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  transition: 0.2s; 
+}
+
+.cal-event:hover { 
+  filter: brightness(0.95); 
+}
+
+/* 🔹 채널별 달력 라벨 색상 (토스 스타일 파스텔톤) */
+.cal-event.insta { background: #E8F3FF; color: #3182F6; } /* 인스타: 파랑 */
+.cal-event.meta { background: #FEECEF; color: #F04452; }  /* 메타: 빨강 */
+.cal-event.mall { background: #E8F8F0; color: #11894C; }  /* 자사몰: 초록 */
+.cal-event.etc { background: var(--bg-app); color: var(--text-sub); } /* 기타: 회색 */
