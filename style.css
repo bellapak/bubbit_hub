@@ -1,17 +1,11 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 :root {
-  --primary: #191F28;
-  --bg-app: #F2F4F6;
-  --bg-surface: #FFFFFF;
-  --text-main: #191F28;
-  --text-sub: #8B95A1;
-  --text-light: #B0B8C1;
-  --border: #E5E8EB;
-  --blue: #3182F6;
+  --primary: #191F28; --bg-app: #F2F4F6; --bg-surface: #FFFFFF;
+  --text-main: #191F28; --text-sub: #8B95A1; --text-light: #B0B8C1;
+  --border: #E5E8EB; --blue: #3182F6;
   --font: 'Pretendard', sans-serif;
-  --radius: 24px;
-  --radius-sm: 12px;
+  --radius: 24px; --radius-sm: 12px;
   --shadow: 0 8px 24px rgba(0,0,0,0.04);
 }
 
@@ -23,6 +17,9 @@ a { text-decoration: none; color: inherit; }
 
 .sidebar { width: 260px; background: var(--bg-surface); display: flex; flex-direction: column; padding: 32px 16px; border-right: 1px solid var(--border); z-index: 10; overflow-y: auto; }
 .brand-logo { padding: 0 16px 32px; font-weight: 700; font-size: 18px; letter-spacing: -0.5px; }
+/* 🔹 사이드바 메뉴 구분 라벨 추가 */
+.nav-label { font-size: 12px; font-weight: 800; color: var(--text-light); padding: 0 16px; margin-bottom: 8px; margin-top: 24px; letter-spacing: 0.5px; }
+.nav-label:first-of-type { margin-top: 0; }
 .nav-item { display: flex; align-items: center; padding: 14px 16px; color: var(--text-sub); font-weight: 600; border-radius: 12px; transition: 0.2s; margin-bottom: 4px; }
 .nav-item:hover { background: var(--bg-app); color: var(--text-main); }
 .nav-item.active { background: var(--primary); color: #fff; }
@@ -51,8 +48,8 @@ a { text-decoration: none; color: inherit; }
 .data-table th, .data-table td { padding: 16px 8px; text-align: left; border-bottom: 1px solid var(--border); }
 .data-table th { color: var(--text-sub); font-weight: 600; font-size: 14px; }
 .data-table td { font-weight: 500; }
-
 .badge { padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; background: var(--bg-app); color: var(--text-sub); }
+
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
@@ -61,7 +58,6 @@ a { text-decoration: none; color: inherit; }
 
 .upload-area { border: 2px dashed var(--border); border-radius: var(--radius); padding: 40px 20px; text-align: center; background: #F9FAFB; transition: 0.2s; margin-bottom: 24px; }
 .upload-area:hover { border-color: var(--blue); background: #F0F6FF; }
-
 .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
 .asset-card { border-radius: var(--radius); overflow: hidden; background: #fff; display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid var(--border); }
 .asset-preview { height: 180px; background: #F9FAFB; display: flex; align-items: center; justify-content: center; padding: 16px; }
@@ -69,4 +65,20 @@ a { text-decoration: none; color: inherit; }
 .asset-info { padding: 20px; display: flex; flex-direction: column; gap: 8px; }
 
 #toast { position: fixed; bottom: 32px; right: 32px; background: var(--text-main); color: #fff; padding: 16px 24px; border-radius: 16px; font-weight: 600; opacity: 0; transition: 0.3s; z-index: 1000; box-shadow: var(--shadow); }
-#toast.show { opacity: 1; transform: translateY(-10px); }   
+#toast.show { opacity: 1; transform: translateY(-10px); }
+
+/* 🔹 달력(Calendar) 스타일 추가 */
+.calendar { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--border); }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #fff; border-bottom: 1px solid var(--border); }
+.calendar-title { font-size: 20px; font-weight: 800; margin: 0; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
+.calendar-dow { background: var(--bg-app); text-align: center; padding: 12px 0; font-size: 13px; font-weight: 700; color: var(--text-sub); }
+.calendar-day { background: #fff; min-height: 120px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.calendar-day.empty { background: #FAFAFA; }
+.day-num { font-size: 14px; font-weight: 700; color: var(--text-sub); margin-bottom: 4px; }
+.cal-event { font-size: 11px; padding: 6px 8px; border-radius: 6px; font-weight: 700; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 채널별 색상 라벨링 */
+.cal-event.insta { background: #E8F3FF; color: #3182F6; }
+.cal-event.meta { background: #FEECEF; color: #F04452; }
+.cal-event.mall { background: #E8F8F0; color: #11894C; }
+.cal-event.etc { background: var(--bg-app); color: var(--text-sub); }
