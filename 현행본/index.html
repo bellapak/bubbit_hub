@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>통합 대시보드 - 버빗 허브</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <nav class="sidebar">
+    <div class="brand-logo">Bubbit Hub</div>
+    
+    <div class="nav-label">WORKSPACE</div>
+    <a href="index.html" class="nav-item active">01 통합 대시보드</a>
+    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
+    <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
+    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
+    
+    <div class="nav-label">MANAGEMENT</div>
+    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
+    <a href="issue.html" class="nav-item">06 이슈 로그</a>
+    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
+    <a href="data.html" class="nav-item">08 빅데이터 연동</a>
+    <a href="account_issue.html" class="nav-item">09 계정 관리</a>
+  </nav>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-title">
+        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
+        <span>통합 대시보드</span>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="내용 검색" onkeyup="searchTable()">
+        <button class="btn btn-primary" onclick="openTaskModal()">새 일정 등록</button>
+      </div>
+    </header>
+    <div class="view-container">
+      
+      <div class="grid-3">
+        <div class="card">
+          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">진행 중 일정</div>
+          <div id="dash-active-cnt" style="font-size:32px; font-weight:700; color:var(--blue);">0건</div>
+        </div>
+        <div class="card">
+          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">높은 우선순위 리스크</div>
+          <div id="dash-high-cnt" style="font-size:32px; font-weight:700; color:#F04452;">0건</div>
+        </div>
+        <div class="card">
+          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">연동된 브랜드 계정</div>
+          <div id="dash-acc-cnt" style="font-size:32px; font-weight:700;">0개</div>
+        </div>
+      </div>
+      
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">전체 일정 및 중요도 요약</span></div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>일정 정보 및 기한</th>
+                <th>채널</th>
+                <th>우선순위</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody id="dash-recent-list"></tbody>
+          </table>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">브랜드 계정 요약</span>
+            <a href="account_issue.html" style="font-size:14px; color:var(--text-sub); font-weight:600;">전체보기</a>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>서비스</th><th>아이디</th></tr></thead>
+            <tbody id="dash-acc-list"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="task-modal" class="modal-overlay">
+  <div class="modal-box" style="width: 440px;">
+    <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 등록</h3>
+    
+    <input id="task-title" class="input-field" placeholder="일정 제목" style="margin-bottom: 12px;">
+    <input type="date" id="task-date" class="input-field" style="margin-bottom: 12px;" title="목표 기한">
+    <input id="task-owner" class="input-field" placeholder="담당자 이름" style="margin-bottom: 12px;">
+    
+    <select id="task-status" class="input-field" style="margin-bottom: 12px;">
+      <option value="예정">예정</option>
+      <option value="진행중">진행중</option>
+      <option value="완료">완료</option>
+      <option value="보류">보류</option>
+    </select>
+    
+    <select id="task-priority" class="input-field" style="margin-bottom: 12px;">
+      <option value="보통">보통</option>
+      <option value="높음">높음</option>
+      <option value="낮음">낮음</option>
+    </select>
+    
+    <select id="task-channel" class="input-field" style="margin-bottom: 12px;">
+      <option value="Instagram">Instagram</option>
+      <option value="Meta Ads">Meta Ads</option>
+      <option value="자사몰">자사몰</option>
+      <option value="내부행사">내부행사</option>
+    </select>
+    
+    <textarea id="task-desc" class="input-field" rows="4" placeholder="상세 내용 요약" style="margin-bottom: 24px; resize:vertical;"></textarea>
+    
+    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+      <button class="btn" onclick="closeTaskModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveNewSchedule()">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">메시지</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
+  const db = getFirestore(initializeApp(firebaseConfig));
+
+  window.openTaskModal = () => document.getElementById('task-modal').style.display = 'flex';
+  window.closeTaskModal = () => document.getElementById('task-modal').style.display = 'none';
+
+  // 캘린더와 공동으로 사용하는 새 데이터 모델 저장 로직
+  window.saveNewSchedule = async () => {
+    const title = document.getElementById('task-title').value.trim();
+    const date = document.getElementById('task-date').value;
+    const owner = document.getElementById('task-owner').value.trim();
+    const status = document.getElementById('task-status').value;
+    const priority = document.getElementById('task-priority').value;
+    const channel = document.getElementById('task-channel').value;
+    const desc = document.getElementById('task-desc').value.trim();
+
+    if(!title || !date) { alert("제목과 날짜를 입력해주세요."); return; }
+    
+    try {
+      await addDoc(collection(db, "brand_schedules"), { 
+        title, date, owner, status, priority, channel, desc, createdAt: new Date().toISOString() 
+      });
+      closeTaskModal(); 
+      showToast("저장되었습니다.");
+      clearForm();
+    } catch (e) { showToast("실패했습니다"); }
+  };
+
+  function clearForm() {
+    document.getElementById('task-title').value = '';
+    document.getElementById('task-date').value = '';
+    document.getElementById('task-owner').value = '';
+    document.getElementById('task-desc').value = '';
+  }
+
+  // 통합 노션형 데이터 모델(brand_schedules) 리스너 세팅
+  onSnapshot(collection(db, "brand_schedules"), (snap) => {
+    const docs = snap.docs.map(doc => doc.data());
+    
+    // 실시간 중요도 및 진행 상태 수집 분석
+    const activeCount = docs.filter(d => d.status === '진행중').length;
+    const highPriorityCount = docs.filter(d => d.priority === '높음').length;
+    
+    document.getElementById('dash-active-cnt').innerText = activeCount + "건";
+    document.getElementById('dash-high-cnt').innerText = highPriorityCount + "건";
+
+    const tbody = document.getElementById('dash-recent-list'); 
+    tbody.innerHTML = '';
+    
+    // 생성일 기준 최신순 정렬
+    docs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    docs.slice(0, 5).forEach(d => {
+      // 정보 중요도(우선순위) 시인성 극대화 컬러링 가이드
+      let priorityStyle = 'background:#F2F4F6;color:#8B95A1;';
+      if(d.priority === '높음') priorityStyle = 'background:#FEECEF;color:#F04452;';
+      if(d.priority === '낮음') priorityStyle = 'background:#F2F4F6;color:#B0B8C1;';
+
+      tbody.innerHTML += `<tr class="searchable-row">
+        <td>
+          <strong style="font-size:15px;">${d.title}</strong>
+          <div style="font-size:12px; color:var(--text-sub); margin-top:4px; font-weight:500;">기한: ${d.date} | 담당: ${d.owner || '-'}</div>
+        </td>
+        <td><span style="font-weight:600; color:var(--text-main);">${d.channel}</span></td>
+        <td><span class="badge" style="${priorityStyle}">${d.priority}</span></td>
+        <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${d.status}</span></td>
+      </tr>`;
+    });
+  });
+
+  // 브랜드 계정 정보 동기화 리스너
+  onSnapshot(collection(db, "accounts"), (snap) => {
+    document.getElementById('dash-acc-cnt').innerText = snap.docs.length + "개";
+    const tbody = document.getElementById('dash-acc-list'); tbody.innerHTML = '';
+    snap.docs.slice(0, 5).forEach(doc => {
+      const d = doc.data();
+      tbody.innerHTML += `<tr class="searchable-row"><td><strong>${d.service}</strong></td><td style="color:var(--text-sub)">${d.id}</td></tr>`;
+    });
+  });
+
+  window.searchTable = function() {
+    const keyword = document.getElementById('search-input').value.toLowerCase();
+    document.querySelectorAll('.searchable-row, .searchable-item').forEach(el => {
+      el.style.display = el.innerText.toLowerCase().includes(keyword) ? '' : 'none';
+    });
+  };
+  
+  window.showToast = function(msg) {
+    const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  };
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+const auth = getAuth();
+
+// 페이지 접속 시 로그인 상태 확인
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = 'login.html'; // 로그인 안 되어 있으면 로그인 페이지로 강제 이동
+  } else {
+    // 🔹 지정된 이메일만 허용하는 화이트리스트 로직
+    const allowedEmails = ["admin@bubbit.com", "member@bubbit.com"]; 
+    if (!allowedEmails.includes(user.email)) {
+      alert("접근 권한이 없습니다.");
+      window.location.href = 'login.html';
+    }
+  }
+});
+</script>
+</body>
+</html>
