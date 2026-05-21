@@ -61,31 +61,11 @@ a { text-decoration: none; color: inherit; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(4px); }
 .modal-box { background: #fff; padding: 32px; border-radius: 24px; width: 400px; box-shadow: 0 16px 32px rgba(0,0,0,0.1); }
 
-/* 달력 캘린더 핵심 구동 CSS 시스템 */
-.calendar { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; background: var(--border); }
-.calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: #fff; border-bottom: 1px solid var(--border); }
-.calendar-title { font-size: 20px; font-weight: 700; margin: 0; color: var(--text-main); }
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
-.calendar-dow { background: #fff; text-align: center; padding: 12px 0; font-size: 14px; font-weight: 700; color: var(--text-sub); border-bottom: 1px solid var(--border); }
-
-/* 일정이 없을 때 기본 높이를 기존 140px에서 96px로 최적화 축소 */
-.calendar-day { background: #fff; min-height: 96px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
-.calendar-day.empty { background: #F9FAFB; }
-.day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-
-/* 토스 스타일 원형 일차 넘버링 */
-.day-num { font-size: 14px; font-weight: 700; color: var(--text-main); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-.day-num.today { background: var(--blue); color: #fff; } /* 오늘 날짜 하이라이트 서식 */
-
-.day-count { font-size: 12px; color: var(--text-sub); font-weight: 500; margin-left: 6px; }
-.cal-event-more { font-size: 13px; color: var(--text-light); font-weight: 700; padding-left: 8px; margin-top: 2px; }
-
-.cal-event { font-size: 12px; padding: 6px 8px; border-radius: 6px; font-weight: 700; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: 0.15s; }
-.cal-event:hover { filter: brightness(0.96); }
-
-/* 채널 및 분류별 파스텔 서식 규칙 */
-.cal-event.insta { background: #E8F3FF; color: #3182F6; }
-.cal-event.meta { background: #FEECEF; color: #F04452; }
-.cal-event.mall { background: #E8F8F0; color: #11894C; }
-.cal-event.holiday { background: #FFF0F2; color: #F04452; } /* 공휴일 전용 서식 */
-.cal-event.etc { background: var(--bg-app); color: var(--text-sub); }
+/* ─── 최적화된 달력 스타일 ─── */
+.calendar-day { background: #fff; min-height: 96px; padding: 8px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--border); }
+.day-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.day-num { font-size: 13px; font-weight: 600; color: var(--text-main); width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+.day-num.today { background: var(--blue); color: #fff; border-radius: 50%; }
+.day-count { font-size: 11px; color: var(--text-light); font-weight: 500; }
+.cal-event { font-size: 11px; padding: 4px 6px; border-radius: 4px; font-weight: 600; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: 0.1s; }
+.cal-event.holiday { color: var(--text-light); font-style: italic; background: transparent; padding: 0; } /* 공휴일: 연한 회색 기울임 */

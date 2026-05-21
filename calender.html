@@ -6,10 +6,9 @@
 <title>일정 및 캘린더 - 버빗 허브</title>
 <link rel="stylesheet" href="style.css">
 <style>
+  /* 캘린더 내 상세 속성 입력창 스타일 */
   .prop-grid { display: grid; grid-template-columns: 100px 1fr; gap: 12px; margin-bottom: 20px; align-items: center; }
   .prop-label { color: var(--text-sub); font-weight: 600; font-size: 14px; }
-  .calendar-day { cursor: pointer; transition: background 0.1s; }
-  .calendar-day:hover { background: #F9FAFB; }
   .day-header { display: flex; justify-content: space-between; align-items: center; }
   .add-inline-btn { opacity: 0; font-size: 12px; color: var(--blue); cursor: pointer; transition: 0.1s; }
   .calendar-day:hover .add-inline-btn { opacity: 1; }
@@ -23,7 +22,7 @@
     <div class="nav-label">WORKSPACE</div>
     <a href="index.html" class="nav-item">01 통합 대시보드</a>
     <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
-    <a href="calender.html" class="nav-item active">03 일정 및 캘린더</a>
+    <a href="campaign.html" class="nav-item active">03 일정 및 캘린더</a>
     <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
     
     <div class="nav-label">MANAGEMENT</div>
@@ -82,7 +81,7 @@
         <option value="높음">높음</option>
         <option value="낮음">낮음</option>
       </select>
-      <div class="prop-label">채널 분류</div>
+      <div class="prop-label">채널</div>
       <select id="new-channel" class="input-field">
         <option value="Instagram">Instagram</option>
         <option value="Meta Ads">Meta Ads</option>
@@ -101,7 +100,7 @@
 <div id="detail-modal" class="modal-overlay">
   <div class="modal-box" style="width: 460px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-      <h3 id="detail-title-display" style="font-size: 18px; font-weight: 700; margin: 0;">일정 상세</h3>
+      <h3 style="font-size: 18px; font-weight: 700; margin: 0;">일정 상세</h3>
       <button class="btn btn-danger" id="delete-btn" style="padding: 6px 12px; font-size: 12px;">삭제</button>
     </div>
     <input type="hidden" id="detail-id">
@@ -125,7 +124,7 @@
         <option value="높음">높음</option>
         <option value="낮음">낮음</option>
       </select>
-      <div class="prop-label">채널 분류</div>
+      <div class="prop-label">채널</div>
       <select id="detail-channel" class="input-field">
         <option value="Instagram">Instagram</option>
         <option value="Meta Ads">Meta Ads</option>
@@ -136,7 +135,7 @@
     <textarea id="detail-desc" class="input-field" rows="4" style="margin-bottom: 24px; resize: vertical;"></textarea>
     <div style="display: flex; gap: 10px; justify-content: flex-end;">
       <button class="btn" onclick="closeModal('detail-modal')">닫기</button>
-      <button class="btn btn-primary" onclick="updateSchedule()">수정 내용 저장</button>
+      <button class="btn btn-primary" onclick="updateSchedule()">수정 저장</button>
     </div>
   </div>
 </div>
@@ -146,48 +145,34 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   
   const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
-  const db = getFirestore(initializeApp(firebaseConfig));
-  const targetCollection = collection(db, "brand_schedules");
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
+  onAuthStateChanged(auth, (user) => { if (!user) window.location.href = 'login.html'; });
+
+  const targetCollection = collection(db, "brand_schedules");
   let currentDate = new Date();
   let allSchedules = [];
   let currentSearchKeyword = "";
+  const koreanHolidays = { "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-06-03": "지방선거일", "2026-06-06": "현충일" };
 
-  // 대한민국 공휴일 및 국가 기념일 빅데이터 가이드 오브젝트 (2026년 기준)
-  const koreanHolidays2026 = {
-    "2026-01-01": "신정", "2026-02-16": "설날 연휴", "2026-02-17": "설날", "2026-02-18": "설날 연휴",
-    "2026-03-01": "삼일절", "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날",
-    "2026-05-25": "부처님오신날 대체공휴일", "2026-06-03": "지방선거일", "2026-06-06": "현충일",
-    "2026-08-15": "광복절", "2026-09-24": "추석 연휴", "2026-09-25": "추석", "2026-09-26": "추석 연휴",
-    "2026-10-03": "개천절", "2026-10-09": "한글날", "2026-12-25": "기독탄신일"
-  };
-
-  window.openCreateModal = (defaultDate = "") => {
-    document.getElementById('create-modal').style.display = 'flex';
-    if(defaultDate) document.getElementById('new-date').value = defaultDate;
-  };
+  window.openCreateModal = (defaultDate = "") => { document.getElementById('create-modal').style.display = 'flex'; if(defaultDate) document.getElementById('new-date').value = defaultDate; };
   window.closeModal = (id) => document.getElementById(id).style.display = 'none';
 
   window.saveNewSchedule = async () => {
     const title = document.getElementById('new-title').value.trim();
     const date = document.getElementById('new-date').value;
-    const owner = document.getElementById('new-owner').value.trim();
-    const status = document.getElementById('new-status').value;
-    const priority = document.getElementById('new-priority').value;
-    const channel = document.getElementById('new-channel').value;
-    const desc = document.getElementById('new-desc').value.trim();
-    if(!title || !date) return alert("제목과 날짜는 필수 입력 사항입니다.");
-    try {
-      await addDoc(targetCollection, { title, date, owner, status, priority, channel, desc, createdAt: new Date().toISOString() });
-      closeModal('create-modal'); showToast("새 일정이 등록되었습니다."); clearCreateForm();
-    } catch(e) { showToast("등록 실패"); }
+    if(!title || !date) return alert("제목과 날짜는 필수입니다.");
+    await addDoc(targetCollection, { title, date, owner: document.getElementById('new-owner').value, status: document.getElementById('new-status').value, priority: document.getElementById('new-priority').value, channel: document.getElementById('new-channel').value, desc: document.getElementById('new-desc').value, createdAt: new Date().toISOString() });
+    closeModal('create-modal'); showToast("등록 완료");
   };
 
   window.openDetailModal = (id) => {
     const item = allSchedules.find(s => s.id === id);
-    if(!item) return;
     document.getElementById('detail-id').value = item.id;
     document.getElementById('detail-title').value = item.title;
     document.getElementById('detail-date').value = item.date;
@@ -197,140 +182,51 @@
     document.getElementById('detail-channel').value = item.channel;
     document.getElementById('detail-desc').value = item.desc || "";
     document.getElementById('detail-modal').style.display = 'flex';
-    document.getElementById('delete-btn').onclick = () => deleteSchedule(item.id);
   };
 
   window.updateSchedule = async () => {
     const id = document.getElementById('detail-id').value;
-    try {
-      await updateDoc(doc(db, "brand_schedules", id), {
-        title: document.getElementById('detail-title').value.trim(),
-        date: document.getElementById('detail-date').value,
-        owner: document.getElementById('detail-owner').value.trim(),
-        status: document.getElementById('detail-status').value,
-        priority: document.getElementById('detail-priority').value,
-        channel: document.getElementById('detail-channel').value,
-        desc: document.getElementById('detail-desc').value.trim()
-      });
-      closeModal('detail-modal'); showToast("일정이 수정되었습니다.");
-    } catch(e) { showToast("수정 실패"); }
+    await updateDoc(doc(db, "brand_schedules", id), { title: document.getElementById('detail-title').value, date: document.getElementById('detail-date').value, owner: document.getElementById('detail-owner').value, status: document.getElementById('detail-status').value, priority: document.getElementById('detail-priority').value, channel: document.getElementById('detail-channel').value, desc: document.getElementById('detail-desc').value });
+    closeModal('detail-modal'); showToast("수정 완료");
   };
 
-  window.deleteSchedule = async (id) => {
-    if(!confirm("이 일정을 삭제하시겠습니까?")) return;
-    try { await deleteDoc(doc(db, "brand_schedules", id)); closeModal('detail-modal'); showToast("일정이 삭제되었습니다."); } catch(e) { showToast("삭제 실패"); }
-  };
+  window.deleteSchedule = async (id) => { if(confirm("삭제할까요?")) { await deleteDoc(doc(db, "brand_schedules", id)); closeModal('detail-modal'); showToast("삭제 완료"); } };
 
   function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     document.getElementById('currentMonthYear').innerText = `${year}. ${String(month + 1).padStart(2, '0')}`;
-
-    const grid = document.getElementById('cal-grid');
-    grid.innerHTML = '';
+    const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
     ['일', '월', '화', '수', '목', '금', '토'].forEach(d => grid.innerHTML += `<div class="calendar-dow">${d}</div>`);
-
+    
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    // 대한민국 현재 시점 기준 분석 연동 센서
     const sysDate = new Date();
-    const sysYear = sysDate.getFullYear();
-    const sysMonth = sysDate.getMonth();
-    const sysDay = sysDate.getDate();
 
-    for(let i=0; i<firstDay; i++) { grid.innerHTML += `<div class="calendar-day empty"></div>`; }
+    for(let i=0; i<firstDay; i++) grid.innerHTML += `<div class="calendar-day empty"></div>`;
 
     for(let day=1; day<=daysInMonth; day++) {
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      
-      const holidayName = koreanHolidays2026[dateStr];
-      const dayTasks = allSchedules.filter(t => {
-        const matchDate = t.date === dateStr;
-        const matchKeyword = currentSearchKeyword ? t.title.toLowerCase().includes(currentSearchKeyword) || (t.owner && t.owner.toLowerCase().includes(currentSearchKeyword)) : true;
-        return matchDate && matchKeyword;
-      });
-
-      // 공휴일과 사내 정규 일정을 하나로 결합
-      let dayItems = [];
-      if(holidayName) dayItems.push({ type: 'holiday', title: holidayName });
-      dayTasks.forEach(t => dayItems.push({ type: 'schedule', ...t }));
-
-      const totalCount = dayItems.length;
-
-      // 3단 적재 처리 가이드라인 및 제한 엔진 구축
-      const visibleItems = dayItems.slice(0, 3);
-      const hasMore = totalCount > 3;
-
+      const dayTasks = allSchedules.filter(t => t.date === dateStr && (currentSearchKeyword ? t.title.toLowerCase().includes(currentSearchKeyword) : true));
       let taskHtml = '';
-      visibleItems.forEach(item => {
-        if(item.type === 'holiday') {
-          taskHtml += `<div class="cal-event holiday">${item.title}</div>`;
-        } else {
-          let colorClass = 'etc';
-          if(item.channel === 'Instagram') colorClass = 'insta';
-          if(item.channel === 'Meta Ads') colorClass = 'meta';
-          if(item.channel === '자사몰') colorClass = 'mall';
-          taskHtml += `<div class="cal-event ${colorClass}" onclick="event.stopPropagation(); openDetailModal('${item.id}')">${item.title}</div>`;
-        }
-      });
-
-      // 3개 이상일 시 하단에 생략 리스트 가시성 부여
-      if(hasMore) {
-        taskHtml += `<div class="cal-event-more">...</div>`;
-      }
-
-      // 오늘 날짜 원형 하이라이트 트리거 판단
-      const isToday = (year === sysYear && month === sysMonth && day === sysDay) ? 'today' : '';
+      dayTasks.slice(0, 3).forEach(t => taskHtml += `<div class="cal-event ${t.channel === 'Instagram' ? 'insta' : t.channel === 'Meta Ads' ? 'meta' : 'mall'}" onclick="event.stopPropagation(); openDetailModal('${t.id}')">${t.title}</div>`);
       
-      // 날짜 옆 총 개수 표기 장치
-      const countLabel = totalCount > 0 ? `<span class="day-count">(${totalCount})</span>` : '';
-
-      const dayCell = document.createElement('div');
-      dayCell.className = 'calendar-day';
-      dayCell.innerHTML = `
-        <div class="day-header">
-          <div style="display:flex; align-items:center;">
-            <div class="day-num ${isToday}">${day}</div>
-            ${countLabel}
+      grid.innerHTML += `
+        <div class="calendar-day" onclick="openCreateModal('${dateStr}')">
+          <div class="day-header">
+            <div class="day-num ${dateStr === sysDate.toISOString().split('T')[0] ? 'today' : ''}">${day}</div>
+            <span class="day-count">${dayTasks.length > 0 ? dayTasks.length : ''}</span>
           </div>
-          <div class="add-inline-btn" onclick="event.stopPropagation(); openCreateModal('${dateStr}')">+</div>
-        </div>
-        ${taskHtml}
-      `;
-      grid.appendChild(dayCell);
+          ${taskHtml}${dayTasks.length > 3 ? '<div class="cal-event-more">...</div>' : ''}
+        </div>`;
     }
   }
 
   window.changeMonth = (dir) => { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); };
   window.searchCalendar = () => { currentSearchKeyword = document.getElementById('search-input').value.toLowerCase().trim(); renderCalendar(); };
-  function clearCreateForm() { document.getElementById('new-title').value = ''; document.getElementById('new-date').value = ''; document.getElementById('new-owner').value = ''; document.getElementById('new-desc').value = ''; }
+  window.showToast = (msg) => { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); };
 
-  onSnapshot(targetCollection, (snap) => {
-    allSchedules = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    renderCalendar();
-  });
-
-  window.showToast = function(msg) {
-    const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-  };
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-const auth = getAuth();
-
-// 페이지 접속 시 로그인 상태 확인
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = 'login.html'; // 로그인 안 되어 있으면 로그인 페이지로 강제 이동
-  } else {
-    // 🔹 지정된 이메일만 허용하는 화이트리스트 로직
-    const allowedEmails = ["admin@bubbit.com", "member@bubbit.com"]; 
-    if (!allowedEmails.includes(user.email)) {
-      alert("접근 권한이 없습니다.");
-      window.location.href = 'login.html';
-    }
-  }
-});
+  onSnapshot(targetCollection, (snap) => { allSchedules = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderCalendar(); });
 </script>
 </body>
 </html>
