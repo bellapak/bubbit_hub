@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>일정 및 캘린더 - 버빗 허브</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* 노션 스타일 보완을 위한 로컬 스타일 */
+  .prop-grid { display: grid; grid-template-columns: 100px 1fr; gap: 12px; margin-bottom: 20px; align-items: center; }
+  .prop-label { color: var(--text-sub); font-weight: 600; font-size: 14px; }
+  .calendar-day { cursor: pointer; transition: background 0.1s; }
+  .calendar-day:hover { background: #F9FAFB; }
+  .day-header { display: flex; justify-content: space-between; align-items: center; }
+  .add-inline-btn { opacity: 0; font-size: 12px; color: var(--blue); cursor: pointer; transition: 0.1s; }
+  .calendar-day:hover .add-inline-btn { opacity: 1; }
+  .notion-badge { padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block; }
+</style>
 </head>
 <body>
 <div id="app">
@@ -31,40 +42,120 @@
         <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
         <span>일정 및 캘린더</span>
       </div>
-      <div style="display:flex; gap:12px;">
-        <button class="btn btn-primary" onclick="openTaskModal()">새 일정 등록</button>
+      <div style="display:flex; gap:12px; align-items: center;">
+        <input type="text" id="search-input" class="input-field" style="width:200px; margin:0;" placeholder="일정 검색" onkeyup="searchCalendar()">
+        <button class="btn btn-primary" onclick="openCreateModal()">새 일정 추가</button>
       </div>
     </header>
 
     <div class="view-container">
       <div class="calendar">
         <div class="calendar-header">
-          <button class="btn" id="prevMonth" onclick="changeMonth(-1)">&lt;</button>
+          <button class="btn" onclick="changeMonth(-1)">&lt;</button>
           <h2 class="calendar-title" id="currentMonthYear">2026. 05</h2>
-          <button class="btn" id="nextMonth" onclick="changeMonth(1)">&gt;</button>
+          <button class="btn" onclick="changeMonth(1)">&gt;</button>
         </div>
-        <div class="calendar-grid" id="cal-grid">
-          </div>
+        <div class="calendar-grid" id="cal-grid"></div>
       </div>
     </div>
   </main>
 </div>
 
-<div id="task-modal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">일정 등록</h3>
-    <input id="task-title" class="input-field" placeholder="캠페인 / 일정 제목" style="margin-bottom: 12px;">
-    <input type="date" id="task-date" class="input-field" style="margin-bottom: 12px;" title="목표 기한">
-    <select id="task-channel" class="input-field" style="margin-bottom: 12px;">
-      <option value="Instagram">Instagram</option>
-      <option value="Meta Ads">Meta Ads</option>
-      <option value="자사몰">자사몰</option>
-      <option value="기타(내부일정)">기타(내부일정)</option>
-    </select>
-    <textarea id="task-desc" class="input-field" rows="4" placeholder="상세 내용 요약" style="margin-bottom: 24px; resize:vertical;"></textarea>
+<div id="create-modal" class="modal-overlay">
+  <div class="modal-box" style="width: 460px;">
+    <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 항목 추가</h3>
+    
+    <div class="prop-grid">
+      <div class="prop-label">제목</div>
+      <input id="new-title" class="input-field" placeholder="일정 제목 입력">
+      
+      <div class="prop-label">날짜</div>
+      <input type="date" id="new-date" class="input-field">
+      
+      <div class="prop-label">담당자</div>
+      <input id="new-owner" class="input-field" placeholder="이름 입력">
+      
+      <div class="prop-label">상태</div>
+      <select id="new-status" class="input-field">
+        <option value="예정">예정</option>
+        <option value="진행중">진행중</option>
+        <option value="완료">완료</option>
+        <option value="보류">보류</option>
+      </select>
+      
+      <div class="prop-label">우선순위</div>
+      <select id="new-priority" class="input-field">
+        <option value="보통">보통</option>
+        <option value="높음">높음</option>
+        <option value="낮음">낮음</option>
+      </select>
+      
+      <div class="prop-label">채널 분류</div>
+      <select id="new-channel" class="input-field">
+        <option value="Instagram">Instagram</option>
+        <option value="Meta Ads">Meta Ads</option>
+        <option value="자사몰">자사몰</option>
+        <option value="내부행사">내부행사</option>
+      </select>
+    </div>
+    
+    <textarea id="new-desc" class="input-field" rows="4" placeholder="세부 내용 기술" style="margin-bottom: 24px; resize: vertical;"></textarea>
+    
     <div style="display: flex; gap: 10px; justify-content: flex-end;">
-      <button class="btn" onclick="closeTaskModal()">취소</button>
-      <button class="btn btn-primary" onclick="saveNewTask()">저장하기</button>
+      <button class="btn" onclick="closeModal('create-modal')">취소</button>
+      <button class="btn btn-primary" onclick="saveNewSchedule()">생성</button>
+    </div>
+  </div>
+</div>
+
+<div id="detail-modal" class="modal-overlay">
+  <div class="modal-box" style="width: 460px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+      <h3 id="detail-title-display" style="font-size: 18px; font-weight: 700; margin: 0;">일정 상세</h3>
+      <button class="btn btn-danger" id="delete-btn" style="padding: 6px 12px; font-size: 12px;">삭제</button>
+    </div>
+    
+    <input type="hidden" id="detail-id">
+    
+    <div class="prop-grid">
+      <div class="prop-label">제목</div>
+      <input id="detail-title" class="input-field">
+      
+      <div class="prop-label">날짜</div>
+      <input type="date" id="detail-date" class="input-field">
+      
+      <div class="prop-label">담당자</div>
+      <input id="detail-owner" class="input-field">
+      
+      <div class="prop-label">상태</div>
+      <select id="detail-status" class="input-field">
+        <option value="예정">예정</option>
+        <option value="진행중">진행중</option>
+        <option value="완료">완료</option>
+        <option value="보류">보류</option>
+      </select>
+      
+      <div class="prop-label">우선순위</div>
+      <select id="detail-priority" class="input-field">
+        <option value="보통">보통</option>
+        <option value="높음">높음</option>
+        <option value="낮음">낮음</option>
+      </select>
+      
+      <div class="prop-label">채널 분류</div>
+      <select id="detail-channel" class="input-field">
+        <option value="Instagram">Instagram</option>
+        <option value="Meta Ads">Meta Ads</option>
+        <option value="자사몰">자사몰</option>
+        <option value="내부행사">내부행사</option>
+      </select>
+    </div>
+    
+    <textarea id="detail-desc" class="input-field" rows="4" style="margin-bottom: 24px; resize: vertical;"></textarea>
+    
+    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+      <button class="btn" onclick="closeModal('detail-modal')">닫기</button>
+      <button class="btn btn-primary" onclick="updateSchedule()">수정 내용 저장</button>
     </div>
   </div>
 </div>
@@ -73,31 +164,96 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  
   const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
   const db = getFirestore(initializeApp(firebaseConfig));
 
-  // 모달 기능 (대시보드와 동일)
-  window.openTaskModal = () => document.getElementById('task-modal').style.display = 'flex';
-  window.closeTaskModal = () => document.getElementById('task-modal').style.display = 'none';
+  // 독립된 노션형 데이터 컬렉션 사용
+  const targetCollection = collection(db, "brand_schedules");
 
-  window.saveNewTask = async () => {
-    const title = document.getElementById('task-title').value;
-    const targetDate = document.getElementById('task-date').value;
-    const channel = document.getElementById('task-channel').value;
-    const desc = document.getElementById('task-desc').value;
-    if(!title || !targetDate) { alert("제목과 날짜를 입력해주세요."); return; }
+  let currentDate = new Date();
+  let allSchedules = [];
+  let currentSearchKeyword = "";
+
+  window.openCreateModal = (defaultDate = "") => {
+    document.getElementById('create-modal').style.display = 'flex';
+    if(defaultDate) document.getElementById('new-date').value = defaultDate;
+  };
+  
+  window.closeModal = (id) => document.getElementById(id).style.display = 'none';
+
+  // 1. 데이터 저장 (Create)
+  window.saveNewSchedule = async () => {
+    const title = document.getElementById('new-title').value.trim();
+    const date = document.getElementById('new-date').value;
+    const owner = document.getElementById('new-owner').value.trim();
+    const status = document.getElementById('new-status').value;
+    const priority = document.getElementById('new-priority').value;
+    const channel = document.getElementById('new-channel').value;
+    const desc = document.getElementById('new-desc').value.trim();
+
+    if(!title || !date) return alert("제목과 날짜는 필수 입력 사항입니다.");
+
     try {
-      await addDoc(collection(db, "tasks"), { title, targetDate, channel, description: desc, status: "대기중", createdAt: new Date().toISOString() });
-      closeTaskModal(); showToast("일정이 달력에 등록되었습니다");
-      document.getElementById('task-title').value = ''; document.getElementById('task-date').value = ''; document.getElementById('task-desc').value = '';
-    } catch (e) { showToast("실패했습니다"); }
+      await addDoc(targetCollection, { title, date, owner, status, priority, channel, desc, createdAt: new Date().toISOString() });
+      closeModal('create-modal');
+      showToast("새 일정이 등록되었습니다.");
+      clearCreateForm();
+    } catch(e) { showToast("등록 실패"); }
   };
 
-  // 🔹 달력(Calendar) 로직
-  let currentDate = new Date(); // 시스템 현재 시간 기준
-  let allTasks = []; // DB에서 불러온 전체 일정 저장용
+  // 2. 세부 내용 열기 (Read Item Peek)
+  window.openDetailModal = (id) => {
+    const item = allSchedules.find(s => s.id === id);
+    if(!item) return;
 
+    document.getElementById('detail-id').value = item.id;
+    document.getElementById('detail-title').value = item.title;
+    document.getElementById('detail-date').value = item.date;
+    document.getElementById('detail-owner').value = item.owner || "";
+    document.getElementById('detail-status').value = item.status;
+    document.getElementById('detail-priority').value = item.priority;
+    document.getElementById('detail-channel').value = item.channel;
+    document.getElementById('detail-desc').value = item.desc || "";
+
+    document.getElementById('detail-modal').style.display = 'flex';
+
+    // 삭제 버튼 매핑
+    document.getElementById('delete-btn').onclick = () => deleteSchedule(item.id);
+  };
+
+  // 3. 내용 수정 (Update)
+  window.updateSchedule = async () => {
+    const id = document.getElementById('detail-id').value;
+    const docRef = doc(db, "brand_schedules", id);
+
+    try {
+      await updateDoc(docRef, {
+        title: document.getElementById('detail-title').value.trim(),
+        date: document.getElementById('detail-date').value,
+        owner: document.getElementById('detail-owner').value.trim(),
+        status: document.getElementById('detail-status').value,
+        priority: document.getElementById('detail-priority').value,
+        channel: document.getElementById('detail-channel').value,
+        desc: document.getElementById('detail-desc').value.trim()
+      });
+      closeModal('detail-modal');
+      showToast("일정이 수정되었습니다.");
+    } catch(e) { showToast("수정 실패"); }
+  };
+
+  // 4. 내용 삭제 (Delete)
+  window.deleteSchedule = async (id) => {
+    if(!confirm("이 일정을 삭제하시겠습니까?")) return;
+    try {
+      await deleteDoc(doc(db, "brand_schedules", id));
+      closeModal('detail-modal');
+      showToast("일정이 삭제되었습니다.");
+    } catch(e) { showToast("삭제 실패"); }
+  };
+
+  // 달력 렌더링 엔진 (Notion 디자인 복제)
   function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -105,39 +261,44 @@
 
     const grid = document.getElementById('cal-grid');
     grid.innerHTML = '';
-    const dows = ['일', '월', '화', '수', '목', '금', '토'];
-    dows.forEach(d => grid.innerHTML += `<div class="calendar-dow">${d}</div>`);
+    
+    ['일', '월', '화', '수', '목', '금', '토'].forEach(d => grid.innerHTML += `<div class="calendar-dow">${d}</div>`);
 
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // 빈 칸 채우기
     for(let i=0; i<firstDay; i++) { grid.innerHTML += `<div class="calendar-day empty"></div>`; }
 
-    // 날짜 및 일정 채우기
     for(let day=1; day<=daysInMonth; day++) {
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
       
-      // 해당 날짜에 맞는 일정 찾기
-      const dayTasks = allTasks.filter(t => t.targetDate === dateStr);
-      let taskHtml = '';
-      
-      dayTasks.forEach(task => {
-        // 채널별 색상 라벨링
-        let colorClass = 'etc';
-        if(task.channel.includes('Instagram')) colorClass = 'insta';
-        if(task.channel.includes('Meta')) colorClass = 'meta';
-        if(task.channel.includes('자사몰')) colorClass = 'mall';
-        
-        taskHtml += `<div class="cal-event ${colorClass}" title="${task.title}\n(${task.channel})">${task.title}</div>`;
+      // 검색 및 날짜 필터링 통합 적용
+      const dayTasks = allSchedules.filter(t => {
+        const matchDate = t.date === dateStr;
+        const matchKeyword = currentSearchKeyword ? t.title.toLowerCase().includes(currentSearchKeyword) || (t.owner && t.owner.toLowerCase().includes(currentSearchKeyword)) : true;
+        return matchDate && matchKeyword;
       });
 
-      grid.innerHTML += `
-        <div class="calendar-day">
+      let taskHtml = '';
+      dayTasks.forEach(task => {
+        let colorClass = 'etc';
+        if(task.channel === 'Instagram') colorClass = 'insta';
+        if(task.channel === 'Meta Ads') colorClass = 'meta';
+        if(task.channel === '자사몰') colorClass = 'mall';
+        
+        taskHtml += `<div class="cal-event ${colorClass}" onclick="event.stopPropagation(); openDetailModal('${task.id}')">${task.title}</div>`;
+      });
+
+      const dayCell = document.createElement('div');
+      dayCell.className = 'calendar-day';
+      dayCell.innerHTML = `
+        <div class="day-header">
           <div class="day-num">${day}</div>
-          ${taskHtml}
+          <div class="add-inline-btn" onclick="event.stopPropagation(); openCreateModal('${dateStr}')">+</div>
         </div>
+        ${taskHtml}
       `;
+      grid.appendChild(dayCell);
     }
   }
 
@@ -146,9 +307,21 @@
     renderCalendar();
   };
 
-  // DB 연동하여 실시간으로 달력에 반영
-  onSnapshot(collection(db, "tasks"), (snap) => {
-    allTasks = snap.docs.map(doc => doc.data());
+  window.searchCalendar = () => {
+    currentSearchKeyword = document.getElementById('search-input').value.toLowerCase().trim();
+    renderCalendar();
+  };
+
+  function clearCreateForm() {
+    document.getElementById('new-title').value = '';
+    document.getElementById('new-date').value = '';
+    document.getElementById('new-owner').value = '';
+    document.getElementById('new-desc').value = '';
+  }
+
+  // 실시간 서버 동기화 센서 탑재
+  onSnapshot(targetCollection, (snap) => {
+    allSchedules = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     renderCalendar();
   });
 
