@@ -143,18 +143,12 @@
 <div id="toast">메시지</div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  
-  const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
-  const app = initializeApp(firebaseConfig);
+const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  const auth = getAuth(app);
-
-  onAuthStateChanged(auth, (user) => { if (!user) window.location.href = 'login.html'; });
-
-  const targetCollection = collection(db, "brand_schedules");
+const targetCollection = collection(db, "brand_schedules");
   let currentDate = new Date();
   let allSchedules = [];
   let currentSearchKeyword = "";
@@ -227,6 +221,12 @@
   window.showToast = (msg) => { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); };
 
   onSnapshot(targetCollection, (snap) => { allSchedules = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderCalendar(); });
+</script>
+
+<script type="module">
+  import { requireAuth, renderAuthBar } from "./app-auth.js";
+  requireAuth();
+  renderAuthBar();
 </script>
 </body>
 </html>

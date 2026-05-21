@@ -64,10 +64,11 @@
 </div>
 <div id="toast">메시지</div>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
   const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
-  const db = getFirestore(initializeApp(firebaseConfig));
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   window.addIntegration = async () => {
     const platform = prompt("연동할 플랫폼 (예: Slack):");
@@ -92,22 +93,12 @@
   window.showToast = function(msg) {
     const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500);
   }
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-const auth = getAuth();
+</script>
 
-// 페이지 접속 시 로그인 상태 확인
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = 'login.html'; // 로그인 안 되어 있으면 로그인 페이지로 강제 이동
-  } else {
-    // 🔹 지정된 이메일만 허용하는 화이트리스트 로직
-    const allowedEmails = ["admin@bubbit.com", "member@bubbit.com"]; 
-    if (!allowedEmails.includes(user.email)) {
-      alert("접근 권한이 없습니다.");
-      window.location.href = 'login.html';
-    }
-  }
-});
+<script type="module">
+  import { requireAuth, renderAuthBar } from "./app-auth.js";
+  requireAuth();
+  renderAuthBar();
 </script>
 </body>
 </html>

@@ -69,3 +69,12 @@ a { text-decoration: none; color: inherit; }
 .day-count { font-size: 11px; color: var(--text-light); font-weight: 500; }
 .cal-event { font-size: 11px; padding: 4px 6px; border-radius: 4px; font-weight: 600; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: 0.1s; }
 .cal-event.holiday { color: var(--text-light); font-style: italic; background: transparent; padding: 0; } /* 공휴일: 연한 회색 기울임 */
+
+/* ─── Google Auth UI ─── */
+.auth-user-box { display:flex; align-items:center; gap:10px; margin-left:8px; }
+.auth-user-email { max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:10px 12px; border-radius:999px; background:#fff; color:var(--text-sub); font-size:12px; font-weight:700; border:1px solid var(--border); }
+#logout-btn { padding:10px 14px; font-size:13px; }
+@media (max-width: 900px) {
+  .auth-user-email { display:none; }
+  .topbar { gap:12px; }
+}
