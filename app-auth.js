@@ -17,9 +17,8 @@ export const db = getFirestore(app);
 
 // 접속 허용 Google 계정 목록입니다. 팀원을 추가하려면 여기에 이메일을 추가하세요.
 export const allowedEmails = [
-  "bestfriendpakminji@gmail.com",
-  "admin@bubbit.com",
-  "member@bubbit.com"
+  "17mj15@gmail.com",
+  "bubbitlab@gmail.com"
 ];
 
 const provider = new GoogleAuthProvider();
