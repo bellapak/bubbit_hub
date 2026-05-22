@@ -5,34 +5,49 @@
 <title>로그인 - 버빗 허브</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  .login-container { max-width: 400px; margin: 100px auto; }
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-app); }
+  .login-card { background: #fff; padding: 48px; border-radius: 32px; box-shadow: 0 16px 40px rgba(0,0,0,0.06); width: 100%; max-width: 400px; text-align: center; }
+  .btn-google { width: 100%; height: 58px; background: #191F28; color: #fff; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 24px; }
 </style>
 </head>
 <body>
-<div class="login-container">
-  <div class="card">
-    <h2 style="font-size:24px; font-weight:800; margin-bottom:32px;">로그인</h2>
-    <input type="email" id="email" class="input-field" placeholder="이메일" style="margin-bottom:12px;">
-    <input type="password" id="password" class="input-field" placeholder="비밀번호" style="margin-bottom:24px;">
-    <button class="btn btn-primary" style="width:100%; height:50px;" onclick="login()">로그인</button>
-  </div>
+
+<div class="login-card">
+  <h2 style="margin-bottom:32px;">로그인</h2>
+  <button id="google-login-btn" class="btn-google">Google로 로그인</button>
+  <p id="login-error" style="color:red; margin-top:16px; display:none;"></p>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  
-  const firebaseConfig = { /* 동일한 설정값 입력 */ };
-  const auth = getAuth(initializeApp(firebaseConfig));
+  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  window.login = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = 'index.html';
-    } catch(e) { alert("로그인 실패: 이메일과 비밀번호를 확인하세요."); }
+  // 1. 설정값 입력 (본인 프로젝트 정보로 교체 필수)
+    const firebaseConfig = {
+    apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs",
+    authDomain: "bubbit-hub.firebaseapp.com",
+    projectId: "bubbit-hub",
+    storageBucket: "bubbit-hub.firebasestorage.app",
+    messagingSenderId: "183100911164",
+    appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39",
+    measurementId: "G-5Z8QDJQ8SV"
   };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  document.getElementById('google-login-btn').addEventListener('click', async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // 로그인 성공 시 대시보드로 이동
+      window.location.href = 'index.html';
+    } catch (error) {
+      document.getElementById('login-error').innerText = "로그인 실패: " + error.message;
+      document.getElementById('login-error').style.display = 'block';
+    }
+  });
 </script>
+
 </body>
 </html>
