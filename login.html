@@ -6,48 +6,119 @@
 <link rel="stylesheet" href="style.css">
 <style>
   body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-app); }
-  .login-card { background: #fff; padding: 48px; border-radius: 32px; box-shadow: 0 16px 40px rgba(0,0,0,0.06); width: 100%; max-width: 400px; text-align: center; }
-  .btn-google { width: 100%; height: 58px; background: #191F28; color: #fff; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; margin-top: 24px; }
+  .login-card {
+    background: #fff;
+    padding: 48px;
+    border-radius: 32px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  .login-subtitle {
+    font-size: 14px;
+    color: var(--text-sub);
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .btn-google {
+    width: 100%;
+    height: 58px;
+    background: #191F28;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .btn-google:hover { opacity: 0.85; }
+  .btn-google:disabled { opacity: 0.5; cursor: not-allowed; }
+  .error-msg {
+    color: #F04452;
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    display: none;
+    background: #FEF0F1;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
 </style>
 </head>
 <body>
-
 <div class="login-card">
-  <h2 style="margin-bottom:32px;">로그인</h2>
-  <button id="google-login-btn" class="btn-google">Google로 로그인</button>
-  <p id="login-error" style="color:red; margin-top:16px; display:none;"></p>
+  <h2 style="margin-bottom:8px; font-size:22px; font-weight:900;">Bubbit Hub</h2>
+  <p class="login-subtitle">팀 전용 워크스페이스</p>
+  <button id="google-login-btn" class="btn-google">Google 계정으로 로그인</button>
+  <p id="login-error" class="error-msg"></p>
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // 1. 설정값 입력 (본인 프로젝트 정보로 교체 필수)
-    const firebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs",
     authDomain: "bubbit-hub.firebaseapp.com",
     projectId: "bubbit-hub",
     storageBucket: "bubbit-hub.firebasestorage.app",
     messagingSenderId: "183100911164",
-    appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39",
-    measurementId: "G-5Z8QDJQ8SV"
+    appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39"
   };
 
-  const app = initializeApp(firebaseConfig);
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  document.getElementById('google-login-btn').addEventListener('click', async () => {
+  // 허용 이메일 목록 (로그인 시점에서도 검증)
+  const ALLOWED_EMAILS = ["admin@bubbit.com", "member@bubbit.com"];
+
+  // 이미 로그인된 허용 사용자는 바로 대시보드로
+  onAuthStateChanged(auth, (user) => {
+    if (user && ALLOWED_EMAILS.includes(user.email)) {
+      window.location.href = "index.html";
+    }
+  });
+
+  const btn = document.getElementById("google-login-btn");
+  const errorEl = document.getElementById("login-error");
+
+  function showError(msg) {
+    errorEl.innerText = msg;
+    errorEl.style.display = "block";
+  }
+
+  btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    btn.innerText = "로그인 중...";
+    errorEl.style.display = "none";
+
     try {
       const result = await signInWithPopup(auth, provider);
-      // 로그인 성공 시 대시보드로 이동
-      window.location.href = 'index.html';
+      const user = result.user;
+
+      // ✅ 로그인 성공 후 서버 응답 전에 이메일 검증
+      if (!ALLOWED_EMAILS.includes(user.email)) {
+        await signOut(auth); // 허용되지 않은 계정은 즉시 로그아웃
+        showError("접근 권한이 없는 계정입니다. 관리자에게 문의하세요.");
+        btn.disabled = false;
+        btn.innerText = "Google 계정으로 로그인";
+        return;
+      }
+
+      window.location.href = "index.html";
     } catch (error) {
-      document.getElementById('login-error').innerText = "로그인 실패: " + error.message;
-      document.getElementById('login-error').style.display = 'block';
+      if (error.code !== "auth/popup-closed-by-user") {
+        showError("로그인에 실패했습니다. 다시 시도해 주세요.");
+      }
+      btn.disabled = false;
+      btn.innerText = "Google 계정으로 로그인";
     }
   });
 </script>
-
 </body>
 </html>

@@ -8,15 +8,13 @@
 </head>
 <body>
 <div id="app">
-<nav class="sidebar">
+  <nav class="sidebar">
     <div class="brand-logo">Bubbit Hub</div>
-    
     <div class="nav-label">WORKSPACE</div>
     <a href="index.html" class="nav-item">01 통합 대시보드</a>
-    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
+    <a href="content.html" class="nav-item active">02 제품 및 콘텐츠</a>
     <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
     <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
-    
     <div class="nav-label">MANAGEMENT</div>
     <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
     <a href="issue.html" class="nav-item">06 이슈 로그</a>
@@ -24,7 +22,7 @@
     <a href="data.html" class="nav-item">08 빅데이터 연동</a>
     <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
-  <main class="main-content">
+  <main class="main-content" style="visibility:hidden;">
     <header class="topbar">
       <div class="topbar-title">
         <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
@@ -35,7 +33,7 @@
       </div>
     </header>
     <div class="view-container">
-      <div class="card searchable-item"> 
+      <div class="card searchable-item">
         <div class="card-header">
           <span class="card-title">에셋 라이브러리 (준비 중)</span>
           <button class="btn btn-primary" onclick="alert('스토리지 세팅 후 활성화됩니다.')">에셋 업로드</button>
@@ -47,29 +45,21 @@
     </div>
   </main>
 </div>
-<script>
-  window.searchTable = function() {
-    const keyword = document.getElementById('search-input').value.toLowerCase();
-    document.querySelectorAll('.searchable-row, .searchable-item').forEach(el => {
-      el.style.display = el.innerText.toLowerCase().includes(keyword) ? '' : 'none';
+
+<!-- ✅ type="module" 추가 — 기존에 누락되어 인증이 실행되지 않던 버그 수정 -->
+<script type="module">
+  import { requireAuth } from "./firebase.js";
+
+  requireAuth(() => {
+    // 인증 통과 후 페이지 기능 활성화
+  });
+
+  window.searchTable = function () {
+    const kw = document.getElementById("search-input").value.toLowerCase();
+    document.querySelectorAll(".searchable-row, .searchable-item").forEach(el => {
+      el.style.display = el.innerText.toLowerCase().includes(kw) ? "" : "none";
     });
   };
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-const auth = getAuth();
-
-// 페이지 접속 시 로그인 상태 확인
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = 'login.html'; // 로그인 안 되어 있으면 로그인 페이지로 강제 이동
-  } else {
-    // 🔹 지정된 이메일만 허용하는 화이트리스트 로직
-    const allowedEmails = ["admin@bubbit.com", "member@bubbit.com"]; 
-    if (!allowedEmails.includes(user.email)) {
-      alert("접근 권한이 없습니다.");
-      window.location.href = 'login.html';
-    }
-  }
-});
 </script>
 </body>
 </html>
