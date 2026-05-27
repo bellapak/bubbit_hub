@@ -1,39 +1,90 @@
+/* 기본 초기화 및 폰트 설정 */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 :root {
-  --primary: #191F28;
-  --bg-app: #F2F4F6;
-  --bg-surface: #FFFFFF;
-  --text-main: #191F28;
-  --text-sub: #8B95A1;
-  --border: #E5E8EB;
-  --blue: #3182F6;
-  --holiday: #F04452;
-  --radius: 24px;
-  --radius-sm: 12px;
+  --primary: #1d1d1f;      /* 애플 블랙 */
+  --bg-app: #f5f5f7;       /* 애플 라이트 그레이 배경 */
+  --bg-surface: #ffffff;
+  --text-main: #1d1d1f;
+  --text-sub: #86868b;     /* 애플 그레이 텍스트 */
+  --border: #d2d2d7;       /* 애플 테두리 컬러 */
+  --blue: #0066cc;         /* 애플 블루 */
+  --radius: 16px;          /* 좀 더 부드러운 라운드 */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Pretendard', sans-serif; background: var(--bg-app); color: var(--text-main); display: flex; height: 100vh; }
 
-#app { display: flex; width: 100%; }
+body { 
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; 
+  font-size: 13px;         /* 본문 폰트 13px 고정 */
+  line-height: 1.5;
+  background: var(--bg-app); 
+  color: var(--text-main); 
+  display: flex; 
+  height: 100vh; 
+  overflow: hidden; 
+}
 
-/* 사이드바 */
-.sidebar { width: 260px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 16px; }
-.brand-logo { font-size: 20px; font-weight: 900; margin-bottom: 40px; padding: 0 16px; }
-.nav-label { font-size: 11px; font-weight: 800; color: var(--text-sub); margin: 24px 16px 8px; }
-.nav-item { padding: 12px 16px; border-radius: var(--radius-sm); color: var(--text-main); font-weight: 600; display: block; transition: 0.2s; }
-.nav-item:hover, .nav-item.active { background: #F2F4F6; color: var(--blue); }
+#app { display: flex; width: 100%; height: 100%; }
 
-/* 메인 */
-.main-content { flex: 1; padding: 32px; overflow-y: auto; }
-.topbar { display: flex; justify-content: space-between; margin-bottom: 24px; }
+/* 사이드바 - 애플 스타일의 얇고 깔끔한 레이아웃 */
+.sidebar { 
+  width: 240px; 
+  background: #fbfbfd; 
+  border-right: 1px solid var(--border); 
+  display: flex; 
+  flex-direction: column; 
+  padding: 32px 20px; 
+}
 
-/* 캘린더 전용 */
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-.calendar-dow { background: #F9FAFB; padding: 12px; text-align: center; font-weight: 600; font-size: 12px; color: var(--text-sub); }
-.calendar-day { background: #fff; min-height: 140px; padding: 10px; }
-.day-num.today { background: var(--blue); color: #fff; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
-.holiday-text { color: var(--holiday); font-size: 10px; font-weight: 700; }
-.cal-event { font-size: 11px; padding: 4px; background: #f8f9fa; border-radius: 4px; margin-top: 2px; cursor: pointer; }
-.d-day { font-size: 9px; color: var(--blue); font-weight: 700; background: #eef5ff; padding: 1px 4px; border-radius: 4px; }
+.brand-logo { 
+  font-size: 18px; 
+  font-weight: 700; 
+  margin-bottom: 40px; 
+  letter-spacing: -0.5px;
+}
+
+.nav-label { 
+  font-size: 10px; 
+  font-weight: 700; 
+  color: var(--text-sub); 
+  margin: 24px 0 8px; 
+  text-transform: uppercase;
+}
+
+.nav-item { 
+  padding: 10px 12px; 
+  border-radius: 8px; 
+  color: var(--text-main); 
+  font-weight: 500; 
+  text-decoration: none;
+  display: block; 
+  transition: background 0.2s; 
+}
+
+.nav-item:hover, .nav-item.active { 
+  background: #e8e8ed; 
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content { 
+  flex: 1; 
+  padding: 40px; 
+  overflow-y: auto; 
+}
+
+.topbar { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 32px; 
+}
+
+/* 범용 카드 스타일 */
+.card {
+  background: var(--bg-surface);
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
