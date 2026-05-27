@@ -22,62 +22,36 @@
     <a href="data.html" class="nav-item">08 빅데이터 연동</a>
     <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
-  <main class="main-content" style="visibility:hidden;">
-    <header class="topbar">
-      <div class="topbar-title">
-        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
-        <span>통합 대시보드</span>
+  <main class="main-content">
+  <header class="topbar">
+    <h1 style="font-size: 20px; font-weight: 700;">통합 대시보드</h1>
+    <button class="btn btn-primary" onclick="openTaskModal()">+ 새 일정 등록</button>
+  </header>
+
+  <div class="view-container">
+    <div class="grid-3">
+      <div class="card">진행 중 일정<div style="font-size:24px; font-weight:700;">0건</div></div>
+      <div class="card">높은 우선순위<div style="font-size:24px; font-weight:700;">0건</div></div>
+      <div class="card">연동 계정<div style="font-size:24px; font-weight:700;">0개</div></div>
+    </div>
+    
+    <div class="grid-2">
+      <div class="card">
+        <h3>전체 일정 요약</h3>
+        <table class="data-table">
+          <thead><tr><th>정보</th><th>채널</th><th>우선순위</th></tr></thead>
+          <tbody id="dash-recent-list"></tbody>
+        </table>
       </div>
-      <div style="display:flex; gap:12px;">
-        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="내용 검색" onkeyup="searchTable()">
-        <button class="btn btn-primary" onclick="openTaskModal()">새 일정 등록</button>
-      </div>
-    </header>
-    <div class="view-container">
-      <div class="grid-3">
-        <div class="card">
-          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">진행 중 일정</div>
-          <div id="dash-active-cnt" style="font-size:32px; font-weight:700; color:var(--blue);">0건</div>
-        </div>
-        <div class="card">
-          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">높은 우선순위 리스크</div>
-          <div id="dash-high-cnt" style="font-size:32px; font-weight:700; color:#F04452;">0건</div>
-        </div>
-        <div class="card">
-          <div style="color:var(--text-sub); font-weight:600; margin-bottom:12px;">연동된 브랜드 계정</div>
-          <div id="dash-acc-cnt" style="font-size:32px; font-weight:700;">0개</div>
-        </div>
-      </div>
-      <div class="view-container">
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
-              <span class="card-title" style="font-weight:700;">전체 일정 관리</span>
-              <button class="btn btn-primary" onclick="openTaskModal()">+ 새 일정</button>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr><th>정보</th><th>채널</th><th>우선순위</th><th>상태</th></tr>
-              </thead>
-              <tbody id="dash-recent-list">
-                </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">브랜드 계정 요약</span>
-            <a href="account_issue.html" style="font-size:14px; color:var(--text-sub); font-weight:600;">전체보기</a>
-          </div>
-          <table class="data-table">
-            <thead><tr><th>서비스</th><th>아이디</th></tr></thead>
-            <tbody id="dash-acc-list"></tbody>
-          </table>
-        </div>
+      <div class="card">
+        <h3>브랜드 계정</h3>
+        <table class="data-table">
+          <tbody id="dash-acc-list"></tbody>
+        </table>
       </div>
     </div>
-  </main>
+  </div>
+</main>
 </div>
 
 <div id="task-modal" class="modal-overlay">
