@@ -1156,8 +1156,11 @@ input[type="submit"]:disabled{
   font-size:10px !important;
   font-weight:500 !important;
 }
-
-.cal-event{
+.cal-event.insta{background:var(--pink-soft);}
+.cal-event.meta{background:var(--purple-soft);color:var(--ink-deep);}
+.cal-event.mall{background:var(--lime);}
+.cal-event-more{margin-top:5px;color:var(--text-sub);font-weight:600;}
+/* .cal-event{
   margin-top:4px !important;
   padding:4px 6px !important;
   border:1px solid rgba(46,47,50,.12) !important;
@@ -1171,16 +1174,12 @@ input[type="submit"]:disabled{
   overflow:hidden !important;
   text-overflow:ellipsis !important;
   white-space:nowrap !important;
-}
+} */
 .cal-event:hover{
   border-color:var(--line-strong) !important;
   background:linear-gradient(135deg, var(--lime-hot) 0%, var(--pink-soft) 52%, var(--purple-soft) 100%) !important;
 }
 
-.cal-event.insta{background:var(--pink-soft);}
-.cal-event.meta{background:var(--purple-soft);color:var(--ink-deep);}
-.cal-event.mall{background:var(--lime);}
-.cal-event-more{margin-top:5px;color:var(--text-sub);font-weight:600;}
 
 
 .cal-event-more{
