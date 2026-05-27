@@ -334,7 +334,7 @@ table strong{font-weight:560!important;}
 .btn:hover{
   transform:translateY(-1px);
   background:var(--gradient-hover);
-  border-color:transparent;
+  border:1px solid var(--ink-deep);
   box-shadow:none;
 }
 
