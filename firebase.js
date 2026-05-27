@@ -21,8 +21,13 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 // 허용 이메일 목록 — 한 곳에서만 관리
-export const ALLOWED_EMAILS = ["17mj15@gmail.com", "member@bubbit.com"];
+export const ALLOWED_EMAILS = ["17mj15@gmail.com", "bubbitlab@gmail.com"];
 
+const isAuthorized = (email) => {
+  if (!email) return false;
+  return ALLOWED_EMAILS.map(e => e.toLowerCase().trim())
+                       .includes(email.toLowerCase().trim());
+};
 /**
  * 인증 가드 — 보호된 페이지 최상단에서 호출
  * 1) 로그인 안 된 경우 → login.html 이동
@@ -35,12 +40,12 @@ export function requireAuth(callback) {
       window.location.href = "login.html";
       return;
     }
-    if (!ALLOWED_EMAILS.includes(user.email)) {
+    // 수정된 검증 함수 사용
+    if (!isAuthorized(user.email)) {
       alert("접근 권한이 없습니다.");
       signOut(auth).finally(() => { window.location.href = "login.html"; });
       return;
     }
-    // 인증 통과 → 콘텐츠 표시
     const main = document.querySelector(".main-content");
     if (main) main.style.visibility = "visible";
     if (typeof callback === "function") callback(user);

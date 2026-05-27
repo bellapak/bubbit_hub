@@ -57,25 +57,14 @@
 </div>
 
 <script type="module">
-  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
+  // ✅ firebase.js에서 ALLOWED_EMAILS를 import — 이메일 목록은 firebase.js 한 곳에서만 관리
+  import { auth, ALLOWED_EMAILS } from "./firebase.js";
+  import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs",
-    authDomain: "bubbit-hub.firebaseapp.com",
-    projectId: "bubbit-hub",
-    storageBucket: "bubbit-hub.firebasestorage.app",
-    messagingSenderId: "183100911164",
-    appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39"
-  };
-
-  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-
-  // 허용 이메일 목록 (로그인 시점에서도 검증)
-  const ALLOWED_EMAILS = ["17mj15@gmail.com", "member@bubbit.com"];
+  const btn = document.getElementById("google-login-btn");
+  const errorEl = document.getElementById("login-error");
 
   // 이미 로그인된 허용 사용자는 바로 대시보드로
   onAuthStateChanged(auth, (user) => {
@@ -83,9 +72,6 @@
       window.location.href = "index.html";
     }
   });
-
-  const btn = document.getElementById("google-login-btn");
-  const errorEl = document.getElementById("login-error");
 
   function showError(msg) {
     errorEl.innerText = msg;
@@ -97,14 +83,16 @@
     btn.innerText = "로그인 중...";
     errorEl.style.display = "none";
 
-    try {
+   try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // ✅ 로그인 성공 후 서버 응답 전에 이메일 검증
-      if (!ALLOWED_EMAILS.includes(user.email)) {
-        await signOut(auth); // 허용되지 않은 계정은 즉시 로그아웃
-        showError("접근 권한이 없는 계정입니다. 관리자에게 문의하세요.");
+      const emailCheck = ALLOWED_EMAILS.map(e => e.toLowerCase().trim())
+                                      .includes(user.email.toLowerCase().trim());
+
+      if (!emailCheck) {
+        await signOut(auth);
+        showError("접근 권한이 없는 계정입니다. 계정을 확인하세요: " + user.email);
         btn.disabled = false;
         btn.innerText = "Google 계정으로 로그인";
         return;
