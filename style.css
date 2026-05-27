@@ -88,3 +88,32 @@ body {
   border: 1px solid rgba(0,0,0,0.05);
   box-shadow: 0 4px 12px rgba(0,0,0,0.02);
 }
+
+/* 기존 style.css 내용을 유지하며 아래 항목들을 추가/수정하세요 */
+
+/* 드롭다운 스타일 개선 */
+select.input-field {
+  appearance: none;
+  background: #fff url('data:image/svg+xml;utf8,<svg fill="%2386868b" viewBox="0 0 24 24" width="16"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 12px center;
+  padding-right: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 표 스타일 (애플 스타일의 얇은 선과 여백) */
+.data-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.data-table th { font-size: 11px; color: var(--text-sub); text-align: left; padding: 12px 8px; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 16px 8px; border-bottom: 1px solid #f2f2f7; }
+
+/* 캘린더 복구 */
+.calendar-grid { 
+  display: grid; 
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 1px; 
+  background: var(--border); 
+  border: 1px solid var(--border); 
+  border-radius: var(--radius); 
+  overflow: hidden; 
+}
+.calendar-day { background: #fff; min-height: 120px; padding: 8px; }

@@ -48,21 +48,23 @@
           <div id="dash-acc-cnt" style="font-size:32px; font-weight:700;">0개</div>
         </div>
       </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><span class="card-title">전체 일정 및 중요도 요약</span></div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>일정 정보 및 기한</th>
-                <th>채널</th>
-                <th>우선순위</th>
-                <th>상태</th>
-              </tr>
-            </thead>
-            <tbody id="dash-recent-list"></tbody>
-          </table>
+      <div class="view-container">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="card-title" style="font-weight:700;">전체 일정 관리</span>
+              <button class="btn btn-primary" onclick="openTaskModal()">+ 새 일정</button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr><th>정보</th><th>채널</th><th>우선순위</th><th>상태</th></tr>
+              </thead>
+              <tbody id="dash-recent-list">
+                </tbody>
+            </table>
+          </div>
         </div>
+      </div>
         <div class="card">
           <div class="card-header">
             <span class="card-title">브랜드 계정 요약</span>
