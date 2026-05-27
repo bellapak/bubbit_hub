@@ -30,9 +30,9 @@
 
   <div class="view-container">
     <div class="grid-3">
-      <div class="card">진행 중 일정<div style="font-size:24px; font-weight:700;">0건</div></div>
-      <div class="card">높은 우선순위<div style="font-size:24px; font-weight:700;">0건</div></div>
-      <div class="card">연동 계정<div style="font-size:24px; font-weight:700;">0개</div></div>
+      <div class="card">진행 중 일정<div style="font-size:24px; font-weight:700;"><span id="dash-active-cnt">0건</span></div></div>
+      <div class="card">높은 우선순위<div style="font-size:24px; font-weight:700;"><span id="dash-high-cnt">0건</span></div></div>
+      <div class="card">연동 계정<div style="font-size:24px; font-weight:700;"><span id="dash-acc-cnt">0개</span></div></div>
     </div>
     
     <div class="grid-2">
@@ -117,31 +117,52 @@
 
     onSnapshot(collection(db, "brand_schedules"), (snap) => {
       const docs = snap.docs.map(d => d.data());
-      document.getElementById("dash-active-cnt").innerText = docs.filter(d => d.status === "진행중").length + "건";
-      document.getElementById("dash-high-cnt").innerText = docs.filter(d => d.priority === "높음").length + "건";
+
+      const activeCnt = document.getElementById("dash-active-cnt");
+      const highCnt = document.getElementById("dash-high-cnt");
       const tbody = document.getElementById("dash-recent-list");
+
+      if (activeCnt) activeCnt.innerText = docs.filter(d => d.status === "진행중").length + "건";
+      if (highCnt) highCnt.innerText = docs.filter(d => d.priority === "높음").length + "건";
+
+      if (!tbody) return;
       tbody.innerHTML = "";
-      docs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5).forEach(d => {
-        let ps = "background:#F2F4F6;color:#8B95A1;";
-        if (d.priority === "높음") ps = "background:#FEECEF;color:#F04452;";
-        if (d.priority === "낮음") ps = "background:#F2F4F6;color:#B0B8C1;";
-        tbody.innerHTML += `<tr class="searchable-row">
-          <td><strong style="font-size:15px;">${d.title}</strong>
-          <div style="font-size:12px;color:var(--text-sub);margin-top:4px;font-weight:500;">기한: ${d.date} | 담당: ${d.owner || "-"}</div></td>
-          <td><span style="font-weight:600;">${d.channel}</span></td>
-          <td><span class="badge" style="${ps}">${d.priority}</span></td>
-          <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${d.status}</span></td>
-        </tr>`;
-      });
+
+      docs
+        .sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0))
+        .slice(0, 5)
+        .forEach(d => {
+          let ps = "background:#F2F4F6;color:#8B95A1;";
+          if (d.priority === "높음") ps = "background:#FEECEF;color:#F04452;";
+          if (d.priority === "낮음") ps = "background:#F2F4F6;color:#B0B8C1;";
+
+          tbody.innerHTML += `<tr class="searchable-row">
+            <td><strong style="font-size:15px;">${d.title || "-"}</strong>
+              <div style="font-size:12px;color:var(--text-sub);margin-top:4px;font-weight:500;">
+                기한: ${d.date || "-"} | 담당: ${d.owner || "-"}
+              </div>
+            </td>
+            <td><span style="font-weight:600;">${d.channel || "-"}</span></td>
+            <td><span class="badge" style="${ps}">${d.priority || "보통"}</span></td>
+            <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${d.status || "예정"}</span></td>
+          </tr>`;
+        });
     });
 
     onSnapshot(collection(db, "accounts"), (snap) => {
-      document.getElementById("dash-acc-cnt").innerText = snap.docs.length + "개";
+      const accCnt = document.getElementById("dash-acc-cnt");
       const tbody = document.getElementById("dash-acc-list");
+
+      if (accCnt) accCnt.innerText = snap.docs.length + "개";
+      if (!tbody) return;
+
       tbody.innerHTML = "";
       snap.docs.slice(0, 5).forEach(doc => {
         const d = doc.data();
-        tbody.innerHTML += `<tr class="searchable-row"><td><strong>${d.service}</strong></td><td style="color:var(--text-sub)">${d.id}</td></tr>`;
+        tbody.innerHTML += `<tr class="searchable-row">
+          <td><strong>${d.service || "-"}</strong></td>
+          <td style="color:var(--text-sub)">${d.id || "-"}</td>
+        </tr>`;
       });
     });
   });

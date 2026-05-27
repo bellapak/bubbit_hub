@@ -22,112 +22,31 @@
     <a href="data.html" class="nav-item">08 빅데이터 연동</a>
     <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
-
   <main class="main-content" style="visibility:hidden;">
     <header class="topbar">
       <div class="topbar-title">
         <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
         <span>제품 및 콘텐츠 허브</span>
       </div>
-      <div style="display:flex; gap:12px; align-items:center;">
-        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="제품·콘텐츠 검색" onkeyup="searchTable()">
-        <button class="btn btn-primary" onclick="alert('스토리지 세팅 후 활성화됩니다.')">+ 에셋 업로드</button>
+      <div style="display:flex; gap:12px;">
+        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="에셋 검색" onkeyup="searchTable()">
       </div>
     </header>
-
     <div class="view-container">
-      <section class="card searchable-item" style="background:linear-gradient(135deg,#fff 0%,#f7f2ff 58%,#eaff6a 100%);">
+      <div class="card searchable-item">
         <div class="card-header">
-          <div>
-            <div class="card-title" style="font-size:22px;">콘텐츠 보드</div>
-            <div style="color:var(--muted);font-weight:800;margin-top:4px;">제품 정보 · 소재 · 상세페이지 · SNS 아이디어를 한 곳에서 정리</div>
-          </div>
-          <span class="badge" style="background:var(--ink);color:#fff;">BUBBIT CONTENT KIT</span>
+          <span class="card-title">에셋 라이브러리 (준비 중)</span>
+          <button class="btn btn-primary" onclick="alert('스토리지 세팅 후 활성화됩니다.')">에셋 업로드</button>
         </div>
-        <div class="grid-3" style="margin-top:18px;">
-          <div class="card" style="box-shadow:4px 4px 0 rgba(17,17,19,.12);">
-            <div style="color:var(--muted);font-weight:900;margin-bottom:8px;">PRODUCT</div>
-            <div style="font-size:26px;font-weight:950;letter-spacing:-.04em;">제품 에셋</div>
-            <div style="color:var(--muted);font-weight:700;margin-top:6px;">패키지, 상세컷, USP 자료</div>
-          </div>
-          <div class="card" style="box-shadow:4px 4px 0 rgba(17,17,19,.12);">
-            <div style="color:var(--muted);font-weight:900;margin-bottom:8px;">CONTENT</div>
-            <div style="font-size:26px;font-weight:950;letter-spacing:-.04em;">SNS 소재</div>
-            <div style="color:var(--muted);font-weight:700;margin-top:6px;">릴스, 카드뉴스, 카피 레퍼런스</div>
-          </div>
-          <div class="card" style="box-shadow:4px 4px 0 rgba(17,17,19,.12);">
-            <div style="color:var(--muted);font-weight:900;margin-bottom:8px;">SHOP</div>
-            <div style="font-size:26px;font-weight:950;letter-spacing:-.04em;">자사몰 자료</div>
-            <div style="color:var(--muted);font-weight:700;margin-top:6px;">배너, 상세페이지, 이벤트 이미지</div>
-          </div>
+        <div style="height:200px; display:flex; align-items:center; justify-content:center; background:#F2F4F6; color:var(--text-sub); font-weight:600; border-radius:16px; border:2px dashed var(--border);">
+          파일 업로드 기능 연동 예정
         </div>
-      </section>
-
-      <div class="grid-2">
-        <section class="card searchable-item">
-          <div class="card-header">
-            <span class="card-title">에셋 라이브러리</span>
-            <button class="btn btn-primary" onclick="alert('스토리지 세팅 후 활성화됩니다.')">에셋 업로드</button>
-          </div>
-          <div class="upload-area" style="min-height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
-            <div style="font-size:42px;font-weight:950;line-height:1;">＋</div>
-            <div style="font-size:18px;font-weight:950;">파일 업로드 기능 연동 예정</div>
-            <div style="max-width:360px;color:var(--muted);font-weight:700;">제품컷, 상세페이지 이미지, SNS 소재를 업로드하면 아래 카드형 라이브러리로 관리할 수 있게 확장하는 영역입니다.</div>
-          </div>
-          <div class="asset-grid">
-            <div class="asset-card searchable-item">
-              <div class="asset-preview" style="background:linear-gradient(135deg,var(--pink),var(--yellow));"><strong>PACKSHOT</strong></div>
-              <div class="asset-info"><span class="badge">제품컷</span><strong>패키지 정면/측면</strong><span style="color:var(--muted);">상세페이지 기본 이미지</span></div>
-            </div>
-            <div class="asset-card searchable-item">
-              <div class="asset-preview" style="background:linear-gradient(135deg,var(--purple),var(--lime));"><strong>SNS</strong></div>
-              <div class="asset-info"><span class="badge">콘텐츠</span><strong>릴스/피드 소재</strong><span style="color:var(--muted);">인스타그램 운영용</span></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="card searchable-item">
-          <div class="card-header">
-            <span class="card-title">콘텐츠 기획 메모</span>
-            <span class="badge" style="background:var(--lime);">IDEA</span>
-          </div>
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead><tr><th>구분</th><th>활용 위치</th><th>상태</th></tr></thead>
-              <tbody>
-                <tr class="searchable-row"><td><strong>USP 카피</strong></td><td>상세페이지 / 광고 소재</td><td><span class="badge">정리 필요</span></td></tr>
-                <tr class="searchable-row"><td><strong>캐릭터 컷</strong></td><td>SNS / 배너</td><td><span class="badge" style="background:var(--yellow);">확장 가능</span></td></tr>
-                <tr class="searchable-row"><td><strong>실사용 후기</strong></td><td>구매전환 섹션</td><td><span class="badge" style="background:var(--pink);">수집 중</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
       </div>
-
-      <section class="card searchable-item">
-        <div class="card-header">
-          <span class="card-title">콘텐츠 분류 체계</span>
-          <span class="badge" style="background:var(--purple);color:#fff;">STRUCTURE</span>
-        </div>
-        <div class="grid-3">
-          <div class="searchable-item" style="padding:18px;border:2px solid var(--ink);border-radius:24px;background:#fff;">
-            <div style="font-weight:950;font-size:16px;margin-bottom:8px;">01 제품 정보</div>
-            <div style="color:var(--muted);font-weight:700;">성분, 향, 인증, 세정력, 안전성 자료</div>
-          </div>
-          <div class="searchable-item" style="padding:18px;border:2px solid var(--ink);border-radius:24px;background:#fff;">
-            <div style="font-weight:950;font-size:16px;margin-bottom:8px;">02 상세페이지</div>
-            <div style="color:var(--muted);font-weight:700;">인트로, USP, 후기, FAQ, 구매전환 영역</div>
-          </div>
-          <div class="searchable-item" style="padding:18px;border:2px solid var(--ink);border-radius:24px;background:#fff;">
-            <div style="font-weight:950;font-size:16px;margin-bottom:8px;">03 SNS/광고</div>
-            <div style="color:var(--muted);font-weight:700;">훅, 썸네일, 릴스 구조, 메타광고 소재</div>
-          </div>
-        </div>
-      </section>
     </div>
   </main>
 </div>
 
+<!-- ✅ type="module" 추가 — 기존에 누락되어 인증이 실행되지 않던 버그 수정 -->
 <script type="module">
   import { requireAuth } from "./firebase.js";
 

@@ -848,3 +848,184 @@ textarea.input-field{resize:vertical;line-height:1.65;}
   background:#fff!important;
   border-color:var(--line)!important;
 }
+
+
+/* =====================================================
+   v5 Button Interaction Refinement
+   - 버튼도 hover 시 그라디언트 + 얇은 검은 선
+   - 클릭/포커스 상태에서는 그라디언트 고정
+   - 현재 위치 표시용 점은 계속 제거
+   ===================================================== */
+
+.nav-item.active::before,
+.nav-label::before,
+.card::before{
+  display:none !important;
+  content:none !important;
+}
+
+/* 기본 버튼은 단색/화이트 유지 */
+.btn,
+button.btn,
+a.btn,
+.btn-primary,
+.btn-danger,
+.pw-toggle,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button:not(.nav-item):not(.pw-toggle){
+  box-shadow:none !important;
+}
+
+/* 클릭 가능한 버튼 hover */
+.btn:hover,
+button.btn:hover,
+a.btn:hover,
+.btn-primary:hover,
+.btn-danger:hover,
+.pw-toggle:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:not(.nav-item):not(.pw-toggle):hover{
+  color:var(--ink-deep) !important;
+  border:1px solid var(--line-strong) !important;
+  background:
+    linear-gradient(135deg,
+      var(--lime-hot) 0%,
+      var(--pink-soft) 48%,
+      var(--purple-soft) 100%
+    ) !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+/* 키보드 포커스 / 클릭 후 포커스 유지 시 그라디언트 고정 */
+.btn:focus,
+.btn:focus-visible,
+button.btn:focus,
+button.btn:focus-visible,
+a.btn:focus,
+a.btn:focus-visible,
+.btn-primary:focus,
+.btn-primary:focus-visible,
+.btn-danger:focus,
+.btn-danger:focus-visible,
+.pw-toggle:focus,
+.pw-toggle:focus-visible,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+button:not(.nav-item):not(.pw-toggle):focus,
+button:not(.nav-item):not(.pw-toggle):focus-visible{
+  color:var(--ink-deep) !important;
+  border:1px solid var(--line-strong) !important;
+  background:
+    linear-gradient(135deg,
+      var(--lime-hot) 0%,
+      var(--pink-soft) 48%,
+      var(--purple-soft) 100%
+    ) !important;
+  outline:none !important;
+  box-shadow:var(--focus) !important;
+  transform:none !important;
+}
+
+/* 마우스로 누르는 동안에도 고정 */
+.btn:active,
+button.btn:active,
+a.btn:active,
+.btn-primary:active,
+.btn-danger:active,
+.pw-toggle:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+input[type="reset"]:active,
+button:not(.nav-item):not(.pw-toggle):active{
+  color:var(--ink-deep) !important;
+  border:1px solid var(--line-strong) !important;
+  background:
+    linear-gradient(135deg,
+      var(--lime-hot) 0%,
+      var(--pink-soft) 48%,
+      var(--purple-soft) 100%
+    ) !important;
+  box-shadow:none !important;
+  transform:translateY(0) !important;
+}
+
+/* 네비게이션 버튼도 hover/focus는 같은 규칙 적용 */
+.nav-item:hover,
+.nav-item:focus,
+.nav-item:focus-visible{
+  color:var(--ink-deep) !important;
+  border:1px solid var(--line-strong) !important;
+  background:
+    linear-gradient(135deg,
+      var(--lime-hot) 0%,
+      var(--pink-soft) 50%,
+      var(--purple-soft) 100%
+    ) !important;
+  outline:none !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+/* 현재 페이지 active는 점 없이 단색 유지, hover/focus 때만 그라디언트 */
+.nav-item.active{
+  color:var(--ink-deep) !important;
+  background:var(--lime) !important;
+  border:1px solid rgba(46,47,50,.22) !important;
+}
+
+.nav-item.active:hover,
+.nav-item.active:focus,
+.nav-item.active:focus-visible{
+  background:
+    linear-gradient(135deg,
+      var(--lime-hot) 0%,
+      var(--pink-soft) 50%,
+      var(--purple-soft) 100%
+    ) !important;
+  border:1px solid var(--line-strong) !important;
+}
+
+/* 에셋 카드 내부 실제 버튼만 버튼 그라디언트, 카드는 얇은 선/은은한 배경만 */
+.asset-card:hover{
+  border:1px solid var(--line-strong) !important;
+  background:
+    linear-gradient(135deg,
+      rgba(223,255,79,.18) 0%,
+      rgba(255,216,238,.16) 52%,
+      rgba(235,232,255,.18) 100%
+    ) !important;
+  box-shadow:none !important;
+}
+
+.asset-card .btn:hover,
+.asset-card .btn:focus,
+.asset-card .btn:focus-visible,
+.asset-card .btn:active{
+  color:var(--ink-deep) !important;
+  border:1px solid var(--line-strong) !important;
+  background:
+    linear-gradient(135deg,
+      var(--lime-hot) 0%,
+      var(--pink-soft) 48%,
+      var(--purple-soft) 100%
+    ) !important;
+  box-shadow:var(--focus) !important;
+}
+
+/* 비활성 버튼은 그라디언트 없음 */
+.btn:disabled,
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled{
+  color:var(--text-soft) !important;
+  background:var(--bg-soft) !important;
+  border:1px solid var(--line) !important;
+  box-shadow:none !important;
+  cursor:not-allowed !important;
+}
