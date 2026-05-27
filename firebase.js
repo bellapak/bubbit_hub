@@ -21,7 +21,7 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 // 허용 이메일 목록 — 한 곳에서만 관리
-export const ALLOWED_EMAILS = ["admin@bubbit.com", "member@bubbit.com"];
+export const ALLOWED_EMAILS = ["17mj15@gmail.com", "member@bubbit.com"];
 
 /**
  * 인증 가드 — 보호된 페이지 최상단에서 호출
