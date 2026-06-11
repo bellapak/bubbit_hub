@@ -235,9 +235,12 @@
     display: grid;
     gap: 18px;
     margin-bottom: 18px;
+    width: 100%;
   }
 
   .brand-section {
+    width: 100%;
+    box-sizing: border-box;
     border: 1px solid var(--border);
     border-radius: 18px;
     background: #fff;
@@ -422,6 +425,16 @@
 
 
 
+
+
+  .manifesto-section {
+    width: 100%;
+  }
+
+  .manifesto-section .manifesto-toggle {
+    width: 100%;
+  }
+
   .manifesto-toggle {
     border: 1px solid var(--border);
     border-radius: 18px;
@@ -592,7 +605,7 @@
         </div>
 
         <div class="brand-system searchable-item">
-          <section class="brand-section">
+          <section class="brand-section manifesto-section">
             <div class="brand-section-head">
               <div>
                 <h3 class="brand-section-title">브랜드 매니페스토</h3>
@@ -724,7 +737,7 @@
             <div class="brand-section-head">
               <div>
                 <h3 class="brand-section-title">컬러 가이드</h3>
-                <p class="brand-section-sub">메인 컬러는 큰 칩으로, 서브/상태/배경 컬러는 작은 원형 칩과 코드로 빠르게 확인할 수 있도록 정리했습니다.</p>
+                <p class="brand-section-sub">메인 컬러는 큰 칩으로, 나머지 컬러는 정리된 순서대로 작은 원형 칩과 코드로 빠르게 확인할 수 있도록 정리했습니다.</p>
               </div>
             </div>
 
@@ -734,13 +747,10 @@
                   <div class="main-color-preview" style="background:#111111;"></div>
                   <div class="main-color-info"><strong>Bubbit Black / Main</strong><span>#111111</span></div>
                 </div>
-                <div class="main-color-card">
-                  <div class="main-color-preview" style="background:#FDB6C3;"></div>
-                  <div class="main-color-info"><strong>Bubbit Pink / Main Point</strong><span>#FDB6C3</span></div>
-                </div>
               </div>
 
               <div class="sub-color-list">
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FDB6C3;"></i><div class="sub-color-meta"><strong>Bubbit Pink / Main Point</strong><span>#FDB6C3</span></div></div>
                 <div class="sub-color-item"><i class="sub-color-dot" style="background:#EC91F4;"></i><div class="sub-color-meta"><strong>Bubbit Purple</strong><span>#EC91F4</span></div></div>
                 <div class="sub-color-item"><i class="sub-color-dot" style="background:#FC9BB3;"></i><div class="sub-color-meta"><strong>Point Pink</strong><span>#FC9BB3</span></div></div>
                 <div class="sub-color-item"><i class="sub-color-dot" style="background:#FED6DE;"></i><div class="sub-color-meta"><strong>Soft Pink</strong><span>#FED6DE</span></div></div>
