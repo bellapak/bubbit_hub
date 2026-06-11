@@ -109,6 +109,7 @@
   }
 
   .asset-preview {
+    width: 100%;
     height: 170px;
     background: #F2F4F6;
     display: flex;
@@ -119,14 +120,18 @@
     letter-spacing: 0.05em;
     color: #111;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
   }
 
   .asset-preview img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
     box-sizing: border-box;
-    padding: 18px;
+    padding: 0;
+    margin: 0;
     display: block;
   }
 
@@ -415,9 +420,130 @@
     background: #FAFAFA;
   }
 
+
+
+  .manifesto-toggle {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .manifesto-toggle summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .manifesto-toggle summary::-webkit-details-marker { display: none; }
+
+  .manifesto-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px;
+    background: linear-gradient(135deg, #111 0%, #2A2024 58%, #FDB6C3 170%);
+    color: #fff;
+  }
+
+  .manifesto-summary-title { display: grid; gap: 8px; }
+  .manifesto-summary-title span { color: #FDB6C3; font-size: 12px; font-weight: 900; letter-spacing: 0.08em; }
+  .manifesto-summary-title strong { font-size: 23px; line-height: 1.25; letter-spacing: -0.04em; }
+
+  .manifesto-arrow {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-size: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  .manifesto-toggle[open] .manifesto-arrow { transform: rotate(180deg); }
+
+  .manifesto-content { padding: 22px; display: grid; gap: 16px; }
+  .manifesto-content h4 { margin: 0 0 8px; color: var(--text-main, #111); font-size: 15px; }
+  .manifesto-content p { margin: 0; color: var(--text-sub); font-size: 13px; line-height: 1.75; }
+
+  .manifesto-content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .manifesto-content-box {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #FAFAFA;
+  }
+
+  .color-guide-wrap { display: grid; gap: 18px; }
+
+  .main-color-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .main-color-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  .main-color-preview {
+    height: 86px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .main-color-info { padding: 12px; }
+  .main-color-info strong { display: block; margin-bottom: 4px; color: var(--text-main, #111); font-size: 13px; }
+  .main-color-info span { display: block; color: var(--text-sub); font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+  .sub-color-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+  }
+
+  .sub-color-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .sub-color-dot {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.12);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.26);
+  }
+
+  .sub-color-meta { display: grid; gap: 2px; }
+  .sub-color-meta strong { color: var(--text-main, #111); font-size: 12px; line-height: 1.2; }
+  .sub-color-meta span { color: var(--text-sub); font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+
   @media (max-width: 900px) {
     .asset-guide-grid,
-    .brand-info-grid {
+    .brand-info-grid,
+    .manifesto-content-grid,
+    .main-color-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -470,20 +596,63 @@
             <div class="brand-section-head">
               <div>
                 <h3 class="brand-section-title">브랜드 매니페스토</h3>
-                <p class="brand-section-sub">버빗이 콘텐츠와 제품 경험에서 일관되게 전달해야 하는 핵심 선언입니다.</p>
+                <p class="brand-section-sub">클릭하면 버빗의 선언, 비전, 가치, 제품 철학, 타깃, 마케팅 기준을 한 번에 확인할 수 있습니다.</p>
               </div>
             </div>
-            <div class="manifesto-card">
-              <p class="manifesto-label">BRAND MANIFESTO</p>
-              <h3>HOP OFF BORING,<br>HOP INTO FUN!</h3>
-              <p>
-                버빗은 지루한 집안일을 단순히 끝내야 하는 노동으로 보지 않습니다.
-                우리는 일상 속에 기분 좋은 틈을 만들고, 청소와 세탁의 시간을 나를 위한 리듬으로 바꾸는 경험을 설계합니다.
-                귀찮음은 덜어내되 기준은 높이고, 뻔한 생필품 안에 위트와 감도를 더합니다.
-              </p>
-            </div>
+
+            <details class="manifesto-toggle">
+              <summary>
+                <div class="manifesto-summary">
+                  <div class="manifesto-summary-title">
+                    <span>BRAND MANIFESTO</span>
+                    <strong>HOP OFF BORING,<br>HOP INTO FUN!</strong>
+                  </div>
+                  <div class="manifesto-arrow">⌄</div>
+                </div>
+              </summary>
+
+              <div class="manifesto-content">
+                <div class="manifesto-content-box">
+                  <h4>Manifesto</h4>
+                  <p>
+                    버빗은 지루한 집안일을 단순히 끝내야 하는 노동으로 보지 않습니다.
+                    우리는 일상 속에 기분 좋은 틈을 만들고, 청소와 세탁의 시간을 나를 위한 리듬으로 바꾸는 경험을 설계합니다.
+                    귀찮음은 덜어내되 기준은 높이고, 뻔한 생필품 안에 위트와 감도를 더합니다.
+                    버빗은 지루한 집안일이 나만의 리듬으로 바뀌는 유쾌한 경험입니다.
+                  </p>
+                </div>
+
+                <div class="manifesto-content-grid">
+                  <div class="manifesto-content-box">
+                    <h4>Brand Vision</h4>
+                    <p>우리는 당신의 일상 속에 기분 좋은 틈을 만듭니다. 버빗은 단순히 청소 도구를 파는 것이 아니라 지루한 집안일의 시간을 나를 위한 리듬으로 바꾸는 경험을 설계합니다.</p>
+                  </div>
+                  <div class="manifesto-content-box">
+                    <h4>Brand Philosophy</h4>
+                    <p>Smart Laziness, Responsible Growth, Whimsical Wit. 귀찮음은 덜어내고 기준은 높게, 동물을 사랑하고 환경을 생각하며, 뻔한 생필품에 숨겨진 재미 한 스푼을 더합니다.</p>
+                  </div>
+                  <div class="manifesto-content-box">
+                    <h4>Core Target</h4>
+                    <p>버빗이 만나는 사람들은 도시의 삶을 즐기며, 사소한 물건 하나에도 자신의 안목을 담고 싶어하는 2539 여성입니다. 이들에게 살림은 단순한 노동이 아니라 나만의 라이프스타일을 큐레이션하는 과정입니다.</p>
+                  </div>
+                  <div class="manifesto-content-box">
+                    <h4>Product Concept</h4>
+                    <p>버빗은 비건 포뮬러, 크루얼티 프리, 감도 높은 디자인을 제품 철학으로 둡니다. 피부 자극을 최소화하고 환경에 무해한 성분을 엄선하며, 공간의 오브제가 되는 위트 있는 디자인을 추구합니다.</p>
+                  </div>
+                  <div class="manifesto-content-box">
+                    <h4>Channel Strategy</h4>
+                    <p>공식 브랜드 스토어는 스토리텔링이 집약된 디지털 플래그십이자 D2C 아카이브 역할을 수행합니다. 네이버 스마트스토어는 데일리 접근성을, 프리미엄 라이프스타일 플랫폼은 취향 기반 큐레이션을, 오프라인 팝업은 직접 체험을 담당합니다.</p>
+                  </div>
+                  <div class="manifesto-content-box">
+                    <h4>Marketing Strategy</h4>
+                    <p>Creative Connection & Wit-Driven Growth. 브랜드 페르소나 스토리텔링, Viral & UGC Drive, Influencer Collaboration을 통해 지루한 살림을 유쾌한 리듬으로 바꾸는 마케팅 플레이북을 운영합니다.</p>
+                  </div>
+                </div>
+              </div>
+            </details>
           </section>
 
+          
           <section class="brand-section">
             <div class="brand-section-head">
               <div>
@@ -555,45 +724,44 @@
             <div class="brand-section-head">
               <div>
                 <h3 class="brand-section-title">컬러 가이드</h3>
-                <p class="brand-section-sub">브랜드 소개서 내 사용 컬러를 기준으로 정리한 빠른 확인용 팔레트입니다.</p>
+                <p class="brand-section-sub">메인 컬러는 큰 칩으로, 서브/상태/배경 컬러는 작은 원형 칩과 코드로 빠르게 확인할 수 있도록 정리했습니다.</p>
               </div>
             </div>
-            <div class="color-grid">
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#FDB6C3;"></div>
-                <div class="color-chip-info"><strong>Bubbit Pink</strong><span>#FDB6C3</span></div>
+
+            <div class="color-guide-wrap">
+              <div class="main-color-grid">
+                <div class="main-color-card">
+                  <div class="main-color-preview" style="background:#111111;"></div>
+                  <div class="main-color-info"><strong>Bubbit Black / Main</strong><span>#111111</span></div>
+                </div>
+                <div class="main-color-card">
+                  <div class="main-color-preview" style="background:#FDB6C3;"></div>
+                  <div class="main-color-info"><strong>Bubbit Pink / Main Point</strong><span>#FDB6C3</span></div>
+                </div>
               </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#FC9BB3;"></div>
-                <div class="color-chip-info"><strong>Point Pink</strong><span>#FC9BB3</span></div>
-              </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#FED6DE;"></div>
-                <div class="color-chip-info"><strong>Soft Pink</strong><span>#FED6DE</span></div>
-              </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#111111;"></div>
-                <div class="color-chip-info"><strong>Bubbit Black</strong><span>#111111</span></div>
-              </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#FFFFFF;"></div>
-                <div class="color-chip-info"><strong>White</strong><span>#FFFFFF</span></div>
-              </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#F2F4F6;"></div>
-                <div class="color-chip-info"><strong>Light Gray</strong><span>#F2F4F6</span></div>
-              </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#767676;"></div>
-                <div class="color-chip-info"><strong>Text Sub</strong><span>#767676</span></div>
-              </div>
-              <div class="color-swatch">
-                <div class="color-chip-preview" style="background:#E8E8EC;"></div>
-                <div class="color-chip-info"><strong>Line</strong><span>#E8E8EC</span></div>
+
+              <div class="sub-color-list">
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#EC91F4;"></i><div class="sub-color-meta"><strong>Bubbit Purple</strong><span>#EC91F4</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FC9BB3;"></i><div class="sub-color-meta"><strong>Point Pink</strong><span>#FC9BB3</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FED6DE;"></i><div class="sub-color-meta"><strong>Soft Pink</strong><span>#FED6DE</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FFF1F5;"></i><div class="sub-color-meta"><strong>Pink Background</strong><span>#FFF1F5</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#5B2B36;"></i><div class="sub-color-meta"><strong>Deep Pink Text</strong><span>#5B2B36</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FFFFFF;"></i><div class="sub-color-meta"><strong>White</strong><span>#FFFFFF</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FAFAFA;"></i><div class="sub-color-meta"><strong>Warm White</strong><span>#FAFAFA</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F7F7F7;"></i><div class="sub-color-meta"><strong>Page Gray</strong><span>#F7F7F7</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F2F4F6;"></i><div class="sub-color-meta"><strong>Light Gray</strong><span>#F2F4F6</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#E8E8EC;"></i><div class="sub-color-meta"><strong>Line Gray</strong><span>#E8E8EC</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#767676;"></i><div class="sub-color-meta"><strong>Sub Text</strong><span>#767676</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#222222;"></i><div class="sub-color-meta"><strong>Main Text</strong><span>#222222</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F59E0B;"></i><div class="sub-color-meta"><strong>Need Check</strong><span>#F59E0B</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#9CA3AF;"></i><div class="sub-color-meta"><strong>Archive</strong><span>#9CA3AF</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#EF4444;"></i><div class="sub-color-meta"><strong>Do Not Use</strong><span>#EF4444</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#2A2024;"></i><div class="sub-color-meta"><strong>Deep Brown Black</strong><span>#2A2024</span></div></div>
               </div>
             </div>
           </section>
 
+          
           <section class="brand-section">
             <div class="brand-section-head">
               <div>
