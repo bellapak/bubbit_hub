@@ -1,368 +1,238 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>제품 및 콘텐츠 에셋 - 버빗 허브</title>
-<link rel="stylesheet" href="style.css" />
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콘텐츠 허브 - 버빗 허브</title>
+<link rel="stylesheet" href="style.css">
 <style>
-  :root {
-    --bubbit-black: #111111;
-    --bubbit-pink: #FDB6C3;
-    --bubbit-purple: #EC91F4;
-    --bubbit-bg: #F7F7F8;
-    --bubbit-white: #FFFFFF;
-    --bubbit-line: #E8E8EC;
-    --bubbit-text: #222222;
-    --bubbit-sub: #767676;
-    --bubbit-soft: #FFF1F5;
-    --status-approved: #111111;
-    --status-check: #F59E0B;
-    --status-stop: #EF4444;
-    --status-archive: #9CA3AF;
-  }
-
-  .main-content {
-    background: var(--bubbit-bg);
-  }
-
-  .asset-hero {
-    background: var(--bubbit-black);
+  .asset-intro {
+    margin-bottom: 18px;
+    padding: 22px;
+    border-radius: 18px;
+    background: #111;
     color: #fff;
-    border-radius: 24px;
-    padding: 34px 36px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
   }
 
-  .asset-hero::after {
-    content: "";
-    position: absolute;
-    right: -60px;
-    top: -60px;
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, var(--bubbit-pink), transparent 68%);
-    opacity: 0.75;
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 12px;
+  .asset-intro .eyebrow {
+    margin: 0 0 8px;
+    color: #FDB6C3;
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.08em;
-    color: var(--bubbit-pink);
-    text-transform: uppercase;
   }
 
-  .hero-title {
+  .asset-intro h2 {
     margin: 0;
-    font-size: 30px;
-    line-height: 1.25;
+    font-size: 22px;
+    line-height: 1.35;
     letter-spacing: -0.03em;
   }
 
-  .hero-desc {
-    margin: 14px 0 0;
-    max-width: 720px;
-    color: rgba(255,255,255,0.78);
-    font-size: 15px;
+  .asset-intro p {
+    margin: 10px 0 0;
+    color: rgba(255,255,255,0.74);
+    font-size: 14px;
     line-height: 1.7;
   }
 
-  .hub-grid {
+  .asset-guide-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .guide-card {
-    background: #fff;
-    border: 1px solid var(--bubbit-line);
-    border-radius: 20px;
-    padding: 22px;
-  }
-
-  .guide-card h3 {
-    margin: 0 0 8px;
-    font-size: 17px;
-    letter-spacing: -0.02em;
-  }
-
-  .guide-card p {
-    margin: 0;
-    color: var(--bubbit-sub);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .section-card {
-    background: #fff;
-    border: 1px solid var(--bubbit-line);
-    border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-
-  .section-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 18px;
+    gap: 12px;
     margin-bottom: 18px;
   }
 
-  .section-title {
-    margin: 0;
-    font-size: 20px;
-    letter-spacing: -0.03em;
+  .asset-guide-card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
   }
 
-  .section-desc {
-    margin: 6px 0 0;
-    color: var(--bubbit-sub);
-    font-size: 14px;
+  .asset-guide-card strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: var(--text-main, #111);
+  }
+
+  .asset-guide-card p {
+    margin: 0;
+    color: var(--text-sub);
+    font-size: 13px;
     line-height: 1.6;
   }
 
-  .filter-wrap {
+  .asset-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 12px 0 22px;
+    margin: 16px 0 18px;
   }
 
-  .filter-chip {
-    border: 1px solid var(--bubbit-line);
+  .asset-chip {
+    border: 1px solid var(--border);
     background: #fff;
-    color: var(--bubbit-text);
-    padding: 9px 13px;
+    padding: 8px 13px;
     border-radius: 999px;
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
+    transition: 0.15s ease;
   }
 
-  .filter-chip.active {
-    background: var(--bubbit-black);
+  .asset-chip:hover,
+  .asset-chip.active {
+    background: #111;
     color: #fff;
-    border-color: var(--bubbit-black);
+    border-color: #111;
   }
 
   .asset-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 16px;
   }
 
   .asset-card {
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border: 1px solid var(--bubbit-line);
-    border-radius: 22px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
     overflow: hidden;
-    transition: transform 0.16s ease, box-shadow 0.16s ease;
+    background: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
   .asset-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(17,17,17,0.08);
+    box-shadow: 0 10px 24px rgba(17,17,17,0.08);
   }
 
-  .asset-thumb {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    background: #F3F3F5;
+  .asset-preview {
+    height: 150px;
+    background: linear-gradient(135deg, #FDB6C3, #F7F7F7 70%);
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    position: relative;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #111;
   }
 
-  .asset-thumb img {
+  .asset-preview img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .asset-thumb.placeholder {
-    background:
-      linear-gradient(135deg, rgba(253,182,195,0.45), rgba(236,145,244,0.2)),
-      #F7F7F8;
-  }
-
-  .asset-thumb.placeholder span {
-    font-size: 13px;
-    font-weight: 800;
-    color: #111;
-    letter-spacing: 0.04em;
-  }
-
-  .status-badge {
+  .asset-preview em {
     position: absolute;
-    left: 12px;
     top: 12px;
-    padding: 7px 9px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 800;
+    left: 12px;
+    background: #111;
     color: #fff;
-    background: var(--status-approved);
-  }
-
-  .status-check { background: var(--status-check); }
-  .status-stop { background: var(--status-stop); }
-  .status-archive { background: var(--status-archive); }
-
-  .asset-body {
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1;
-  }
-
-  .asset-category {
-    color: var(--bubbit-purple);
-    font-size: 12px;
+    border-radius: 999px;
+    padding: 6px 9px;
+    font-size: 10px;
+    font-style: normal;
     font-weight: 800;
-    letter-spacing: 0.04em;
   }
 
-  .asset-title {
-    margin: 0;
-    font-size: 17px;
-    letter-spacing: -0.02em;
+  .asset-preview em.need-check {
+    background: #F59E0B;
   }
 
-  .asset-meta {
-    display: grid;
-    gap: 6px;
-    color: var(--bubbit-sub);
+  .asset-preview em.archive {
+    background: #9CA3AF;
+  }
+
+  .asset-info {
+    padding: 16px;
+  }
+
+  .asset-info strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: var(--text-main, #111);
+  }
+
+  .asset-info p {
+    margin: 4px 0;
+    color: var(--text-sub);
     font-size: 13px;
-    line-height: 1.45;
+    line-height: 1.5;
   }
 
-  .asset-meta b {
-    color: var(--bubbit-text);
-  }
-
-  .asset-note {
-    background: var(--bubbit-soft);
-    border: 1px solid rgba(253,182,195,0.5);
+  .asset-info small {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    background: #FFF1F5;
     color: #5B2B36;
-    padding: 11px 12px;
-    border-radius: 14px;
-    font-size: 13px;
-    line-height: 1.45;
+    font-size: 12px;
+    line-height: 1.5;
   }
 
   .asset-actions {
     display: flex;
     gap: 8px;
-    margin-top: auto;
+    margin-top: 14px;
   }
 
-  .asset-btn {
+  .asset-actions a {
     flex: 1;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 10px 12px;
-    border-radius: 12px;
+    height: 38px;
+    border-radius: 10px;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 800;
-    border: 1px solid var(--bubbit-black);
+    font-weight: 700;
   }
 
-  .asset-btn.primary {
-    background: var(--bubbit-black);
+  .asset-actions a.preview-link {
+    border: 1px solid #111;
+    color: #111;
+    background: #fff;
+  }
+
+  .asset-actions a.download-link {
+    background: #111;
     color: #fff;
   }
 
-  .asset-btn.secondary {
-    background: #fff;
-    color: var(--bubbit-black);
-  }
-
-  .guide-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-top: 2px solid var(--bubbit-black);
-  }
-
-  .guide-table th,
-  .guide-table td {
-    padding: 14px 12px;
-    border-bottom: 1px solid var(--bubbit-line);
-    text-align: left;
-    vertical-align: top;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .guide-table th {
-    width: 190px;
-    background: #FAFAFA;
-    color: var(--bubbit-text);
-  }
-
-  .empty-state {
+  .asset-empty {
     display: none;
+    min-height: 140px;
     align-items: center;
     justify-content: center;
-    min-height: 180px;
-    border: 1px dashed var(--bubbit-line);
-    border-radius: 18px;
-    color: var(--bubbit-sub);
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    color: var(--text-sub);
     font-size: 14px;
     font-weight: 700;
   }
 
-  @media (max-width: 1180px) {
-    .hub-grid,
-    .asset-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 760px) {
-    .hub-grid,
-    .asset-grid {
+  @media (max-width: 900px) {
+    .asset-guide-grid {
       grid-template-columns: 1fr;
-    }
-
-    .section-head {
-      flex-direction: column;
-    }
-
-    .asset-hero {
-      padding: 28px 24px;
     }
   }
 </style>
 </head>
-
 <body>
 <div id="app">
   <nav class="sidebar">
     <div class="brand-logo">Bubbit Hub</div>
-
     <div class="nav-label">WORKSPACE</div>
     <a href="index.html" class="nav-item">01 통합 대시보드</a>
     <a href="content.html" class="nav-item active">02 제품 및 콘텐츠</a>
     <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
     <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
-
     <div class="nav-label">MANAGEMENT</div>
     <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
     <a href="issue.html" class="nav-item">06 이슈 로그</a>
@@ -370,395 +240,271 @@
     <a href="data.html" class="nav-item">08 빅데이터 연동</a>
     <a href="account_issue.html" class="nav-item">09 계정 관리</a>
   </nav>
-
   <main class="main-content" style="visibility:hidden;">
     <header class="topbar">
       <div class="topbar-title">
         <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
         <span>제품 및 콘텐츠 허브</span>
       </div>
-
       <div style="display:flex; gap:12px;">
-        <input
-          type="text"
-          id="search-input"
-          class="input-field"
-          style="width:260px; margin:0;"
-          placeholder="에셋명, 카테고리, 사용처 검색"
-          onkeyup="renderAssets()"
-        />
+        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="에셋 검색" onkeyup="searchTable()">
       </div>
     </header>
-
     <div class="view-container">
-      <section class="asset-hero searchable-item">
-        <p class="eyebrow">BUBBIT BRAND ASSET HUB</p>
-        <h1 class="hero-title">같은 기준으로 만들고, 검수된 에셋만 사용합니다.</h1>
-        <p class="hero-desc">
-          버빗 허브는 모든 팀원이 동일한 브랜드 경험을 만들 수 있도록
-          브랜드 기준, 제품 및 콘텐츠 에셋, 사용 규격, 다운로드 파일을 한 곳에서 관리하는 내부 운영 공간입니다.
-        </p>
-      </section>
+      <div class="card searchable-item">
+        <div class="card-header">
+          <span class="card-title">브랜드 에셋 라이브러리</span>
+          <a class="btn btn-primary" href="https://github.com/계정명/저장소명/tree/main/assets" target="_blank" rel="noopener">GitHub 에셋 폴더 열기</a>
+        </div>
 
-      <section class="hub-grid searchable-item">
-        <article class="guide-card">
-          <h3>Smart Laziness</h3>
-          <p>귀찮음은 덜어내고 기준은 높게. 가장 영리한 살림 방식을 제안합니다.</p>
-        </article>
+        <div class="asset-intro searchable-item">
+          <p class="eyebrow">BUBBIT BRAND ASSET HUB</p>
+          <h2>같은 기준으로 만들고, 검수된 에셋만 사용합니다.</h2>
+          <p>
+            버빗의 제품 이미지, 콘텐츠 에셋, 로고, 캐릭터 파일을 한 곳에서 확인하고 다운로드할 수 있는 공간입니다.
+            모든 팀원이 동일한 브랜드 경험을 만들 수 있도록 사용 규격과 주의사항을 함께 확인해 주세요.
+          </p>
+        </div>
 
-        <article class="guide-card">
-          <h3>Responsible Growth</h3>
-          <p>동물을 사랑하고 환경을 생각하는 마음을 버빗의 기본 약속으로 둡니다.</p>
-        </article>
-
-        <article class="guide-card">
-          <h3>Whimsical Wit</h3>
-          <p>뻔한 생필품에 숨겨진 재미 한 스푼. 유연하고 위트 있는 태도를 유지합니다.</p>
-        </article>
-      </section>
-
-      <section class="section-card searchable-item">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">브랜드 사용 기준</h2>
-            <p class="section-desc">
-              에셋을 다운로드하기 전, 사용 가능 범위와 금지 기준을 먼저 확인해주세요.
-            </p>
+        <div class="asset-guide-grid searchable-item">
+          <div class="asset-guide-card">
+            <strong>Smart Laziness</strong>
+            <p>귀찮음은 덜어내고 기준은 높게. 가장 영리한 살림 방식을 제안합니다.</p>
           </div>
-          <a href="guide.html" class="btn btn-primary">브랜드 가이드 전체 보기</a>
-        </div>
-
-        <table class="guide-table">
-          <tbody>
-            <tr>
-              <th>슬로건</th>
-              <td>
-                HOP OFF BORING, HOP INTO FUN!<br />
-                지루한 집안일이 나만의 리듬으로 바뀌는 유쾌한 경험을 기준으로 커뮤니케이션합니다.
-              </td>
-            </tr>
-            <tr>
-              <th>사용 가능 에셋</th>
-              <td>
-                APPROVED 상태의 로고, 캐릭터, 제품 이미지, 상세페이지 이미지, SNS 템플릿, 제안서 파일만 사용합니다.
-              </td>
-            </tr>
-            <tr>
-              <th>사용 금지</th>
-              <td>
-                임의 색상 변경, 비율 왜곡, 그림자/그라데이션 추가, 오래된 시안 사용, 승인 전 파일 외부 전달을 금지합니다.
-              </td>
-            </tr>
-            <tr>
-              <th>검수 기준</th>
-              <td>
-                파일 규격, 사용 채널, 최종 업데이트일, 담당자, 주의사항을 확인한 뒤 사용합니다.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="section-card">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">제품 및 콘텐츠 에셋 라이브러리</h2>
-            <p class="section-desc">
-              GitHub 에셋 폴더에 등록된 파일을 기준으로 미리보기와 다운로드 링크를 제공합니다.
-              파일을 교체할 때는 GitHub 내 동일 경로의 파일을 업데이트해주세요.
-            </p>
+          <div class="asset-guide-card">
+            <strong>Responsible Growth</strong>
+            <p>동물을 사랑하고 환경을 생각하는 마음을 버빗의 기본 약속으로 둡니다.</p>
           </div>
-          <a
-            id="github-folder-link"
-            href="#"
-            target="_blank"
-            class="btn"
-            style="padding:10px 14px;font-size:14px;"
-          >
-            GitHub 에셋 폴더 열기
-          </a>
+          <div class="asset-guide-card">
+            <strong>Whimsical Wit</strong>
+            <p>뻔한 생필품에 숨겨진 재미 한 스푼. 유연하고 위트 있는 태도를 유지합니다.</p>
+          </div>
         </div>
 
-        <div class="filter-wrap" id="filter-wrap"></div>
-
-        <div class="asset-grid" id="asset-grid"></div>
-
-        <div class="empty-state" id="empty-state">
-          검색 결과가 없습니다. 키워드나 카테고리를 다시 확인해주세요.
+        <div style="margin-bottom:18px; color:var(--text-sub); font-size:14px; line-height:1.7;" class="searchable-item">
+          <strong style="color:var(--text-main, #111);">사용 기준</strong><br>
+          APPROVED 상태의 파일만 외부 전달 및 제작에 사용해 주세요. NEED CHECK 파일은 담당자 확인 후 사용하며,
+          ARCHIVE 파일은 히스토리 확인용으로만 사용합니다.
         </div>
-      </section>
+
+        <div class="asset-filter">
+          <button class="asset-chip active" onclick="filterAssets('전체', this)">전체</button>
+          <button class="asset-chip" onclick="filterAssets('로고', this)">로고</button>
+          <button class="asset-chip" onclick="filterAssets('캐릭터', this)">캐릭터</button>
+          <button class="asset-chip" onclick="filterAssets('제품 이미지', this)">제품 이미지</button>
+          <button class="asset-chip" onclick="filterAssets('콘텐츠', this)">콘텐츠</button>
+          <button class="asset-chip" onclick="filterAssets('템플릿', this)">템플릿</button>
+          <button class="asset-chip" onclick="filterAssets('인쇄용', this)">인쇄용</button>
+        </div>
+
+        <div class="asset-grid" id="asset-grid">
+          <div class="asset-card searchable-item" data-category="로고">
+            <div class="asset-preview">
+              <span>LOGO</span>
+              <em>APPROVED</em>
+            </div>
+            <div class="asset-info">
+              <strong>버빗 로고 패키지</strong>
+              <p>파일 형식: AI / SVG / PNG</p>
+              <p>사용처: 웹, 인쇄, 제안서, SNS</p>
+              <p>업데이트: 2026.06 / 담당: 디자인팀</p>
+              <small>로고 비율 왜곡, 임의 색상 변경, 그림자 효과 적용 금지</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/logo/bubbit-logo-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/bubbit-logo-package.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="캐릭터">
+            <div class="asset-preview">
+              <span>BUBBIT</span>
+              <em>APPROVED</em>
+            </div>
+            <div class="asset-info">
+              <strong>버빗 캐릭터 기본형</strong>
+              <p>파일 형식: AI / SVG / PNG</p>
+              <p>사용처: 상세페이지, SNS, 브랜드 페이지</p>
+              <p>업데이트: 2026.06 / 담당: 디자인팀</p>
+              <small>플랫 벡터 기준 유지. 눈, 코, 입 요소 임의 추가 및 3D 스타일 변형 금지</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/character/bubbit-basic-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/bubbit-character-basic.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="캐릭터">
+            <div class="asset-preview">
+              <span>MOOBBIT</span>
+              <em>APPROVED</em>
+            </div>
+            <div class="asset-info">
+              <strong>무빗 캐릭터 기본형</strong>
+              <p>파일 형식: AI / SVG / PNG</p>
+              <p>사용처: SNS 콘텐츠, 이벤트, 안내 영역</p>
+              <p>업데이트: 2026.06 / 담당: 디자인팀</p>
+              <small>버빗 메인 커뮤니케이션을 보조하는 서브 캐릭터로 사용</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/character/moobbit-basic-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/moobbit-character-basic.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="제품 이미지">
+            <div class="asset-preview">
+              <span>PRODUCT</span>
+              <em>APPROVED</em>
+            </div>
+            <div class="asset-info">
+              <strong>주방세제 제품 이미지</strong>
+              <p>파일 형식: PNG / JPG</p>
+              <p>사용처: 자사몰, 입점몰, 광고 소재</p>
+              <p>업데이트: 2026.06 / 담당: 콘텐츠팀</p>
+              <small>제품 패키지 최신 버전 여부 확인 후 사용</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/product/dish-soap-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/dish-soap-product-image.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="제품 이미지">
+            <div class="asset-preview">
+              <span>CAPSULE</span>
+              <em class="need-check">NEED CHECK</em>
+            </div>
+            <div class="asset-info">
+              <strong>캡슐세탁세제 제품 이미지</strong>
+              <p>파일 형식: PNG / JPG</p>
+              <p>사용처: 제품 소개, 제안서, SNS</p>
+              <p>업데이트: 2026.06 / 담당: 콘텐츠팀</p>
+              <small>향 네이밍 및 패키지 표기 최종 확정 후 사용 권장</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/product/capsule-detergent-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/capsule-detergent-product-image.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="콘텐츠">
+            <div class="asset-preview">
+              <span>SNS</span>
+              <em>APPROVED</em>
+            </div>
+            <div class="asset-info">
+              <strong>인스타그램 콘텐츠 템플릿</strong>
+              <p>파일 형식: PSD / PNG / JPG</p>
+              <p>사용처: 피드, 릴스 커버, 이벤트 콘텐츠</p>
+              <p>업데이트: 2026.06 / 담당: 마케팅팀</p>
+              <small>카피 톤앤매너 확인 후 사용. 과도한 설명형 문구 지양</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/sns/instagram-template-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/instagram-template-package.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="템플릿">
+            <div class="asset-preview">
+              <span>PPT</span>
+              <em>APPROVED</em>
+            </div>
+            <div class="asset-info">
+              <strong>제휴 제안서 템플릿</strong>
+              <p>파일 형식: PPTX / PDF</p>
+              <p>사용처: 입점, 제휴, 외부 제안</p>
+              <p>업데이트: 2026.06 / 담당: 마케팅팀</p>
+              <small>외부 전달 전 담당자 검수 필수</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/template/partnership-deck-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/bubbit-partnership-template.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="asset-card searchable-item" data-category="인쇄용">
+            <div class="asset-preview">
+              <span>PRINT</span>
+              <em class="need-check">NEED CHECK</em>
+            </div>
+            <div class="asset-info">
+              <strong>인쇄용 로고 및 패키지 가이드</strong>
+              <p>파일 형식: AI / PDF</p>
+              <p>사용처: 패키지, 스티커, 인쇄물</p>
+              <p>업데이트: 2026.06 / 담당: 디자인팀</p>
+              <small>인쇄 전 색상, 칼선, 여백, 해상도 최종 감리 필요</small>
+              <div class="asset-actions">
+                <a class="preview-link" href="./assets/print/print-guide-preview.png" target="_blank" rel="noopener">미리보기</a>
+                <a class="download-link" href="./assets/download/print-logo-package.zip" download>다운로드</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="asset-empty" id="asset-empty">검색 결과가 없습니다.</div>
+      </div>
     </div>
   </main>
 </div>
 
+<!-- ✅ type="module" 추가 — 기존에 누락되어 인증이 실행되지 않던 버그 수정 -->
 <script type="module">
   import { requireAuth } from "./firebase.js";
 
+  let currentAssetCategory = "전체";
+
   requireAuth(() => {
-    document.querySelector(".main-content").style.visibility = "visible";
-    renderFilters();
-    renderAssets();
+    const mainContent = document.querySelector(".main-content");
+    if (mainContent) mainContent.style.visibility = "visible";
+    updateAssetView();
   });
 
-  /*
-    GitHub Pages에서 운영한다면 상대경로 권장:
-    ./assets/logo/bubbit-logo-package.zip
-
-    GitHub raw 링크를 직접 쓸 경우:
-    https://raw.githubusercontent.com/계정명/저장소명/main/assets/...
-
-    Private 저장소의 raw 링크는 권한 문제로 다운로드가 막힐 수 있습니다.
-    내부 허브라면 GitHub Pages 배포 또는 사내 접근 가능한 저장소 경로를 권장합니다.
-  */
-
-  const GITHUB_ASSET_FOLDER_URL = "https://github.com/계정명/저장소명/tree/main/assets";
-
-  document.getElementById("github-folder-link").href = GITHUB_ASSET_FOLDER_URL;
-
-  const categories = [
-    "전체",
-    "로고",
-    "캐릭터",
-    "제품 이미지",
-    "상세페이지",
-    "SNS 콘텐츠",
-    "템플릿",
-    "인쇄용",
-    "아카이브"
-  ];
-
-  let currentCategory = "전체";
-
-  const assetData = [
-    {
-      title: "버빗 로고 패키지",
-      category: "로고",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/logo/bubbit-logo-preview.png",
-      download: "./assets/download/bubbit-logo-package.zip",
-      format: "AI / SVG / PNG",
-      usage: "웹, 인쇄, 제안서, SNS",
-      size: "원본 비율 유지",
-      updated: "2026.06",
-      owner: "디자인팀",
-      note: "로고 비율 왜곡, 임의 색상 변경, 그림자 효과 적용 금지"
-    },
-    {
-      title: "버빗 캐릭터 기본형",
-      category: "캐릭터",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/character/bubbit-basic-preview.png",
-      download: "./assets/download/bubbit-character-basic.zip",
-      format: "AI / SVG / PNG",
-      usage: "상세페이지, SNS, 브랜드 페이지",
-      size: "플랫 벡터 기준",
-      updated: "2026.06",
-      owner: "디자인팀",
-      note: "눈, 코, 입 요소 임의 추가 및 3D/그라데이션 스타일 변형 금지"
-    },
-    {
-      title: "무빗 캐릭터 기본형",
-      category: "캐릭터",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/character/moobbit-basic-preview.png",
-      download: "./assets/download/moobbit-character-basic.zip",
-      format: "AI / SVG / PNG",
-      usage: "SNS 콘텐츠, 이벤트, 안내 영역",
-      size: "플랫 벡터 기준",
-      updated: "2026.06",
-      owner: "디자인팀",
-      note: "버빗 메인 커뮤니케이션을 보조하는 서브 캐릭터로 사용"
-    },
-    {
-      title: "주방세제 제품 이미지",
-      category: "제품 이미지",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/product/dish-soap-preview.png",
-      download: "./assets/download/dish-soap-product-image.zip",
-      format: "PNG / JPG",
-      usage: "자사몰, 입점몰, 광고 소재",
-      size: "상세페이지 및 썸네일 규격 포함",
-      updated: "2026.06",
-      owner: "콘텐츠팀",
-      note: "제품 패키지 최신 버전 여부 확인 후 사용"
-    },
-    {
-      title: "캡슐세탁세제 제품 이미지",
-      category: "제품 이미지",
-      status: "NEED CHECK",
-      statusClass: "status-check",
-      preview: "./assets/product/capsule-detergent-preview.png",
-      download: "./assets/download/capsule-detergent-product-image.zip",
-      format: "PNG / JPG",
-      usage: "제품 소개, 제안서, SNS",
-      size: "정방형 / 4:5 / 16:9",
-      updated: "2026.06",
-      owner: "콘텐츠팀",
-      note: "향 네이밍 및 패키지 표기 최종 확정 후 사용 권장"
-    },
-    {
-      title: "주방세제 상세페이지 이미지",
-      category: "상세페이지",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/detail/dish-soap-detail-preview.png",
-      download: "./assets/download/dish-soap-detail-assets.zip",
-      format: "JPG / GIF / PNG",
-      usage: "자사몰 PDP, 입점몰 상세",
-      size: "PC / MO 상세 기준",
-      updated: "2026.06",
-      owner: "디자인팀",
-      note: "입점몰별 가이드에 따라 이미지 길이와 용량 재조정 필요"
-    },
-    {
-      title: "인스타그램 썸네일 템플릿",
-      category: "SNS 콘텐츠",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/sns/instagram-template-preview.png",
-      download: "./assets/download/instagram-template-package.zip",
-      format: "PSD / PNG / JPG",
-      usage: "인스타그램 피드, 릴스 커버",
-      size: "1080x1350 / 1080x1080",
-      updated: "2026.06",
-      owner: "마케팅팀",
-      note: "카피 톤앤매너 확인 후 사용. 과도한 설명형 문구 지양"
-    },
-    {
-      title: "제휴 제안서 템플릿",
-      category: "템플릿",
-      status: "APPROVED",
-      statusClass: "",
-      preview: "./assets/template/partnership-deck-preview.png",
-      download: "./assets/download/bubbit-partnership-template.zip",
-      format: "PPTX / PDF",
-      usage: "입점, 제휴, 외부 제안",
-      size: "16:9",
-      updated: "2026.06",
-      owner: "마케팅팀",
-      note: "외부 전달 전 담당자 검수 필수"
-    },
-    {
-      title: "인쇄용 로고 및 패키지 가이드",
-      category: "인쇄용",
-      status: "NEED CHECK",
-      statusClass: "status-check",
-      preview: "./assets/print/print-guide-preview.png",
-      download: "./assets/download/print-logo-package.zip",
-      format: "AI / PDF",
-      usage: "패키지, 스티커, 인쇄물",
-      size: "CMYK / 아웃라인 파일",
-      updated: "2026.06",
-      owner: "디자인팀",
-      note: "인쇄 전 색상, 칼선, 여백, 해상도 최종 감리 필요"
-    },
-    {
-      title: "구 시안 아카이브",
-      category: "아카이브",
-      status: "ARCHIVE",
-      statusClass: "status-archive",
-      preview: "",
-      download: "./assets/archive/old-draft-archive.zip",
-      format: "ZIP",
-      usage: "히스토리 확인용",
-      size: "내부 참고용",
-      updated: "2026.06",
-      owner: "디자인팀",
-      note: "실제 제작 및 외부 전달 금지"
-    }
-  ];
-
-  window.setCategory = function(category) {
-    currentCategory = category;
-    renderFilters();
-    renderAssets();
+  window.searchTable = function () {
+    updateAssetView();
   };
 
-  window.renderFilters = function() {
-    const wrap = document.getElementById("filter-wrap");
+  window.filterAssets = function (category, button) {
+    currentAssetCategory = category;
 
-    wrap.innerHTML = categories.map(category => `
-      <button
-        type="button"
-        class="filter-chip ${currentCategory === category ? "active" : ""}"
-        onclick="setCategory('${category}')"
-      >
-        ${category}
-      </button>
-    `).join("");
-  };
-
-  window.renderAssets = function() {
-    const grid = document.getElementById("asset-grid");
-    const empty = document.getElementById("empty-state");
-    const keyword = document.getElementById("search-input").value.trim().toLowerCase();
-
-    const filtered = assetData.filter(asset => {
-      const matchCategory = currentCategory === "전체" || asset.category === currentCategory;
-
-      const searchableText = [
-        asset.title,
-        asset.category,
-        asset.status,
-        asset.format,
-        asset.usage,
-        asset.size,
-        asset.updated,
-        asset.owner,
-        asset.note
-      ].join(" ").toLowerCase();
-
-      const matchKeyword = !keyword || searchableText.includes(keyword);
-
-      return matchCategory && matchKeyword;
+    document.querySelectorAll(".asset-chip").forEach(chip => {
+      chip.classList.remove("active");
     });
 
-    grid.innerHTML = filtered.map(asset => createAssetCard(asset)).join("");
+    if (button) button.classList.add("active");
 
-    empty.style.display = filtered.length === 0 ? "flex" : "none";
+    updateAssetView();
   };
 
-  function createAssetCard(asset) {
-    const thumb = asset.preview
-      ? `<img src="${asset.preview}" alt="${asset.title} 미리보기" onerror="this.parentElement.classList.add('placeholder'); this.remove();">`
-      : `<span>NO PREVIEW</span>`;
+  function updateAssetView() {
+    const searchInput = document.getElementById("search-input");
+    const kw = searchInput ? searchInput.value.toLowerCase().trim() : "";
+    const assetCards = document.querySelectorAll(".asset-card");
+    const empty = document.getElementById("asset-empty");
+    let visibleCount = 0;
 
-    return `
-      <article class="asset-card searchable-item">
-        <div class="asset-thumb ${asset.preview ? "" : "placeholder"}">
-          ${thumb}
-          <span class="status-badge ${asset.statusClass}">${asset.status}</span>
-        </div>
+    assetCards.forEach(card => {
+      const cardCategory = card.getAttribute("data-category") || "";
+      const matchCategory = currentAssetCategory === "전체" || cardCategory === currentAssetCategory;
+      const matchKeyword = !kw || card.innerText.toLowerCase().includes(kw);
+      const isVisible = matchCategory && matchKeyword;
 
-        <div class="asset-body">
-          <div class="asset-category">${asset.category}</div>
-          <h3 class="asset-title">${asset.title}</h3>
+      card.style.display = isVisible ? "" : "none";
+      if (isVisible) visibleCount += 1;
+    });
 
-          <div class="asset-meta">
-            <div><b>파일 형식</b> · ${asset.format}</div>
-            <div><b>사용처</b> · ${asset.usage}</div>
-            <div><b>규격</b> · ${asset.size}</div>
-            <div><b>업데이트</b> · ${asset.updated}</div>
-            <div><b>담당</b> · ${asset.owner}</div>
-          </div>
+    document.querySelectorAll(".searchable-row").forEach(el => {
+      el.style.display = el.innerText.toLowerCase().includes(kw) ? "" : "none";
+    });
 
-          <div class="asset-note">${asset.note}</div>
+    document.querySelectorAll(".searchable-item:not(.asset-card)").forEach(el => {
+      el.style.display = el.innerText.toLowerCase().includes(kw) || !kw ? "" : "none";
+    });
 
-          <div class="asset-actions">
-            <a href="${asset.preview || asset.download}" target="_blank" class="asset-btn secondary">
-              미리보기
-            </a>
-            <a href="${asset.download}" download class="asset-btn primary">
-              다운로드
-            </a>
-          </div>
-        </div>
-      </article>
-    `;
+    if (empty) {
+      empty.style.display = visibleCount === 0 ? "flex" : "none";
+    }
   }
 </script>
 </body>
