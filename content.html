@@ -110,7 +110,7 @@
 
   .asset-preview {
     height: 150px;
-    background: linear-gradient(135deg, #FDB6C3, #F7F7F7 70%);
+    background: #F2F4F6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +123,18 @@
   .asset-preview img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .asset-preview span.preview-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--text-sub);
   }
 
   .asset-preview em {
@@ -192,12 +203,6 @@
     text-decoration: none;
     font-size: 13px;
     font-weight: 700;
-  }
-
-  .asset-actions a.preview-link {
-    border: 1px solid #111;
-    color: #111;
-    background: #fff;
   }
 
   .asset-actions a.download-link {
@@ -300,7 +305,7 @@
         <div class="asset-grid" id="asset-grid">
           <div class="asset-card searchable-item" data-category="로고">
             <div class="asset-preview">
-              <span>LOGO</span>
+              <img src="./assets/logo/bubbit-logo-preview.png" alt="버빗 로고 패키지 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">LOGO</span>
               <em>APPROVED</em>
             </div>
             <div class="asset-info">
@@ -310,7 +315,6 @@
               <p>업데이트: 2026.06 / 담당: 디자인팀</p>
               <small>로고 비율 왜곡, 임의 색상 변경, 그림자 효과 적용 금지</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/logo/bubbit-logo-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/bubbit-logo-package.zip" download>다운로드</a>
               </div>
             </div>
@@ -318,7 +322,7 @@
 
           <div class="asset-card searchable-item" data-category="캐릭터">
             <div class="asset-preview">
-              <span>BUBBIT</span>
+              <img src="./assets/character/bubbit-basic-preview.png" alt="버빗 캐릭터 기본형 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">BUBBIT</span>
               <em>APPROVED</em>
             </div>
             <div class="asset-info">
@@ -328,7 +332,6 @@
               <p>업데이트: 2026.06 / 담당: 디자인팀</p>
               <small>플랫 벡터 기준 유지. 눈, 코, 입 요소 임의 추가 및 3D 스타일 변형 금지</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/character/bubbit-basic-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/bubbit-character-basic.zip" download>다운로드</a>
               </div>
             </div>
@@ -336,7 +339,7 @@
 
           <div class="asset-card searchable-item" data-category="캐릭터">
             <div class="asset-preview">
-              <span>MOOBBIT</span>
+              <img src="./assets/character/moobbit-basic-preview.png" alt="무빗 캐릭터 기본형 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">MOOBBIT</span>
               <em>APPROVED</em>
             </div>
             <div class="asset-info">
@@ -346,7 +349,6 @@
               <p>업데이트: 2026.06 / 담당: 디자인팀</p>
               <small>버빗 메인 커뮤니케이션을 보조하는 서브 캐릭터로 사용</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/character/moobbit-basic-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/moobbit-character-basic.zip" download>다운로드</a>
               </div>
             </div>
@@ -354,7 +356,7 @@
 
           <div class="asset-card searchable-item" data-category="제품 이미지">
             <div class="asset-preview">
-              <span>PRODUCT</span>
+              <img src="./assets/product/dish-soap-preview.png" alt="주방세제 제품 이미지 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">PRODUCT</span>
               <em>APPROVED</em>
             </div>
             <div class="asset-info">
@@ -364,7 +366,6 @@
               <p>업데이트: 2026.06 / 담당: 콘텐츠팀</p>
               <small>제품 패키지 최신 버전 여부 확인 후 사용</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/product/dish-soap-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/dish-soap-product-image.zip" download>다운로드</a>
               </div>
             </div>
@@ -372,7 +373,7 @@
 
           <div class="asset-card searchable-item" data-category="제품 이미지">
             <div class="asset-preview">
-              <span>CAPSULE</span>
+              <img src="./assets/product/capsule-detergent-preview.png" alt="캡슐세탁세제 제품 이미지 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">CAPSULE</span>
               <em class="need-check">NEED CHECK</em>
             </div>
             <div class="asset-info">
@@ -382,7 +383,6 @@
               <p>업데이트: 2026.06 / 담당: 콘텐츠팀</p>
               <small>향 네이밍 및 패키지 표기 최종 확정 후 사용 권장</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/product/capsule-detergent-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/capsule-detergent-product-image.zip" download>다운로드</a>
               </div>
             </div>
@@ -390,7 +390,7 @@
 
           <div class="asset-card searchable-item" data-category="콘텐츠">
             <div class="asset-preview">
-              <span>SNS</span>
+              <img src="./assets/sns/instagram-template-preview.png" alt="인스타그램 콘텐츠 템플릿 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">SNS</span>
               <em>APPROVED</em>
             </div>
             <div class="asset-info">
@@ -400,7 +400,6 @@
               <p>업데이트: 2026.06 / 담당: 마케팅팀</p>
               <small>카피 톤앤매너 확인 후 사용. 과도한 설명형 문구 지양</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/sns/instagram-template-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/instagram-template-package.zip" download>다운로드</a>
               </div>
             </div>
@@ -408,7 +407,7 @@
 
           <div class="asset-card searchable-item" data-category="템플릿">
             <div class="asset-preview">
-              <span>PPT</span>
+              <img src="./assets/template/partnership-deck-preview.png" alt="제휴 제안서 템플릿 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">PPT</span>
               <em>APPROVED</em>
             </div>
             <div class="asset-info">
@@ -418,7 +417,6 @@
               <p>업데이트: 2026.06 / 담당: 마케팅팀</p>
               <small>외부 전달 전 담당자 검수 필수</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/template/partnership-deck-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/bubbit-partnership-template.zip" download>다운로드</a>
               </div>
             </div>
@@ -426,7 +424,7 @@
 
           <div class="asset-card searchable-item" data-category="인쇄용">
             <div class="asset-preview">
-              <span>PRINT</span>
+              <img src="./assets/print/print-guide-preview.png" alt="인쇄용 로고 및 패키지 가이드 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="preview-fallback" style="display:none;">PRINT</span>
               <em class="need-check">NEED CHECK</em>
             </div>
             <div class="asset-info">
@@ -436,7 +434,6 @@
               <p>업데이트: 2026.06 / 담당: 디자인팀</p>
               <small>인쇄 전 색상, 칼선, 여백, 해상도 최종 감리 필요</small>
               <div class="asset-actions">
-                <a class="preview-link" href="./assets/print/print-guide-preview.png" target="_blank" rel="noopener">미리보기</a>
                 <a class="download-link" href="./assets/download/print-logo-package.zip" download>다운로드</a>
               </div>
             </div>
