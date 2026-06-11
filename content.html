@@ -109,28 +109,25 @@
   }
 
   .asset-preview {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    height: auto;
+    height: 170px;
     background: #F2F4F6;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
     font-weight: 800;
     letter-spacing: 0.05em;
     color: #111;
+    overflow: hidden;
   }
 
   .asset-preview img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    object-position: center;
-    display: block;
     box-sizing: border-box;
     padding: 18px;
+    display: block;
   }
 
   .asset-preview span.preview-fallback {
@@ -227,8 +224,200 @@
     font-weight: 700;
   }
 
+
+
+  .brand-system {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .brand-section {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: #fff;
+    padding: 20px;
+  }
+
+  .brand-section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .brand-section-title {
+    margin: 0;
+    color: var(--text-main, #111);
+    font-size: 18px;
+    line-height: 1.35;
+    letter-spacing: -0.03em;
+  }
+
+  .brand-section-sub {
+    margin: 6px 0 0;
+    color: var(--text-sub);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .manifesto-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #111 0%, #2A2024 55%, #FDB6C3 160%);
+    color: #fff;
+    padding: 24px;
+  }
+
+  .manifesto-card::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -70px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(253, 182, 195, 0.32);
+  }
+
+  .manifesto-label {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 10px;
+    color: #FDB6C3;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+
+  .manifesto-card h3 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.25;
+    letter-spacing: -0.04em;
+  }
+
+  .manifesto-card p {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 14px 0 0;
+    color: rgba(255,255,255,0.78);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .brand-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .brand-info-box {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #FAFAFA;
+    padding: 16px;
+  }
+
+  .brand-info-box strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-main, #111);
+    font-size: 14px;
+  }
+
+  .brand-info-box p {
+    margin: 0;
+    color: var(--text-sub);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .brand-pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .brand-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 8px 12px;
+    border: 1px solid rgba(253,182,195,0.55);
+    border-radius: 999px;
+    background: #FFF1F5;
+    color: #5B2B36;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .color-swatch {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  .color-chip-preview {
+    height: 86px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .color-chip-info {
+    padding: 12px;
+  }
+
+  .color-chip-info strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-main, #111);
+    font-size: 13px;
+  }
+
+  .color-chip-info span {
+    display: block;
+    color: var(--text-sub);
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .tone-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #111;
+  }
+
+  .tone-table th,
+  .tone-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .tone-table th {
+    width: 160px;
+    color: var(--text-main, #111);
+    background: #FAFAFA;
+  }
+
   @media (max-width: 900px) {
-    .asset-guide-grid {
+    .asset-guide-grid,
+    .brand-info-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -269,14 +458,169 @@
 
         <div class="asset-intro searchable-item">
           <p class="eyebrow">BUBBIT BRAND ASSET HUB</p>
-          <h2>같은 기준으로 만들고, 검수된 에셋만 사용합니다.</h2>
+          <h2>같은 기준으로 만들고, 같은 경험으로 전달합니다.</h2>
           <p>
-            버빗의 제품 이미지, 콘텐츠 에셋, 로고, 캐릭터 파일을 한 곳에서 확인하고 다운로드할 수 있는 공간입니다.
+            버빗의 브랜드 철학, 표현 기준, 컬러, 제품 및 콘텐츠 에셋을 한 곳에서 확인하고 다운로드할 수 있는 공간입니다.
             모든 팀원이 동일한 브랜드 경험을 만들 수 있도록 사용 규격과 주의사항을 함께 확인해 주세요.
           </p>
         </div>
 
-        <div class="asset-guide-grid searchable-item">
+        <div class="brand-system searchable-item">
+          <section class="brand-section">
+            <div class="brand-section-head">
+              <div>
+                <h3 class="brand-section-title">브랜드 매니페스토</h3>
+                <p class="brand-section-sub">버빗이 콘텐츠와 제품 경험에서 일관되게 전달해야 하는 핵심 선언입니다.</p>
+              </div>
+            </div>
+            <div class="manifesto-card">
+              <p class="manifesto-label">BRAND MANIFESTO</p>
+              <h3>HOP OFF BORING,<br>HOP INTO FUN!</h3>
+              <p>
+                버빗은 지루한 집안일을 단순히 끝내야 하는 노동으로 보지 않습니다.
+                우리는 일상 속에 기분 좋은 틈을 만들고, 청소와 세탁의 시간을 나를 위한 리듬으로 바꾸는 경험을 설계합니다.
+                귀찮음은 덜어내되 기준은 높이고, 뻔한 생필품 안에 위트와 감도를 더합니다.
+              </p>
+            </div>
+          </section>
+
+          <section class="brand-section">
+            <div class="brand-section-head">
+              <div>
+                <h3 class="brand-section-title">브랜드 목적과 경험 기준</h3>
+                <p class="brand-section-sub">버빗이 왜 존재하는지, 어떤 기준으로 콘텐츠와 에셋을 만들어야 하는지 정리한 영역입니다.</p>
+              </div>
+            </div>
+            <div class="brand-info-grid">
+              <div class="brand-info-box">
+                <strong>Brand Purpose</strong>
+                <p>지루한 집안일의 시간을 나를 위한 리듬으로 바꾸고, 일상 속에 기분 좋은 변화를 만드는 라이프스타일 경험을 제안합니다.</p>
+              </div>
+              <div class="brand-info-box">
+                <strong>Brand Vision</strong>
+                <p>단순히 청소 도구를 판매하는 브랜드를 넘어, 사소한 생활용품 하나에도 취향과 감도를 담는 브랜드 경험을 설계합니다.</p>
+              </div>
+              <div class="brand-info-box">
+                <strong>Experience Goal</strong>
+                <p>실용성은 기본으로 하되, 보는 순간 기분이 좋아지고 사용 후에는 기준이 높아졌다고 느끼는 경험을 만듭니다.</p>
+              </div>
+              <div class="brand-info-box">
+                <strong>Core Target</strong>
+                <p>도시의 삶을 즐기며 사소한 물건에도 자신의 안목을 담고 싶어하는 2539 여성. 살림을 라이프스타일 큐레이션의 일부로 바라봅니다.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="brand-section">
+            <div class="brand-section-head">
+              <div>
+                <h3 class="brand-section-title">브랜드 가치</h3>
+                <p class="brand-section-sub">모든 디자인, 카피, 콘텐츠, 제안서에서 유지해야 할 버빗의 핵심 태도입니다.</p>
+              </div>
+            </div>
+            <div class="asset-guide-grid">
+              <div class="asset-guide-card">
+                <strong>Smart Laziness</strong>
+                <p>귀찮음은 덜어내고 기준은 높게. 번거로움을 줄이면서도 더 영리한 살림 방식을 제안합니다.</p>
+              </div>
+              <div class="asset-guide-card">
+                <strong>Responsible Growth</strong>
+                <p>동물을 사랑하고 환경을 생각하는 마음. 비건 포뮬러와 크루얼티 프리 기준을 기본 약속으로 둡니다.</p>
+              </div>
+              <div class="asset-guide-card">
+                <strong>Whimsical Wit</strong>
+                <p>뻔한 생필품에 숨겨진 재미 한 스푼. 유연한 사고와 위트 있는 태도를 브랜드 표현의 중심에 둡니다.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="brand-section">
+            <div class="brand-section-head">
+              <div>
+                <h3 class="brand-section-title">제품 철학</h3>
+                <p class="brand-section-sub">제품 이미지와 상세페이지, 콘텐츠 제작 시 함께 전달해야 하는 핵심 제품 기준입니다.</p>
+              </div>
+            </div>
+            <div class="brand-pill-list">
+              <span class="brand-pill">비건 포뮬러</span>
+              <span class="brand-pill">크루얼티 프리</span>
+              <span class="brand-pill">감도 높은 디자인</span>
+              <span class="brand-pill">공간의 오브제</span>
+              <span class="brand-pill">일상의 쉼표</span>
+              <span class="brand-pill">취향 기반 살림</span>
+            </div>
+          </section>
+
+          <section class="brand-section">
+            <div class="brand-section-head">
+              <div>
+                <h3 class="brand-section-title">컬러 가이드</h3>
+                <p class="brand-section-sub">브랜드 소개서 내 사용 컬러를 기준으로 정리한 빠른 확인용 팔레트입니다.</p>
+              </div>
+            </div>
+            <div class="color-grid">
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#FDB6C3;"></div>
+                <div class="color-chip-info"><strong>Bubbit Pink</strong><span>#FDB6C3</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#FC9BB3;"></div>
+                <div class="color-chip-info"><strong>Point Pink</strong><span>#FC9BB3</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#FED6DE;"></div>
+                <div class="color-chip-info"><strong>Soft Pink</strong><span>#FED6DE</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#111111;"></div>
+                <div class="color-chip-info"><strong>Bubbit Black</strong><span>#111111</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#FFFFFF;"></div>
+                <div class="color-chip-info"><strong>White</strong><span>#FFFFFF</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#F2F4F6;"></div>
+                <div class="color-chip-info"><strong>Light Gray</strong><span>#F2F4F6</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#767676;"></div>
+                <div class="color-chip-info"><strong>Text Sub</strong><span>#767676</span></div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-chip-preview" style="background:#E8E8EC;"></div>
+                <div class="color-chip-info"><strong>Line</strong><span>#E8E8EC</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="brand-section">
+            <div class="brand-section-head">
+              <div>
+                <h3 class="brand-section-title">톤앤매너 기준</h3>
+                <p class="brand-section-sub">콘텐츠, 상세페이지, 제안서, 안내 문구 작성 시 참고하는 표현 기준입니다.</p>
+              </div>
+            </div>
+            <table class="tone-table">
+              <tbody>
+                <tr>
+                  <th>해야 하는 표현</th>
+                  <td>유쾌하지만 가볍지 않게, 감도 있지만 어렵지 않게, 제품력은 명확하게 전달합니다.</td>
+                </tr>
+                <tr>
+                  <th>지양하는 표현</th>
+                  <td>과도하게 유아적이거나 귀여움만 강조하는 표현, 기능을 흐리는 장난스러운 카피, 근거 없는 친환경 표현은 지양합니다.</td>
+                </tr>
+                <tr>
+                  <th>핵심 문장</th>
+                  <td>지루한 집안일이 나만의 리듬으로 바뀌는 유쾌한 경험, 버빗.</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+
+        <div class="asset-guide-grid searchable-item" style="display:none;">
           <div class="asset-guide-card">
             <strong>Smart Laziness</strong>
             <p>귀찮음은 덜어내고 기준은 높게. 가장 영리한 살림 방식을 제안합니다.</p>
