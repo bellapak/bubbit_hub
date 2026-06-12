@@ -645,12 +645,129 @@
   }
 
 
+
+
+  /* 컬러 가이드: 컬러바 / 시스템 컬러 카드 */
+  .color-main-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-color-card.featured .main-color-preview {
+    height: 150px;
+  }
+
+  .color-bar-stack {
+    display: grid;
+    gap: 18px;
+  }
+
+  .color-bar-group {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  .color-bar-title {
+    margin: 0 0 10px;
+    color: var(--text-main, #111);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+
+  .color-bar-title span {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-sub);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .color-bar {
+    display: flex;
+    width: 100%;
+    height: 72px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .color-segment {
+    display: block;
+    flex: 1 1 0;
+    min-width: 28px;
+    height: 100%;
+    border-right: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .color-segment:last-child {
+    border-right: 0;
+  }
+
+  .color-code-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 10px;
+  }
+
+  .color-code-row span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: #FAFAFA;
+    color: var(--text-sub) !important;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .system-color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .system-color-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  .system-color-preview {
+    height: 88px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .system-color-card strong {
+    display: block;
+    padding: 12px 12px 3px;
+    color: var(--text-main, #111);
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .system-color-card span {
+    display: block;
+    padding: 0 12px 12px;
+    color: var(--text-sub);
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
   @media (max-width: 900px) {
     .asset-guide-grid,
     .hub-overview-grid,
     .brand-info-grid,
     .manifesto-content-grid,
-    .main-color-grid {
+    .main-color-grid,
+    .system-color-grid {
       grid-template-columns: 1fr;
     }
   }
