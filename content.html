@@ -552,11 +552,122 @@
   .sub-color-meta span { color: var(--text-sub); font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 
 
+  .main-color-grid.color-main-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-color-card.featured .main-color-preview {
+    height: 132px;
+  }
+
+  .color-bar-stack {
+    display: grid;
+    gap: 18px;
+  }
+
+  .color-bar-group {
+    display: grid;
+    gap: 8px;
+  }
+
+  .color-bar-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--text-main, #111);
+  }
+
+  .color-bar-title span {
+    color: var(--text-sub);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .color-bar {
+    display: flex;
+    width: 100%;
+    height: 54px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .color-segment {
+    flex: 1;
+    min-width: 18px;
+    height: 100%;
+  }
+
+  .color-code-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    color: var(--text-sub);
+    font-size: 11px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .color-code-row span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .color-code-row span::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: currentColor;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .system-color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .system-color-card {
+    display: grid;
+    gap: 8px;
+  }
+
+  .system-color-preview {
+    height: 74px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .system-color-card strong {
+    display: block;
+    color: var(--text-main, #111);
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .system-color-card span {
+    display: block;
+    margin-top: 2px;
+    color: var(--text-sub);
+    font-size: 11px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+
   @media (max-width: 900px) {
     .asset-guide-grid,
     .brand-info-grid,
     .manifesto-content-grid,
-    .main-color-grid {
+    .main-color-grid,
+    .system-color-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -742,31 +853,105 @@
             </div>
 
             <div class="color-guide-wrap">
-              <div class="main-color-grid">
-                <div class="main-color-card">
-                  <div class="main-color-preview" style="background:#111111;"></div>
-                  <div class="main-color-info"><strong>Bubbit Black / Main</strong><span>#111111</span></div>
+              <div class="main-color-grid color-main-pair">
+                <div class="main-color-card featured">
+                  <div class="main-color-preview" style="background:#000000;"></div>
+                  <div class="main-color-info"><strong>Bubbit Black / Main</strong><span>#000000</span></div>
+                </div>
+                <div class="main-color-card featured">
+                  <div class="main-color-preview" style="background:#FDBFC9;"></div>
+                  <div class="main-color-info"><strong>Bubbit Pink / Main</strong><span>#FDBFC9 · Pantone 706C</span></div>
                 </div>
               </div>
 
-              <div class="sub-color-list">
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FDB6C3;"></i><div class="sub-color-meta"><strong>Bubbit Pink / Main Point</strong><span>#FDB6C3</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#EC91F4;"></i><div class="sub-color-meta"><strong>Bubbit Purple</strong><span>#EC91F4</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FC9BB3;"></i><div class="sub-color-meta"><strong>Point Pink</strong><span>#FC9BB3</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FED6DE;"></i><div class="sub-color-meta"><strong>Soft Pink</strong><span>#FED6DE</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FFF1F5;"></i><div class="sub-color-meta"><strong>Pink Background</strong><span>#FFF1F5</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#5B2B36;"></i><div class="sub-color-meta"><strong>Deep Pink Text</strong><span>#5B2B36</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FFFFFF;"></i><div class="sub-color-meta"><strong>White</strong><span>#FFFFFF</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FAFAFA;"></i><div class="sub-color-meta"><strong>Warm White</strong><span>#FAFAFA</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F7F7F7;"></i><div class="sub-color-meta"><strong>Page Gray</strong><span>#F7F7F7</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F2F4F6;"></i><div class="sub-color-meta"><strong>Light Gray</strong><span>#F2F4F6</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#E8E8EC;"></i><div class="sub-color-meta"><strong>Line Gray</strong><span>#E8E8EC</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#767676;"></i><div class="sub-color-meta"><strong>Sub Text</strong><span>#767676</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#222222;"></i><div class="sub-color-meta"><strong>Main Text</strong><span>#222222</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F59E0B;"></i><div class="sub-color-meta"><strong>Need Check</strong><span>#F59E0B</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#9CA3AF;"></i><div class="sub-color-meta"><strong>Archive</strong><span>#9CA3AF</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#EF4444;"></i><div class="sub-color-meta"><strong>Do Not Use</strong><span>#EF4444</span></div></div>
-                <div class="sub-color-item"><i class="sub-color-dot" style="background:#2A2024;"></i><div class="sub-color-meta"><strong>Deep Brown Black</strong><span>#2A2024</span></div></div>
+              <div class="color-bar-stack">
+                <div class="color-bar-group">
+                  <p class="color-bar-title">Bubbit Mood Gradient <span>Deep black pink → playful pink/purple</span></p>
+                  <div class="color-bar">
+                    <i class="color-segment" style="background:#2A2024;" title="#2A2024"></i>
+                    <i class="color-segment" style="background:#3A2028;" title="#3A2028"></i>
+                    <i class="color-segment" style="background:#4A2730;" title="#4A2730"></i>
+                    <i class="color-segment" style="background:#5B2B36;" title="#5B2B36"></i>
+                    <i class="color-segment" style="background:#6F3D55;" title="#6F3D55"></i>
+                    <i class="color-segment" style="background:#7E496C;" title="#7E496C"></i>
+                    <i class="color-segment" style="background:#965489;" title="#965489"></i>
+                    <i class="color-segment" style="background:#A85E9C;" title="#A85E9C"></i>
+                    <i class="color-segment" style="background:#B46ABC;" title="#B46ABC"></i>
+                    <i class="color-segment" style="background:#BE77D4;" title="#BE77D4"></i>
+                    <i class="color-segment" style="background:#C783E1;" title="#C783E1"></i>
+                    <i class="color-segment" style="background:#D88AEA;" title="#D88AEA"></i>
+                    <i class="color-segment" style="background:#EC91F4;" title="#EC91F4"></i>
+                    <i class="color-segment" style="background:#F58BCD;" title="#F58BCD"></i>
+                    <i class="color-segment" style="background:#FC9BB3;" title="#FC9BB3"></i>
+                    <i class="color-segment" style="background:#FDB6C3;" title="#FDB6C3"></i>
+                  </div>
+                  <div class="color-code-row">
+                    <span style="color:#2A2024;">#2A2024</span><span style="color:#5B2B36;">#5B2B36</span><span style="color:#965489;">#965489</span><span style="color:#B46ABC;">#B46ABC</span><span style="color:#EC91F4;">#EC91F4</span><span style="color:#FC9BB3;">#FC9BB3</span><span style="color:#FDB6C3;">#FDB6C3</span>
+                  </div>
+                </div>
+
+                <div class="color-bar-group">
+                  <p class="color-bar-title">Pink Main & Tint Scale <span>Web / Package / background tint</span></p>
+                  <div class="color-bar">
+                    <i class="color-segment" style="background:#FDBFC9;" title="#FDBFC9 · WEB MAIN"></i>
+                    <i class="color-segment" style="background:#FC9BB3;" title="#FC9BB3"></i>
+                    <i class="color-segment" style="background:#FDB6C3;" title="#FDB6C3 · PACKAGE MAIN"></i>
+                    <i class="color-segment" style="background:#FED6DE;" title="#FED6DE"></i>
+                    <i class="color-segment" style="background:#F9C8D0;" title="#F9C8D0"></i>
+                    <i class="color-segment" style="background:#FAD3DA;" title="#FAD3DA"></i>
+                    <i class="color-segment" style="background:#FBE0E5;" title="#FBE0E5"></i>
+                    <i class="color-segment" style="background:#FCE9ED;" title="#FCE9ED"></i>
+                    <i class="color-segment" style="background:#FFF1F5;" title="#FFF1F5"></i>
+                    <i class="color-segment" style="background:#FFFFFF;" title="#FFFFFF"></i>
+                  </div>
+                  <div class="color-code-row">
+                    <span style="color:#FDBFC9;">#FDBFC9 WEB MAIN</span><span style="color:#FC9BB3;">#FC9BB3</span><span style="color:#FDB6C3;">#FDB6C3 PACKAGE MAIN</span><span style="color:#FED6DE;">#FED6DE</span><span style="color:#FFF1F5;">#FFF1F5</span><span style="color:#FFFFFF;">#FFFFFF</span>
+                  </div>
+                </div>
+
+                <div class="color-bar-group">
+                  <p class="color-bar-title">Red / Pink Alert Scale <span>강조 및 경고성 포인트</span></p>
+                  <div class="color-bar">
+                    <i class="color-segment" style="background:#570000;" title="#570000"></i>
+                    <i class="color-segment" style="background:#8B0000;" title="#8B0000"></i>
+                    <i class="color-segment" style="background:#B0000C;" title="#B0000C"></i>
+                    <i class="color-segment" style="background:#EF1020;" title="#EF1020"></i>
+                    <i class="color-segment" style="background:#FF4054;" title="#FF4054"></i>
+                    <i class="color-segment" style="background:#FF5D73;" title="#FF5D73"></i>
+                    <i class="color-segment" style="background:#FF758A;" title="#FF758A"></i>
+                    <i class="color-segment" style="background:#DE9AA0;" title="#DE9AA0"></i>
+                  </div>
+                  <div class="color-code-row">
+                    <span style="color:#570000;">#570000</span><span style="color:#8B0000;">#8B0000</span><span style="color:#B0000C;">#B0000C</span><span style="color:#EF1020;">#EF1020</span><span style="color:#FF4054;">#FF4054</span><span style="color:#FF758A;">#FF758A</span><span style="color:#DE9AA0;">#DE9AA0</span>
+                  </div>
+                </div>
+
+                <div class="color-bar-group">
+                  <p class="color-bar-title">Neutral Gray Scale <span>Text / line / background</span></p>
+                  <div class="color-bar">
+                    <i class="color-segment" style="background:#111111;" title="#111111"></i>
+                    <i class="color-segment" style="background:#222222;" title="#222222"></i>
+                    <i class="color-segment" style="background:#444444;" title="#444444"></i>
+                    <i class="color-segment" style="background:#767676;" title="#767676"></i>
+                    <i class="color-segment" style="background:#9CA3AF;" title="#9CA3AF"></i>
+                    <i class="color-segment" style="background:#D1D5DB;" title="#D1D5DB"></i>
+                    <i class="color-segment" style="background:#E8E8EC;" title="#E8E8EC"></i>
+                    <i class="color-segment" style="background:#F2F4F6;" title="#F2F4F6"></i>
+                    <i class="color-segment" style="background:#F7F7F7;" title="#F7F7F7"></i>
+                    <i class="color-segment" style="background:#FAFAFA;" title="#FAFAFA"></i>
+                    <i class="color-segment" style="background:#FFFFFF;" title="#FFFFFF"></i>
+                  </div>
+                  <div class="color-code-row">
+                    <span style="color:#111111;">#111111</span><span style="color:#222222;">#222222</span><span style="color:#767676;">#767676</span><span style="color:#9CA3AF;">#9CA3AF</span><span style="color:#E8E8EC;">#E8E8EC</span><span style="color:#F2F4F6;">#F2F4F6</span><span style="color:#F7F7F7;">#F7F7F7</span><span style="color:#FFFFFF;">#FFFFFF</span>
+                  </div>
+                </div>
+
+                <div class="system-color-grid">
+                  <div class="system-color-card"><div class="system-color-preview" style="background:#3AD3E8;"></div><strong>Success / Blue</strong><span>#3AD3E8</span></div>
+                  <div class="system-color-card"><div class="system-color-preview" style="background:#FF5138;"></div><strong>Warning / Orange</strong><span>#FF5138</span></div>
+                  <div class="system-color-card"><div class="system-color-preview" style="background:#FFA53A;"></div><strong>Error / Yellow</strong><span>#FFA53A</span></div>
+                  <div class="system-color-card"><div class="system-color-preview" style="background:#D66AF6;"></div><strong>Info / Purple</strong><span>#D66AF6</span></div>
+                </div>
               </div>
             </div>
           </section>
