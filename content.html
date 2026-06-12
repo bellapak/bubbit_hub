@@ -552,122 +552,105 @@
   .sub-color-meta span { color: var(--text-sub); font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 
 
-  .main-color-grid.color-main-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
-  .main-color-card.featured .main-color-preview {
-    height: 132px;
-  }
-
-  .color-bar-stack {
+  .hub-overview-grid {
     display: grid;
-    gap: 18px;
-  }
-
-  .color-bar-group {
-    display: grid;
-    gap: 8px;
-  }
-
-  .color-bar-title {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-    margin: 0;
-    font-size: 13px;
-    font-weight: 900;
-    color: var(--text-main, #111);
+    margin: 18px 0;
   }
 
-  .color-bar-title span {
-    color: var(--text-sub);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-
-  .color-bar {
-    display: flex;
-    width: 100%;
-    height: 54px;
+  .hub-overview-card {
+    display: block;
+    min-height: 190px;
+    padding: 20px;
     border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
+    border-radius: 18px;
     background: #fff;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   }
 
-  .color-segment {
-    flex: 1;
-    min-width: 18px;
-    height: 100%;
+  .hub-overview-card:hover {
+    transform: translateY(-2px);
+    border-color: #111;
+    box-shadow: 0 10px 24px rgba(17,17,17,0.08);
   }
 
-  .color-code-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 10px;
-    color: var(--text-sub);
-    font-size: 11px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  }
-
-  .color-code-row span {
+  .hub-overview-card .num {
     display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-  }
-
-  .color-code-row span::before {
-    content: "";
-    width: 8px;
-    height: 8px;
+    margin-bottom: 14px;
+    padding: 7px 10px;
     border-radius: 999px;
-    background: currentColor;
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-
-  .system-color-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .system-color-card {
-    display: grid;
-    gap: 8px;
-  }
-
-  .system-color-preview {
-    height: 74px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-  }
-
-  .system-color-card strong {
-    display: block;
-    color: var(--text-main, #111);
-    font-size: 12px;
-    line-height: 1.25;
-  }
-
-  .system-color-card span {
-    display: block;
-    margin-top: 2px;
-    color: var(--text-sub);
+    background: #111;
+    color: #FDB6C3;
     font-size: 11px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+
+  .hub-overview-card h3 {
+    margin: 0 0 10px;
+    color: var(--text-main, #111);
+    font-size: 17px;
+    line-height: 1.35;
+    letter-spacing: -0.03em;
+  }
+
+  .hub-overview-card p {
+    margin: 0 0 12px;
+    color: var(--text-sub);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .hub-overview-card ul {
+    margin: 0;
+    padding-left: 16px;
+    color: var(--text-sub);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .hub-section-divider {
+    margin: 26px 0 14px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: #111;
+    color: #fff;
+  }
+
+  .hub-section-divider .section-num {
+    display: block;
+    margin-bottom: 8px;
+    color: #FDB6C3;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+  }
+
+  .hub-section-divider h3 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.35;
+    letter-spacing: -0.03em;
+  }
+
+  .hub-section-divider p {
+    margin: 8px 0 0;
+    color: rgba(255,255,255,0.72);
+    font-size: 13px;
+    line-height: 1.65;
   }
 
 
   @media (max-width: 900px) {
     .asset-guide-grid,
+    .hub-overview-grid,
     .brand-info-grid,
     .manifesto-content-grid,
-    .main-color-grid,
-    .system-color-grid {
+    .main-color-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -693,7 +676,7 @@
     <header class="topbar">
       <div class="topbar-title">
         <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
-        <span>제품 및 콘텐츠 허브</span>
+        <span>브랜드 가이드</span>
       </div>
       <div style="display:flex; gap:12px;">
         <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="에셋 검색" onkeyup="searchTable()">
@@ -702,20 +685,56 @@
     <div class="view-container">
       <div class="card searchable-item">
         <div class="card-header">
-          <span class="card-title">브랜드 에셋 라이브러리</span>
+          <span class="card-title">BUBBIT BRAND ASSET HUB</span>
           <a class="btn btn-primary" href="https://github.com/계정명/저장소명/tree/main/assets" target="_blank" rel="noopener">GitHub 에셋 폴더 열기</a>
         </div>
 
         <div class="asset-intro searchable-item">
           <p class="eyebrow">BUBBIT BRAND ASSET HUB</p>
-          <h2>같은 기준으로 만들고, 같은 경험으로 전달합니다.</h2>
+          <h2>하나의 기준, 동일한 브랜드 경험.</h2>
           <p>
-            버빗의 브랜드 철학, 표현 기준, 컬러, 제품 및 콘텐츠 에셋을 한 곳에서 확인하고 다운로드할 수 있는 공간입니다.
-            모든 팀원이 동일한 브랜드 경험을 만들 수 있도록 사용 규격과 주의사항을 함께 확인해 주세요.
+            버빗의 철학부터 디자인 자산까지, 일관된 결과물을 만들기 위한 모든 기준이 담겨 있습니다.
           </p>
         </div>
 
+        <div class="hub-overview-grid searchable-item">
+          <a href="#brand-guide" class="hub-overview-card">
+            <span class="num">01</span>
+            <h3>브랜드 가이드<br><small>Brand Guide</small></h3>
+            <p>버빗이 지향하는 가치와 고객에게 건네는 언어의 기준을 확인합니다.</p>
+            <ul>
+              <li>브랜드 스토리 & 핵심 가치</li>
+              <li>텍스트 및 커뮤니케이션 톤앤매너 가이드</li>
+            </ul>
+          </a>
+
+          <a href="#design-guide" class="hub-overview-card">
+            <span class="num">02</span>
+            <h3>디자인 가이드<br><small>Design Guide</small></h3>
+            <p>누가 만들어도 가장 버빗다운 결과물이 나올 수 있도록 시각적 기준을 통일합니다.</p>
+            <ul>
+              <li>로고, 컬러, 타이포그래피 사용 규정</li>
+              <li>버빗 캐릭터 활용 및 변형 금지 가이드</li>
+            </ul>
+          </a>
+
+          <a href="#asset-download" class="hub-overview-card">
+            <span class="num">03</span>
+            <h3>에셋 다운로드<br><small>Asset Download</small></h3>
+            <p>브랜드 채널 및 마케팅에 즉시 활용할 수 있는 공식 자산입니다.</p>
+            <ul>
+              <li>이미지 소스 및 SNS 작업용 템플릿 파일</li>
+            </ul>
+          </a>
+        </div>
+
         <div class="brand-system searchable-item">
+          <div class="hub-section-divider" id="brand-guide">
+            <span class="section-num">01. BRAND GUIDE</span>
+            <h3>브랜드 가이드</h3>
+            <p>브랜드 스토리, 핵심 가치, 커뮤니케이션 톤앤매너를 확인하는 영역입니다.</p>
+          </div>
+
           <section class="brand-section manifesto-section">
             <div class="brand-section-head">
               <div>
@@ -844,6 +863,12 @@
             </div>
           </section>
 
+          <div class="hub-section-divider" id="design-guide">
+            <span class="section-num">02. DESIGN GUIDE</span>
+            <h3>디자인 가이드</h3>
+            <p>컬러, 제품 철학, 에셋 사용 기준을 통해 시각적 결과물을 일관되게 관리합니다.</p>
+          </div>
+
           <section class="brand-section">
             <div class="brand-section-head">
               <div>
@@ -853,105 +878,31 @@
             </div>
 
             <div class="color-guide-wrap">
-              <div class="main-color-grid color-main-pair">
-                <div class="main-color-card featured">
-                  <div class="main-color-preview" style="background:#000000;"></div>
-                  <div class="main-color-info"><strong>Bubbit Black / Main</strong><span>#000000</span></div>
-                </div>
-                <div class="main-color-card featured">
-                  <div class="main-color-preview" style="background:#FDBFC9;"></div>
-                  <div class="main-color-info"><strong>Bubbit Pink / Main</strong><span>#FDBFC9 · Pantone 706C</span></div>
+              <div class="main-color-grid">
+                <div class="main-color-card">
+                  <div class="main-color-preview" style="background:#111111;"></div>
+                  <div class="main-color-info"><strong>Bubbit Black / Main</strong><span>#111111</span></div>
                 </div>
               </div>
 
-              <div class="color-bar-stack">
-                <div class="color-bar-group">
-                  <p class="color-bar-title">Bubbit Mood Gradient <span>Deep black pink → playful pink/purple</span></p>
-                  <div class="color-bar">
-                    <i class="color-segment" style="background:#2A2024;" title="#2A2024"></i>
-                    <i class="color-segment" style="background:#3A2028;" title="#3A2028"></i>
-                    <i class="color-segment" style="background:#4A2730;" title="#4A2730"></i>
-                    <i class="color-segment" style="background:#5B2B36;" title="#5B2B36"></i>
-                    <i class="color-segment" style="background:#6F3D55;" title="#6F3D55"></i>
-                    <i class="color-segment" style="background:#7E496C;" title="#7E496C"></i>
-                    <i class="color-segment" style="background:#965489;" title="#965489"></i>
-                    <i class="color-segment" style="background:#A85E9C;" title="#A85E9C"></i>
-                    <i class="color-segment" style="background:#B46ABC;" title="#B46ABC"></i>
-                    <i class="color-segment" style="background:#BE77D4;" title="#BE77D4"></i>
-                    <i class="color-segment" style="background:#C783E1;" title="#C783E1"></i>
-                    <i class="color-segment" style="background:#D88AEA;" title="#D88AEA"></i>
-                    <i class="color-segment" style="background:#EC91F4;" title="#EC91F4"></i>
-                    <i class="color-segment" style="background:#F58BCD;" title="#F58BCD"></i>
-                    <i class="color-segment" style="background:#FC9BB3;" title="#FC9BB3"></i>
-                    <i class="color-segment" style="background:#FDB6C3;" title="#FDB6C3"></i>
-                  </div>
-                  <div class="color-code-row">
-                    <span style="color:#2A2024;">#2A2024</span><span style="color:#5B2B36;">#5B2B36</span><span style="color:#965489;">#965489</span><span style="color:#B46ABC;">#B46ABC</span><span style="color:#EC91F4;">#EC91F4</span><span style="color:#FC9BB3;">#FC9BB3</span><span style="color:#FDB6C3;">#FDB6C3</span>
-                  </div>
-                </div>
-
-                <div class="color-bar-group">
-                  <p class="color-bar-title">Pink Main & Tint Scale <span>Web / Package / background tint</span></p>
-                  <div class="color-bar">
-                    <i class="color-segment" style="background:#FDBFC9;" title="#FDBFC9 · WEB MAIN"></i>
-                    <i class="color-segment" style="background:#FC9BB3;" title="#FC9BB3"></i>
-                    <i class="color-segment" style="background:#FDB6C3;" title="#FDB6C3 · PACKAGE MAIN"></i>
-                    <i class="color-segment" style="background:#FED6DE;" title="#FED6DE"></i>
-                    <i class="color-segment" style="background:#F9C8D0;" title="#F9C8D0"></i>
-                    <i class="color-segment" style="background:#FAD3DA;" title="#FAD3DA"></i>
-                    <i class="color-segment" style="background:#FBE0E5;" title="#FBE0E5"></i>
-                    <i class="color-segment" style="background:#FCE9ED;" title="#FCE9ED"></i>
-                    <i class="color-segment" style="background:#FFF1F5;" title="#FFF1F5"></i>
-                    <i class="color-segment" style="background:#FFFFFF;" title="#FFFFFF"></i>
-                  </div>
-                  <div class="color-code-row">
-                    <span style="color:#FDBFC9;">#FDBFC9 WEB MAIN</span><span style="color:#FC9BB3;">#FC9BB3</span><span style="color:#FDB6C3;">#FDB6C3 PACKAGE MAIN</span><span style="color:#FED6DE;">#FED6DE</span><span style="color:#FFF1F5;">#FFF1F5</span><span style="color:#FFFFFF;">#FFFFFF</span>
-                  </div>
-                </div>
-
-                <div class="color-bar-group">
-                  <p class="color-bar-title">Red / Pink Alert Scale <span>강조 및 경고성 포인트</span></p>
-                  <div class="color-bar">
-                    <i class="color-segment" style="background:#570000;" title="#570000"></i>
-                    <i class="color-segment" style="background:#8B0000;" title="#8B0000"></i>
-                    <i class="color-segment" style="background:#B0000C;" title="#B0000C"></i>
-                    <i class="color-segment" style="background:#EF1020;" title="#EF1020"></i>
-                    <i class="color-segment" style="background:#FF4054;" title="#FF4054"></i>
-                    <i class="color-segment" style="background:#FF5D73;" title="#FF5D73"></i>
-                    <i class="color-segment" style="background:#FF758A;" title="#FF758A"></i>
-                    <i class="color-segment" style="background:#DE9AA0;" title="#DE9AA0"></i>
-                  </div>
-                  <div class="color-code-row">
-                    <span style="color:#570000;">#570000</span><span style="color:#8B0000;">#8B0000</span><span style="color:#B0000C;">#B0000C</span><span style="color:#EF1020;">#EF1020</span><span style="color:#FF4054;">#FF4054</span><span style="color:#FF758A;">#FF758A</span><span style="color:#DE9AA0;">#DE9AA0</span>
-                  </div>
-                </div>
-
-                <div class="color-bar-group">
-                  <p class="color-bar-title">Neutral Gray Scale <span>Text / line / background</span></p>
-                  <div class="color-bar">
-                    <i class="color-segment" style="background:#111111;" title="#111111"></i>
-                    <i class="color-segment" style="background:#222222;" title="#222222"></i>
-                    <i class="color-segment" style="background:#444444;" title="#444444"></i>
-                    <i class="color-segment" style="background:#767676;" title="#767676"></i>
-                    <i class="color-segment" style="background:#9CA3AF;" title="#9CA3AF"></i>
-                    <i class="color-segment" style="background:#D1D5DB;" title="#D1D5DB"></i>
-                    <i class="color-segment" style="background:#E8E8EC;" title="#E8E8EC"></i>
-                    <i class="color-segment" style="background:#F2F4F6;" title="#F2F4F6"></i>
-                    <i class="color-segment" style="background:#F7F7F7;" title="#F7F7F7"></i>
-                    <i class="color-segment" style="background:#FAFAFA;" title="#FAFAFA"></i>
-                    <i class="color-segment" style="background:#FFFFFF;" title="#FFFFFF"></i>
-                  </div>
-                  <div class="color-code-row">
-                    <span style="color:#111111;">#111111</span><span style="color:#222222;">#222222</span><span style="color:#767676;">#767676</span><span style="color:#9CA3AF;">#9CA3AF</span><span style="color:#E8E8EC;">#E8E8EC</span><span style="color:#F2F4F6;">#F2F4F6</span><span style="color:#F7F7F7;">#F7F7F7</span><span style="color:#FFFFFF;">#FFFFFF</span>
-                  </div>
-                </div>
-
-                <div class="system-color-grid">
-                  <div class="system-color-card"><div class="system-color-preview" style="background:#3AD3E8;"></div><strong>Success / Blue</strong><span>#3AD3E8</span></div>
-                  <div class="system-color-card"><div class="system-color-preview" style="background:#FF5138;"></div><strong>Warning / Orange</strong><span>#FF5138</span></div>
-                  <div class="system-color-card"><div class="system-color-preview" style="background:#FFA53A;"></div><strong>Error / Yellow</strong><span>#FFA53A</span></div>
-                  <div class="system-color-card"><div class="system-color-preview" style="background:#D66AF6;"></div><strong>Info / Purple</strong><span>#D66AF6</span></div>
-                </div>
+              <div class="sub-color-list">
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FDB6C3;"></i><div class="sub-color-meta"><strong>Bubbit Pink / Main Point</strong><span>#FDB6C3</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#EC91F4;"></i><div class="sub-color-meta"><strong>Bubbit Purple</strong><span>#EC91F4</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FC9BB3;"></i><div class="sub-color-meta"><strong>Point Pink</strong><span>#FC9BB3</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FED6DE;"></i><div class="sub-color-meta"><strong>Soft Pink</strong><span>#FED6DE</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FFF1F5;"></i><div class="sub-color-meta"><strong>Pink Background</strong><span>#FFF1F5</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#5B2B36;"></i><div class="sub-color-meta"><strong>Deep Pink Text</strong><span>#5B2B36</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FFFFFF;"></i><div class="sub-color-meta"><strong>White</strong><span>#FFFFFF</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#FAFAFA;"></i><div class="sub-color-meta"><strong>Warm White</strong><span>#FAFAFA</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F7F7F7;"></i><div class="sub-color-meta"><strong>Page Gray</strong><span>#F7F7F7</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F2F4F6;"></i><div class="sub-color-meta"><strong>Light Gray</strong><span>#F2F4F6</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#E8E8EC;"></i><div class="sub-color-meta"><strong>Line Gray</strong><span>#E8E8EC</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#767676;"></i><div class="sub-color-meta"><strong>Sub Text</strong><span>#767676</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#222222;"></i><div class="sub-color-meta"><strong>Main Text</strong><span>#222222</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#F59E0B;"></i><div class="sub-color-meta"><strong>Need Check</strong><span>#F59E0B</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#9CA3AF;"></i><div class="sub-color-meta"><strong>Archive</strong><span>#9CA3AF</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#EF4444;"></i><div class="sub-color-meta"><strong>Do Not Use</strong><span>#EF4444</span></div></div>
+                <div class="sub-color-item"><i class="sub-color-dot" style="background:#2A2024;"></i><div class="sub-color-meta"><strong>Deep Brown Black</strong><span>#2A2024</span></div></div>
               </div>
             </div>
           </section>
@@ -981,6 +932,12 @@
               </tbody>
             </table>
           </section>
+        </div>
+
+        <div class="hub-section-divider searchable-item" id="asset-download">
+          <span class="section-num">03. ASSET DOWNLOAD</span>
+          <h3>에셋 다운로드</h3>
+          <p>검수된 공식 파일을 확인하고 다운로드하는 영역입니다. APPROVED 상태의 파일만 외부 전달 및 제작에 사용해 주세요.</p>
         </div>
 
         <div class="asset-guide-grid searchable-item" style="display:none;">
