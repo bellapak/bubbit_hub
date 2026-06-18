@@ -1,5 +1,23 @@
 import { NAV_GROUPS, PAGE_CONFIG, PAGE_ALIASES } from "./app.config.js";
 
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function textOrDash(value) {
+  const text = String(value ?? "").trim();
+  return text ? text : "-";
+}
+
+window.escapeHTML = window.escapeHTML || escapeHTML;
+window.textOrDash = window.textOrDash || textOrDash;
+
+
 function getCurrentFileName() {
   const raw = decodeURIComponent(window.location.pathname.split("/").pop() || "index.html");
   return PAGE_ALIASES[raw] || raw;

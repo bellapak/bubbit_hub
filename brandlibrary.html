@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>브랜드 라이브러리 - 버빗 허브</title><link href="style.css" rel="stylesheet"/><link href="brandlibrary.css" rel="stylesheet"/></head><body><div id="app"><main class="main-content" data-page="brandlibrary">
 
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>브랜드 라이브러리 - 버빗 허브</title><link href="style.css" rel="stylesheet"/><link href="brandlibrary.css" rel="stylesheet"/></head><body><div id="app"><main class="main-content" data-page="brandlibrary">
 <div class="view-container">
 <div class="card searchable-item">
 <div class="card-header">
@@ -14,6 +14,20 @@
             버빗의 철학부터 디자인 자산까지, 일관된 결과물을 만들기 위한 모든 기준이 담겨 있습니다.
           </p>
 </div>
+<div aria-label="브랜드 라이브러리 읽는 순서" class="library-reading-map searchable-item">
+<div class="library-reading-head">
+<span>READING MAP</span>
+<strong>처음 보는 직원은 이 순서대로 보면 됩니다.</strong>
+</div>
+<ol class="library-reading-steps">
+<li><a href="#brand-guide"><b>01 브랜드 방향</b><span>왜 존재하는 브랜드인지</span></a></li>
+<li><a href="#design-guide"><b>02 디자인 기준</b><span>컬러와 표현 규칙</span></a></li>
+<li><a href="#tone-guide"><b>03 톤앤매너</b><span>말투와 카피 기준</span></a></li>
+<li><a href="#asset-download"><b>04 에셋 사용</b><span>검수 상태와 다운로드</span></a></li>
+<li><a href="#asset-upload-admin"><b>05 내부 업로드</b><span>새 공식 파일 등록</span></a></li>
+</ol>
+</div>
+
 <div class="hub-overview-grid searchable-item">
 <a class="hub-overview-card" href="#brand-guide">
 <span class="num">01</span>
@@ -48,13 +62,13 @@
 <h3>브랜드 라이브러리</h3>
 <p>브랜드 스토리, 핵심 가치, 커뮤니케이션 톤앤매너를 확인하는 영역입니다.</p>
 </div>
-<section class="brand-section manifesto-section">
-<div class="brand-section-head">
+<details class="brand-section manifesto-section library-accordion searchable-item" data-section-title="브랜드 매니페스토" open=""><summary class="library-accordion-summary">
 <div>
 <h3 class="brand-section-title">브랜드 매니페스토</h3>
 <p class="brand-section-sub">클릭하면 버빗의 선언, 비전, 가치, 제품 철학, 타깃, 마케팅 기준을 한 번에 확인할 수 있습니다.</p>
 </div>
-</div>
+<span class="library-accordion-icon">펼치기</span></summary><div class="library-accordion-body">
+
 <details class="manifesto-toggle">
 <summary>
 <div class="manifesto-summary">
@@ -103,14 +117,14 @@
 </div>
 </div>
 </details>
-</section>
-<section class="brand-section">
-<div class="brand-section-head">
+</div></details>
+<details class="brand-section library-accordion searchable-item" data-section-title="브랜드 목적과 경험 기준" open=""><summary class="library-accordion-summary">
 <div>
 <h3 class="brand-section-title">브랜드 목적과 경험 기준</h3>
 <p class="brand-section-sub">버빗이 왜 존재하는지, 어떤 기준으로 콘텐츠와 에셋을 만들어야 하는지 정리한 영역입니다.</p>
 </div>
-</div>
+<span class="library-accordion-icon">펼치기</span></summary><div class="library-accordion-body">
+
 <div class="brand-info-grid">
 <div class="brand-info-box">
 <strong>Brand Purpose</strong>
@@ -129,14 +143,14 @@
 <p>도시의 삶을 즐기며 사소한 물건에도 자신의 안목을 담고 싶어하는 2539 여성. 살림을 라이프스타일 큐레이션의 일부로 바라봅니다.</p>
 </div>
 </div>
-</section>
-<section class="brand-section">
-<div class="brand-section-head">
+</div></details>
+<details class="brand-section library-accordion searchable-item" data-section-title="브랜드 가치"><summary class="library-accordion-summary">
 <div>
 <h3 class="brand-section-title">브랜드 가치</h3>
 <p class="brand-section-sub">모든 디자인, 카피, 콘텐츠, 제안서에서 유지해야 할 버빗의 핵심 태도입니다.</p>
 </div>
-</div>
+<span class="library-accordion-icon">펼치기</span></summary><div class="library-accordion-body">
+
 <div class="asset-guide-grid">
 <div class="asset-guide-card">
 <strong>Smart Laziness</strong>
@@ -151,14 +165,14 @@
 <p>뻔한 생필품에 숨겨진 재미 한 스푼. 유연한 사고와 위트 있는 태도를 브랜드 표현의 중심에 둡니다.</p>
 </div>
 </div>
-</section>
-<section class="brand-section">
-<div class="brand-section-head">
+</div></details>
+<details class="brand-section library-accordion searchable-item" data-section-title="제품 철학"><summary class="library-accordion-summary">
 <div>
 <h3 class="brand-section-title">제품 철학</h3>
 <p class="brand-section-sub">제품 이미지와 상세페이지, 콘텐츠 제작 시 함께 전달해야 하는 핵심 제품 기준입니다.</p>
 </div>
-</div>
+<span class="library-accordion-icon">펼치기</span></summary><div class="library-accordion-body">
+
 <div class="brand-pill-list">
 <span class="brand-pill">비건 포뮬러</span>
 <span class="brand-pill">크루얼티 프리</span>
@@ -167,19 +181,19 @@
 <span class="brand-pill">일상의 쉼표</span>
 <span class="brand-pill">취향 기반 살림</span>
 </div>
-</section>
+</div></details>
 <div class="hub-section-divider" id="design-guide">
 <span class="section-num">02. DESIGN GUIDE</span>
 <h3>디자인 가이드</h3>
 <p>컬러, 제품 철학, 에셋 사용 기준을 통해 시각적 결과물을 일관되게 관리합니다.</p>
 </div>
-<section class="brand-section">
-<div class="brand-section-head">
+<details class="brand-section library-accordion searchable-item" data-section-title="컬러 가이드"><summary class="library-accordion-summary">
 <div>
 <h3 class="brand-section-title">컬러 가이드</h3>
 <p class="brand-section-sub">메인 컬러는 큰 칩으로, 나머지 컬러는 정리된 순서대로 작은 원형 칩과 코드로 빠르게 확인할 수 있도록 정리했습니다.</p>
 </div>
-</div>
+<span class="library-accordion-icon">펼치기</span></summary><div class="library-accordion-body">
+
 <div class="color-guide-wrap">
 <div class="main-color-grid color-main-pair">
 <div class="main-color-card featured">
@@ -277,14 +291,14 @@
 </div>
 </div>
 </div>
-</section>
-<section class="brand-section">
-<div class="brand-section-head">
+</div></details>
+<details class="brand-section library-accordion searchable-item" data-section-title="톤앤매너 기준" id="tone-guide"><summary class="library-accordion-summary">
 <div>
 <h3 class="brand-section-title">톤앤매너 기준</h3>
 <p class="brand-section-sub">콘텐츠, 상세페이지, 제안서, 안내 문구 작성 시 참고하는 표현 기준입니다.</p>
 </div>
-</div>
+<span class="library-accordion-icon">펼치기</span></summary><div class="library-accordion-body">
+
 <table class="tone-table">
 <tbody>
 <tr>
@@ -301,7 +315,7 @@
 </tr>
 </tbody>
 </table>
-</section>
+</div></details>
 </div>
 <div class="hub-section-divider searchable-item" id="asset-download">
 <span class="section-num">03. ASSET DOWNLOAD</span>
@@ -365,7 +379,7 @@
 <div class="uploaded-asset-title">
 <span>업로드된 내부 에셋</span>
 <span id="uploaded-asset-count">0개</span>
-</div>
+<button class="btn" id="refresh-uploaded-assets" onclick="loadUploadedAssets()" type="button">목록 새로고침</button></div>
 <div class="uploaded-asset-grid" id="uploaded-asset-grid"></div>
 <div class="asset-empty" id="uploaded-asset-empty" style="display:flex;">아직 업로드된 에셋이 없습니다.</div>
 </div>
@@ -383,7 +397,7 @@
 <div class="asset-grid" id="asset-grid">
 <div class="asset-card searchable-item" data-category="로고">
 <div class="asset-preview">
-<img alt="버빗 로고 패키지 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/logo/bubbit-logo-preview.png"/><span class="preview-fallback" style="display:none;">LOGO</span>
+<img alt="버빗 로고 패키지 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/logo/bubbit-logo-preview.png"/><span class="preview-fallback" style="display:none;">LOGO</span>
 <em>APPROVED</em>
 </div>
 <div class="asset-info">
@@ -399,7 +413,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="캐릭터">
 <div class="asset-preview">
-<img alt="버빗 캐릭터 기본형 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/character/bubbit-basic-preview.png"/><span class="preview-fallback" style="display:none;">BUBBIT</span>
+<img alt="버빗 캐릭터 기본형 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/character/bubbit-basic-preview.png"/><span class="preview-fallback" style="display:none;">BUBBIT</span>
 <em>APPROVED</em>
 </div>
 <div class="asset-info">
@@ -415,7 +429,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="캐릭터">
 <div class="asset-preview">
-<img alt="무빗 캐릭터 기본형 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/character/moobbit-basic-preview.png"/><span class="preview-fallback" style="display:none;">MOOBBIT</span>
+<img alt="무빗 캐릭터 기본형 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/character/moobbit-basic-preview.png"/><span class="preview-fallback" style="display:none;">MOOBBIT</span>
 <em>APPROVED</em>
 </div>
 <div class="asset-info">
@@ -431,7 +445,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="제품 이미지">
 <div class="asset-preview">
-<img alt="주방세제 제품 이미지 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/product/dish-soap-preview.png"/><span class="preview-fallback" style="display:none;">PRODUCT</span>
+<img alt="주방세제 제품 이미지 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/product/dish-soap-preview.png"/><span class="preview-fallback" style="display:none;">PRODUCT</span>
 <em>APPROVED</em>
 </div>
 <div class="asset-info">
@@ -447,7 +461,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="제품 이미지">
 <div class="asset-preview">
-<img alt="캡슐세탁세제 제품 이미지 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/product/capsule-detergent-preview.png"/><span class="preview-fallback" style="display:none;">CAPSULE</span>
+<img alt="캡슐세탁세제 제품 이미지 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/product/capsule-detergent-preview.png"/><span class="preview-fallback" style="display:none;">CAPSULE</span>
 <em class="need-check">NEED CHECK</em>
 </div>
 <div class="asset-info">
@@ -463,7 +477,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="콘텐츠">
 <div class="asset-preview">
-<img alt="인스타그램 콘텐츠 템플릿 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/sns/instagram-template-preview.png"/><span class="preview-fallback" style="display:none;">SNS</span>
+<img alt="인스타그램 콘텐츠 템플릿 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/sns/instagram-template-preview.png"/><span class="preview-fallback" style="display:none;">SNS</span>
 <em>APPROVED</em>
 </div>
 <div class="asset-info">
@@ -479,7 +493,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="템플릿">
 <div class="asset-preview">
-<img alt="제휴 제안서 템플릿 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/template/partnership-deck-preview.png"/><span class="preview-fallback" style="display:none;">PPT</span>
+<img alt="제휴 제안서 템플릿 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/template/partnership-deck-preview.png"/><span class="preview-fallback" style="display:none;">PPT</span>
 <em>APPROVED</em>
 </div>
 <div class="asset-info">
@@ -495,7 +509,7 @@
 </div>
 <div class="asset-card searchable-item" data-category="인쇄용">
 <div class="asset-preview">
-<img alt="인쇄용 로고 및 패키지 가이드 미리보기" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/print/print-guide-preview.png"/><span class="preview-fallback" style="display:none;">PRINT</span>
+<img alt="인쇄용 로고 및 패키지 가이드 미리보기" decoding="async" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/print/print-guide-preview.png"/><span class="preview-fallback" style="display:none;">PRINT</span>
 <em class="need-check">NEED CHECK</em>
 </div>
 <div class="asset-info">
@@ -515,7 +529,7 @@
 </div>
 </main></div><div id="toast">메시지</div><script src="./layout.js" type="module"></script><script type="module">
   import { db, requireAuth } from "./firebase.js";
-  import { collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp }
+  import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, limit }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   let currentAssetCategory = "전체";
@@ -523,13 +537,21 @@
   let selectedFileName = "";
   let selectedFileSize = 0;
   let uploadedAssetTotal = 0;
+  let uploadedAssetsLoaded = false;
 
   requireAuth(() => {
     const mainContent = document.querySelector(".main-content");
     if (mainContent) mainContent.style.visibility = "visible";
-
-    subscribeUploadedAssets();
+    enhanceLibraryHierarchy();
     updateAssetView();
+
+    // 업로드 에셋은 초기 렌더를 막지 않도록 idle 시점에 1회만 불러옵니다.
+    const lazyLoad = () => window.loadUploadedAssets({ silent: true });
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(lazyLoad, { timeout: 2200 });
+    } else {
+      setTimeout(lazyLoad, 900);
+    }
   });
 
   window.searchTable = function () {
@@ -653,6 +675,8 @@
         uploadBtn.innerText = "업로드";
         uploadBtn.disabled = true;
       }
+
+      await window.loadUploadedAssets();
     } catch (e) {
       console.error(e);
       alert("업로드 실패. Firebase 연결 또는 권한을 확인해 주세요.");
@@ -660,6 +684,40 @@
         uploadBtn.innerText = "업로드";
         uploadBtn.disabled = false;
       }
+    }
+  };
+
+  window.loadUploadedAssets = async function ({ silent = false } = {}) {
+    const grid = document.getElementById("uploaded-asset-grid");
+    const uploadedEmpty = document.getElementById("uploaded-asset-empty");
+    if (!grid) return;
+
+    if (uploadedEmpty) {
+      uploadedEmpty.innerText = "업로드 에셋을 불러오는 중입니다.";
+      uploadedEmpty.style.display = "flex";
+    }
+
+    try {
+      const q = query(collection(db, "guide_assets"), limit(24));
+      const snap = await getDocs(q);
+      grid.innerHTML = "";
+      uploadedAssetTotal = snap.size;
+      uploadedAssetsLoaded = true;
+
+      const docs = [];
+      snap.forEach(docSnap => docs.push({ id: docSnap.id, data: docSnap.data() }));
+      docs.sort((a, b) => (b.data.createdAt?.seconds || 0) - (a.data.createdAt?.seconds || 0));
+
+      docs.forEach(item => grid.appendChild(createUploadedAssetCard(item.data, item.id)));
+      updateAssetView();
+      if (!silent) showToast("업로드 목록을 새로고침했습니다");
+    } catch (error) {
+      console.error(error);
+      if (uploadedEmpty) {
+        uploadedEmpty.innerText = "업로드 목록을 불러오지 못했습니다. Firebase 권한을 확인해 주세요.";
+        uploadedEmpty.style.display = "flex";
+      }
+      if (!silent) showToast("업로드 목록을 불러오지 못했습니다");
     }
   };
 
@@ -671,33 +729,12 @@
     setTimeout(() => toast.classList.remove("show"), 2500);
   };
 
-  function subscribeUploadedAssets() {
-    const grid = document.getElementById("uploaded-asset-grid");
-    if (!grid) return;
-
-    onSnapshot(collection(db, "guide_assets"), (snap) => {
-      grid.innerHTML = "";
-      uploadedAssetTotal = snap.size;
-
-      const docs = [];
-      snap.forEach(docSnap => {
-        docs.push({ id: docSnap.id, data: docSnap.data() });
+  function enhanceLibraryHierarchy() {
+    document.querySelectorAll(".library-reading-steps a").forEach(link => {
+      link.addEventListener("click", () => {
+        const target = document.querySelector(link.getAttribute("href"));
+        if (target?.tagName === "DETAILS") target.open = true;
       });
-
-      docs.sort((a, b) => {
-        const aTime = a.data.createdAt?.seconds || 0;
-        const bTime = b.data.createdAt?.seconds || 0;
-        return bTime - aTime;
-      });
-
-      docs.forEach(item => {
-        grid.appendChild(createUploadedAssetCard(item.data, item.id));
-      });
-
-      updateAssetView();
-    }, (error) => {
-      console.error(error);
-      showToast("업로드 목록을 불러오지 못했습니다");
     });
   }
 
@@ -713,6 +750,8 @@
       const img = document.createElement("img");
       img.src = data.imageData;
       img.alt = `${data.title || "업로드 에셋"} 미리보기`;
+      img.loading = "lazy";
+      img.decoding = "async";
       preview.appendChild(img);
     } else {
       const fallback = document.createElement("span");
@@ -797,6 +836,7 @@
     try {
       await deleteDoc(doc(db, "guide_assets", docId));
       showToast("삭제되었습니다");
+      await window.loadUploadedAssets({ silent: true });
     } catch (e) {
       console.error(e);
       alert("삭제 실패. Firebase 권한을 확인해 주세요.");
@@ -832,20 +872,24 @@
       el.style.display = el.innerText.toLowerCase().includes(kw) ? "" : "none";
     });
 
-    document.querySelectorAll(".searchable-item:not(.asset-card)").forEach(el => {
+    document.querySelectorAll(".library-accordion").forEach(el => {
+      const match = !kw || el.innerText.toLowerCase().includes(kw);
+      el.style.display = match ? "" : "none";
+      if (kw && match) el.open = true;
+    });
+
+    document.querySelectorAll(".searchable-item:not(.asset-card):not(.library-accordion)").forEach(el => {
       el.style.display = el.innerText.toLowerCase().includes(kw) || !kw ? "" : "none";
     });
 
-    if (empty) {
-      empty.style.display = visibleCount === 0 ? "flex" : "none";
-    }
-
-    if (uploadedCount) {
-      uploadedCount.innerText = `${uploadedAssetTotal}개`;
-    }
+    if (empty) empty.style.display = visibleCount === 0 ? "flex" : "none";
+    if (uploadedCount) uploadedCount.innerText = uploadedAssetsLoaded ? `${uploadedAssetTotal}개` : "대기";
 
     if (uploadedEmpty) {
-      if (uploadedAssetTotal === 0) {
+      if (!uploadedAssetsLoaded) {
+        uploadedEmpty.innerText = "업로드 목록은 잠시 후 자동으로 불러오거나, 목록 새로고침을 눌러 확인할 수 있습니다.";
+        uploadedEmpty.style.display = "flex";
+      } else if (uploadedAssetTotal === 0) {
         uploadedEmpty.innerText = "아직 업로드된 에셋이 없습니다.";
         uploadedEmpty.style.display = "flex";
       } else if (visibleUploadedCount === 0) {

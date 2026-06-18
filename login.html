@@ -2,23 +2,25 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>로그인 - 버빗 허브</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-app); }
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-app); padding: 18px; }
   .login-card {
     background: #fff;
     padding: 48px;
     border-radius: 32px;
     box-shadow: 0 16px 40px rgba(0,0,0,0.06);
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     text-align: center;
+    border: 1px solid var(--line);
   }
   .login-subtitle {
     font-size: 14px;
     color: var(--text-sub);
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     font-weight: 500;
   }
   .btn-google {
@@ -31,80 +33,128 @@
     font-weight: 800;
     font-size: 15px;
     cursor: pointer;
-    transition: opacity 0.2s;
-    font-family: 'Pretendard', sans-serif;
+    transition: opacity 0.2s, transform 0.14s ease;
+    font-family: var(--font, 'Pretendard', sans-serif);
   }
-  .btn-google:hover { opacity: 0.85; }
-  .btn-google:disabled { opacity: 0.5; cursor: not-allowed; }
-  .error-msg {
-    color: #F04452;
+  .btn-google:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-google:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .error-msg, .notice-msg {
     margin-top: 16px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 650;
     display: none;
-    background: #FEF0F1;
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    line-height: 1.55;
+    text-align: left;
   }
+  .error-msg { color: #A1192B; background: #FEF0F1; border: 1px solid #FFD1D9; }
+  .notice-msg { color: #5B4A00; background: #FFF8E6; border: 1px solid #FDDFA0; }
+  .login-help { margin-top: 18px; color: var(--text-sub); font-size: 12px; line-height: 1.6; }
 </style>
 </head>
 <body>
 <div class="login-card">
   <h2 style="margin-bottom:8px; font-size:22px; font-weight:900;">Bubbit Hub</h2>
   <p class="login-subtitle">팀 전용 워크스페이스</p>
-  <button id="google-login-btn" class="btn-google">Google 계정으로 로그인</button>
+  <button id="google-login-btn" class="btn-google" type="button">Google 계정으로 로그인</button>
   <p id="login-error" class="error-msg"></p>
+  <p id="login-notice" class="notice-msg"></p>
+  <p class="login-help">계속 실패하면 Firebase Authentication의 Google 제공업체, Authorized domains, app.secrets.js 허용 계정을 확인해 주세요.</p>
 </div>
 
 <script type="module">
-  // ✅ firebase.js에서 ALLOWED_EMAILS를 import — 이메일 목록은 firebase.js 한 곳에서만 관리
-  import { auth, ALLOWED_EMAILS } from "./firebase.js";
-  import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
-    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { auth, isAuthorizedUser, AUTH_CONFIG_READY, getLoginErrorMessage } from "./firebase.js";
+  import {
+    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+
   const btn = document.getElementById("google-login-btn");
   const errorEl = document.getElementById("login-error");
-
-  // 이미 로그인된 허용 사용자는 바로 대시보드로
-  onAuthStateChanged(auth, (user) => {
-    if (user && ALLOWED_EMAILS.includes(user.email)) {
-      window.location.href = "index.html";
-    }
-  });
+  const noticeEl = document.getElementById("login-notice");
 
   function showError(msg) {
     errorEl.innerText = msg;
     errorEl.style.display = "block";
+    noticeEl.style.display = "none";
   }
+
+  function showNotice(msg) {
+    noticeEl.innerText = msg;
+    noticeEl.style.display = "block";
+  }
+
+  function resetButton() {
+    btn.disabled = false;
+    btn.innerText = "Google 계정으로 로그인";
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const reason = params.get("reason");
+  if (reason === "unauthorized") showError("접근 권한이 없는 계정입니다. 허용 계정 목록을 확인해 주세요.");
+  if (reason === "allowlist-missing") showError("허용 계정 설정이 비어 있습니다. app.secrets.js에 AUTHORIZED_EMAILS 또는 AUTHORIZED_DOMAINS를 설정해 주세요.");
+  if (reason === "login-required") showNotice("로그인이 필요한 페이지입니다.");
+  if (reason === "signed-out") showNotice("로그아웃되었습니다.");
+
+  if (!AUTH_CONFIG_READY) {
+    showError("허용 계정 설정이 없습니다. app.secrets.example.js를 app.secrets.js로 복사한 뒤 팀 계정을 등록해 주세요.");
+  }
+
+  try {
+    const redirectResult = await getRedirectResult(auth);
+    if (redirectResult?.user) {
+      if (isAuthorizedUser(redirectResult.user)) {
+        window.location.href = "index.html";
+      } else {
+        await signOut(auth);
+        showError("접근 권한이 없는 계정입니다: " + redirectResult.user.email);
+      }
+    }
+  } catch (error) {
+    showError(getLoginErrorMessage(error));
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+    if (isAuthorizedUser(user)) {
+      window.location.href = "index.html";
+      return;
+    }
+    await signOut(auth).catch(() => {});
+    showError("접근 권한이 없는 계정입니다: " + (user.email || "이메일 없음"));
+  });
 
   btn.addEventListener("click", async () => {
     btn.disabled = true;
     btn.innerText = "로그인 중...";
     errorEl.style.display = "none";
+    noticeEl.style.display = "none";
 
-   try {
+    try {
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      const emailCheck = ALLOWED_EMAILS.map(e => e.toLowerCase().trim())
-                                      .includes(user.email.toLowerCase().trim());
-
-      if (!emailCheck) {
+      if (!isAuthorizedUser(result.user)) {
         await signOut(auth);
-        showError("접근 권한이 없는 계정입니다. 계정을 확인하세요: " + user.email);
-        btn.disabled = false;
-        btn.innerText = "Google 계정으로 로그인";
+        showError("접근 권한이 없는 계정입니다: " + (result.user.email || "이메일 없음"));
+        resetButton();
         return;
       }
-
       window.location.href = "index.html";
     } catch (error) {
-      if (error.code !== "auth/popup-closed-by-user") {
-        showError("로그인에 실패했습니다. 다시 시도해 주세요.");
+      if (["auth/popup-blocked", "auth/cancelled-popup-request"].includes(error.code)) {
+        showNotice("팝업 로그인이 차단되어 리다이렉트 방식으로 다시 시도합니다.");
+        await signInWithRedirect(auth, provider);
+        return;
       }
-      btn.disabled = false;
-      btn.innerText = "Google 계정으로 로그인";
+      showError(getLoginErrorMessage(error));
+      resetButton();
     }
   });
 </script>

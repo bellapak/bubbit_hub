@@ -24,6 +24,9 @@
   import { collection, addDoc, onSnapshot, doc, deleteDoc }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+  const esc = window.escapeHTML || ((v) => String(v ?? "").replace(/[&<>\"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])));
+  const dash = (v) => String(v ?? "").trim() || "-";
+
   requireAuth(() => {
     window.saveCS = async () => {
       const type = document.getElementById("cs-type").value;
@@ -44,9 +47,9 @@
       snap.forEach(docSnap => {
         const d = docSnap.data();
         list.innerHTML += `<tr class="searchable-row">
-          <td><span class="badge" style="background:#E8F3FF;color:#3182F6">${d.type}</span></td>
-          <td><strong>${d.content}</strong></td>
-          <td style="color:var(--text-sub)">${d.date}</td>
+          <td><span class="badge" style="background:#E8F3FF;color:#3182F6">${esc(dash(d.type))}</span></td>
+          <td><strong>${esc(dash(d.content))}</strong></td>
+          <td style="color:var(--text-sub)">${esc(dash(d.date))}</td>
           <td><button class="btn" style="padding:6px 12px;font-size:12px;" onclick="deleteCS('${docSnap.id}')">완료</button></td>
         </tr>`;
       });

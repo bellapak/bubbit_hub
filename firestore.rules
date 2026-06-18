@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null && request.auth.token.email != null;
+    }
+
+    // 실제 팀 이메일 또는 회사 도메인으로 교체하세요.
+    function isAllowedUser() {
+      return signedIn() && (
+        request.auth.token.email in [
+          "team-member@example.com"
+        ]
+        // 또는 회사 도메인 허용 예시:
+        // || request.auth.token.email.matches('.*@company\\.co\\.kr$')
+      );
+    }
+
+    match /{document=**} {
+      allow read, write: if isAllowedUser();
+    }
+  }
+}
