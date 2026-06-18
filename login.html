@@ -105,7 +105,7 @@
   if (reason === "signed-out") showNotice("로그아웃되었습니다.");
 
   if (!AUTH_CONFIG_READY) {
-    showError("허용 계정 설정이 없습니다. app.secrets.example.js를 app.secrets.js로 복사한 뒤 팀 계정을 등록해 주세요.");
+    showError("허용 계정 설정이 없습니다. app.secrets.example.js를 app.secrets.js로 복사한 뒤 실제 접속 허용 이메일을 등록해 주세요.");
   }
 
   try {
@@ -115,7 +115,7 @@
         window.location.href = "index.html";
       } else {
         await signOut(auth);
-        showError("접근 권한이 없는 계정입니다: " + redirectResult.user.email);
+        showError("접근 권한이 없는 계정입니다: " + (redirectResult.user.email || "이메일 없음"));
       }
     }
   } catch (error) {
@@ -137,6 +137,12 @@
     btn.innerText = "로그인 중...";
     errorEl.style.display = "none";
     noticeEl.style.display = "none";
+
+    if (!AUTH_CONFIG_READY) {
+      showError("허용 계정 설정이 없습니다. app.secrets.js를 먼저 생성해 주세요.");
+      resetButton();
+      return;
+    }
 
     try {
       const result = await signInWithPopup(auth, provider);

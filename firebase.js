@@ -43,6 +43,10 @@ export const AUTHORIZED_DOMAINS = Array.isArray(localConfig.AUTHORIZED_DOMAINS)
 
 export const AUTH_CONFIG_READY = AUTHORIZED_EMAILS.length > 0 || AUTHORIZED_DOMAINS.length > 0;
 
+// 구버전 login.html이나 페이지에서 ALLOWED_EMAILS를 import해도 깨지지 않도록 남긴 호환 alias입니다.
+// 실제 이메일 값은 AUTHORIZED_EMAILS와 동일하게 app.secrets.js에서만 불러옵니다.
+export const ALLOWED_EMAILS = AUTHORIZED_EMAILS;
+
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);

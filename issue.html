@@ -29,9 +29,6 @@
   import { collection, addDoc, onSnapshot, doc, deleteDoc }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  const esc = window.escapeHTML || ((v) => String(v ?? "").replace(/[&<>\"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])));
-  const dash = (v) => String(v ?? "").trim() || "-";
-
   requireAuth(() => {
     window.saveIssue = async () => {
       const title = document.getElementById("issue-title").value;
@@ -54,10 +51,10 @@
         const d = docSnap.data();
         let bs = d.status === "해결됨" ? "background:#E8F8F0;color:#11894C;" : (d.status === "대기중" ? "background:#FFF4E6;color:#D76B00;" : "");
         list.innerHTML += `<tr class="searchable-row">
-          <td><span class="badge" style="${bs}">${esc(dash(d.status))}</span></td>
-          <td><strong>${esc(dash(d.title))}</strong></td>
-          <td><span style="color:var(--text-sub)">${esc(dash(d.level))}</span></td>
-          <td style="color:var(--text-sub)">${esc(dash(d.date))}</td>
+          <td><span class="badge" style="${bs}">${d.status}</span></td>
+          <td><strong>${d.title}</strong></td>
+          <td><span style="color:var(--text-sub)">${d.level}</span></td>
+          <td style="color:var(--text-sub)">${d.date}</td>
           <td><button class="btn btn-danger" style="padding:6px 12px;font-size:12px;" onclick="deleteIssue('${docSnap.id}')">삭제</button></td>
         </tr>`;
       });

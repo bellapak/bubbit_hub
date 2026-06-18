@@ -21,9 +21,6 @@
   import { collection, addDoc, onSnapshot, doc, deleteDoc }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  const esc = window.escapeHTML || ((v) => String(v ?? "").replace(/[&<>\"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])));
-  const dash = (v) => String(v ?? "").trim() || "-";
-
   requireAuth(() => {
     window.savePromo = async () => {
       const title = document.getElementById("promo-title").value;
@@ -45,10 +42,10 @@
       snap.forEach(docSnap => {
         const d = docSnap.data();
         list.innerHTML += `<tr class="searchable-row">
-          <td><span class="badge">${esc(dash(d.status))}</span></td>
-          <td><strong>${esc(dash(d.title))}</strong></td>
-          <td style="color:var(--text-sub)">${esc(dash(d.benefit))}</td>
-          <td style="color:var(--text-sub)">${esc(dash(d.period))}</td>
+          <td><span class="badge">${d.status}</span></td>
+          <td><strong>${d.title}</strong></td>
+          <td style="color:var(--text-sub)">${d.benefit}</td>
+          <td style="color:var(--text-sub)">${d.period}</td>
           <td><button class="btn" style="padding:6px 12px;font-size:12px;" onclick="deletePromo('${docSnap.id}')">종료</button></td>
         </tr>`;
       });

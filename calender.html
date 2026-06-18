@@ -97,13 +97,16 @@
 </div>
 </div>
 </div><div id="toast">메시지</div><script src="./layout.js" type="module"></script><script type="module">
-  import { db, requireAuth } from "./firebase.js";
-  import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  
+  const firebaseConfig = { apiKey: "AIzaSyDFxVAAkgut4hsmafMMxRo2Ge2P7td6JOs", authDomain: "bubbit-hub.firebaseapp.com", projectId: "bubbit-hub", storageBucket: "bubbit-hub.firebasestorage.app", messagingSenderId: "183100911164", appId: "1:183100911164:web:c1a1fa4b273d9ddccf5d39" };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-  requireAuth(() => {
-    const main = document.querySelector(".main-content");
-    if (main) main.style.visibility = "visible";
-  });
+  onAuthStateChanged(auth, (user) => { if (!user) window.location.href = 'login.html'; });
 
   const targetCollection = collection(db, "brand_schedules");
   let currentDate = new Date();

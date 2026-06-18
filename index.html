@@ -57,9 +57,6 @@
   import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   // ✅ 인증 가드 — 통과해야만 아래 로직 실행
-  const esc = window.escapeHTML || ((v) => String(v ?? "").replace(/[&<>\"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])));
-  const dash = (v) => String(v ?? "").trim() || "-";
-
   requireAuth(() => {
     window.openTaskModal = () => document.getElementById("task-modal").style.display = "flex";
     window.closeTaskModal = () => document.getElementById("task-modal").style.display = "none";
@@ -105,14 +102,14 @@
           if (d.priority === "낮음") ps = "background:#F2F4F6;color:#B0B8C1;";
 
           tbody.innerHTML += `<tr class="searchable-row">
-            <td><strong style="font-size:15px;">${esc(dash(d.title))}</strong>
+            <td><strong style="font-size:15px;">${d.title || "-"}</strong>
               <div style="font-size:12px;color:var(--text-sub);margin-top:4px;font-weight:500;">
-                기한: ${esc(dash(d.date))} | 담당: ${esc(dash(d.owner))}
+                기한: ${d.date || "-"} | 담당: ${d.owner || "-"}
               </div>
             </td>
-            <td><span style="font-weight:600;">${esc(dash(d.channel))}</span></td>
-            <td><span class="badge" style="${ps}">${esc(d.priority || "보통")}</span></td>
-            <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${esc(d.status || "예정")}</span></td>
+            <td><span style="font-weight:600;">${d.channel || "-"}</span></td>
+            <td><span class="badge" style="${ps}">${d.priority || "보통"}</span></td>
+            <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${d.status || "예정"}</span></td>
           </tr>`;
         });
     });
@@ -128,8 +125,8 @@
       snap.docs.slice(0, 5).forEach(doc => {
         const d = doc.data();
         tbody.innerHTML += `<tr class="searchable-row">
-          <td><strong>${esc(dash(d.service))}</strong></td>
-          <td style="color:var(--text-sub)">${esc(dash(d.id))}</td>
+          <td><strong>${d.service || "-"}</strong></td>
+          <td style="color:var(--text-sub)">${d.id || "-"}</td>
         </tr>`;
       });
     });

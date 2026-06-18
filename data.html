@@ -32,9 +32,6 @@
   import { collection, addDoc, onSnapshot }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  const esc = window.escapeHTML || ((v) => String(v ?? "").replace(/[&<>\"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])));
-  const dash = (v) => String(v ?? "").trim() || "-";
-
   requireAuth(() => {
     window.addIntegration = async () => {
       const platform = prompt("연동할 플랫폼 (예: Slack):");
@@ -51,9 +48,9 @@
       snap.forEach(doc => {
         const d = doc.data();
         tbody.innerHTML += `<tr class="searchable-row">
-          <td><strong>${esc(dash(d.platform))}</strong></td>
-          <td><span class="badge" style="background:#E8F3FF;color:#3182F6">${esc(dash(d.status))}</span></td>
-          <td style="color:var(--text-sub)">${esc(dash(d.date))}</td>
+          <td><strong>${d.platform}</strong></td>
+          <td><span class="badge" style="background:#E8F3FF;color:#3182F6">${d.status}</span></td>
+          <td style="color:var(--text-sub)">${d.date}</td>
           <td><button class="btn" style="padding:6px 12px;font-size:12px;">수정</button></td>
         </tr>`;
       });

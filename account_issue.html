@@ -1,102 +1,69 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>계정 관리 - 버빗 허브</title>
-<link href="style.css" rel="stylesheet"/>
-<style>
-  .security-banner{
-    display:grid;
-    gap:6px;
-    margin-bottom:16px;
-    padding:14px 16px;
-    border:1px solid #FDDFA0;
-    border-radius:14px;
-    background:#FFF8E6;
-    color:#6B5100;
-    font-size:13px;
-    line-height:1.55;
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>계정 관리 - 버빗 허브</title><link href="style.css" rel="stylesheet"/><style>
+  .pw-cell { position: relative; display: flex; align-items: center; gap: 8px; }
+  .pw-masked { font-family: monospace; letter-spacing: 2px; color: var(--text-sub); user-select: none; }
+  .pw-toggle {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-sub); font-size: 13px; font-weight: 600;
+    padding: 2px 6px; border-radius: 6px; transition: 0.15s;
+    font-family: 'Pretendard', sans-serif;
   }
-  .security-banner strong{color:#4A3900;}
-  .account-actions{display:flex; gap:8px; flex-wrap:wrap;}
-</style>
-</head>
-<body>
-<div id="app"><main class="main-content" data-page="account">
+  .pw-toggle:hover { background: var(--bg-app); color: var(--text-main); }
+</style></head><body><div id="app"><main class="main-content" data-page="account">
+
 <div class="view-container">
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">브랜드 공용 계정 관리</span>
-      <div class="account-actions">
-        <button class="btn" type="button" onclick="cleanLegacyPasswords()">기존 비밀번호 필드 제거</button>
-      </div>
-    </div>
-
-    <div class="security-banner">
-      <strong>보안 변경: 이 페이지에는 비밀번호를 저장하지 않습니다.</strong>
-      <span>계정 아이디, 담당자, 보관 위치 메모만 관리하세요. 실제 비밀번호는 회사 승인 패스워드 매니저 또는 권한 관리 도구에서만 보관하는 기준으로 바꿨습니다.</span>
-    </div>
-
-    <div class="input-group">
-      <input class="input-field" id="acc-service" placeholder="서비스명 (예: Instagram, Cafe24)"/>
-      <input class="input-field" id="acc-id" placeholder="로그인 ID 또는 계정명"/>
-      <input class="input-field" id="acc-owner" placeholder="담당자/관리팀"/>
-      <input class="input-field" id="acc-note" placeholder="보관 위치 메모 예: 1Password / 관리자 권한 요청 필요"/>
-      <button class="btn btn-primary" onclick="saveAccount()" type="button">등록</button>
-    </div>
-
-    <table class="data-table">
-      <thead><tr><th>서비스</th><th>계정</th><th>담당/메모</th><th>등록일</th><th>관리</th></tr></thead>
-      <tbody id="account-list"></tbody>
-    </table>
-  </div>
+<div class="card">
+<div class="card-header">
+<span class="card-title">브랜드 공용 계정 등록</span>
 </div>
-</main></div>
-<div id="toast">메시지</div>
-<script src="./layout.js" type="module"></script>
-<script type="module">
+<!-- ⚠️ 보안 안내 배너 -->
+<div style="background:#FFF8E6; border:1px solid #FDDFA0; border-radius:12px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:#7A5700; font-weight:600; display:flex; align-items:center; gap:8px;">
+          ⚠️ 비밀번호는 화면에 마스킹 처리됩니다. 보안을 위해 중요 계정은 별도 패스워드 매니저 사용을 권장합니다.
+        </div>
+<div class="input-group">
+<input class="input-field" id="acc-service" placeholder="서비스명 (예: 인스타)"/>
+<input class="input-field" id="acc-id" placeholder="아이디"/>
+<input class="input-field" id="acc-pw" placeholder="비밀번호" type="password"/>
+<button class="btn btn-primary" onclick="saveAccount()">등록</button>
+</div>
+<table class="data-table">
+<thead><tr><th>서비스</th><th>아이디</th><th>비밀번호</th><th>관리</th></tr></thead>
+<tbody id="account-list"></tbody>
+</table>
+</div>
+</div>
+</main></div><div id="toast">메시지</div><script src="./layout.js" type="module"></script><script type="module">
   import { db, requireAuth } from "./firebase.js";
-  import { collection, addDoc, onSnapshot, doc, deleteDoc, getDocs, updateDoc, deleteField, serverTimestamp }
+  import { collection, addDoc, onSnapshot, doc, deleteDoc }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  const esc = window.escapeHTML || ((v) => String(v ?? "").replace(/[&<>\"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m])));
-  const dash = (v) => String(v ?? "").trim() || "-";
 
   requireAuth(() => {
     window.saveAccount = async () => {
       const service = document.getElementById("acc-service").value.trim();
       const id = document.getElementById("acc-id").value.trim();
-      const owner = document.getElementById("acc-owner").value.trim();
-      const note = document.getElementById("acc-note").value.trim();
-      if (!service || !id) return alert("서비스명과 계정명은 필수입니다.");
-      await addDoc(collection(db, "accounts"), {
-        service,
-        id,
-        owner,
-        note,
-        createdAt: serverTimestamp(),
-        date: new Date().toLocaleDateString("ko-KR")
-      });
+      const pw = document.getElementById("acc-pw").value;
+      if (!service || !id) return;
+      await addDoc(collection(db, "accounts"), { service, id, pw });
       document.querySelectorAll(".input-field").forEach(i => i.id !== "search-input" && (i.value = ""));
-      showToast("계정 메모가 저장되었습니다");
+      showToast("계정 정보가 저장되었습니다");
     };
 
     window.deleteAccount = async (id) => {
       if (confirm("삭제하시겠습니까?")) await deleteDoc(doc(db, "accounts", id));
     };
 
-    window.cleanLegacyPasswords = async () => {
-      if (!confirm("기존 accounts 문서에 남아 있을 수 있는 pw 필드를 제거할까요?")) return;
-      const snap = await getDocs(collection(db, "accounts"));
-      const jobs = [];
-      snap.forEach(item => {
-        if (Object.prototype.hasOwnProperty.call(item.data(), "pw")) {
-          jobs.push(updateDoc(doc(db, "accounts", item.id), { pw: deleteField() }));
-        }
-      });
-      await Promise.all(jobs);
-      showToast(jobs.length ? `${jobs.length}개 문서의 비밀번호 필드를 제거했습니다` : "제거할 비밀번호 필드가 없습니다");
+    // ✅ 비밀번호 표시/숨기기 토글
+    window.togglePw = function (btn, pw) {
+      const span = btn.previousElementSibling;
+      if (btn.dataset.visible === "true") {
+        span.textContent = "••••••••";
+        btn.textContent = "보기";
+        btn.dataset.visible = "false";
+      } else {
+        span.textContent = pw;
+        btn.textContent = "숨기기";
+        btn.dataset.visible = "true";
+      }
     };
 
     onSnapshot(collection(db, "accounts"), (snap) => {
@@ -104,13 +71,20 @@
       list.innerHTML = "";
       snap.forEach(docSnap => {
         const d = docSnap.data();
-        list.insertAdjacentHTML("beforeend", `<tr class="searchable-row">
-          <td><strong>${esc(dash(d.service))}</strong></td>
-          <td style="color:var(--text-sub)">${esc(dash(d.id))}</td>
-          <td><strong>${esc(dash(d.owner))}</strong><div style="font-size:12px;color:var(--text-sub);margin-top:4px;">${esc(dash(d.note))}</div></td>
-          <td style="color:var(--text-sub)">${esc(dash(d.date))}</td>
-          <td><button class="btn btn-danger" style="padding:6px 12px;font-size:12px;" onclick="deleteAccount('${docSnap.id}')">삭제</button></td>
-        </tr>`);
+        // 비밀번호는 기본적으로 마스킹 표시, 버튼으로 토글
+        list.innerHTML += `<tr class="searchable-row">
+          <td><strong>${d.service}</strong></td>
+          <td>${d.id}</td>
+          <td>
+            <div class="pw-cell">
+              <span class="pw-masked">••••••••</span>
+              <button class="pw-toggle" data-visible="false"
+                onclick="togglePw(this, ${JSON.stringify(d.pw)})">보기</button>
+            </div>
+          </td>
+          <td><button class="btn btn-danger" style="padding:6px 12px;font-size:12px;"
+            onclick="deleteAccount('${docSnap.id}')">삭제</button></td>
+        </tr>`;
       });
     });
   });
@@ -125,6 +99,4 @@
     const t = document.getElementById("toast"); t.innerText = msg; t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2500);
   };
-</script>
-</body>
-</html>
+</script></body></html>

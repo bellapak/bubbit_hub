@@ -1,62 +1,86 @@
-# Bubbit Hub — Secure Brand Library Version
+# Bubbit Hub Secure v3.1
 
-이번 버전은 기존 코드 안에서만 구조를 정리하면서 아래 문제를 함께 보완했습니다.
+## 이번 수정의 기준
 
-## 반영 사항
+이번 버전은 업로드된 아카이브 코드 안에서만 구조를 정리한 버전입니다. `content.html`은 운영 페이지에서 제외하고, 기존 브랜드 가이드 원본은 `brandlibrary.html`로 사용합니다.
 
-### 1. 브랜드 라이브러리 계층 정리
-- 긴 브랜드 가이드 내용을 섹션별 아코디언 구조로 변경했습니다.
-- 상단에 `READING MAP`을 추가해 처음 보는 직원도 읽는 순서를 알 수 있게 했습니다.
-- 검색 시 관련 아코디언이 자동으로 열리도록 수정했습니다.
+## 가장 중요한 로그인 구조
 
-### 2. 로딩 개선
-- 브랜드 라이브러리 이미지에 `loading="lazy"`, `decoding="async"`를 적용했습니다.
-- 업로드 에셋 목록은 초기 렌더를 막지 않도록 idle 시점에 1회만 불러오도록 변경했습니다.
-- 실시간 `onSnapshot` 대신 `getDocs + limit(24)` 방식으로 바꿔 첫 로딩 부담을 줄였습니다.
+원래 `firebase.js`에 직접 들어 있던 허용 이메일을 완전히 삭제하면 로그인은 당연히 막힙니다. 이번 수정의 의도는 **이메일 허용 목록을 없애는 것**이 아니라, 공개 코드 파일에서 분리하는 것입니다.
 
-### 3. Google 로그인 오류 개선
-- 로그인 실패 원인을 화면에 더 구체적으로 표시하도록 변경했습니다.
-- 팝업 차단 시 redirect 로그인으로 재시도하도록 보완했습니다.
-- 허용 계정은 `firebase.js`에 직접 쓰지 않고 `app.secrets.js`에서만 관리하도록 분리했습니다.
-
-### 4. 보안 개선
-- 개인 이메일 하드코딩을 제거했습니다.
-- `app.secrets.example.js`와 `.gitignore`를 추가했습니다.
-- 계정 관리 페이지에서 비밀번호 저장 기능을 제거했습니다.
-- 기존 Firestore `accounts` 문서에 남은 `pw` 필드를 삭제하는 버튼을 추가했습니다.
-- 동적 테이블 출력 일부에 HTML escape 처리를 추가해 스크립트 삽입 위험을 낮췄습니다.
-- `firestore.rules` 예시를 추가했습니다.
-
-## 적용 전 필수 작업
-
-1. `app.secrets.example.js`를 복사해 `app.secrets.js`를 만듭니다.
-2. `app.secrets.js`에 실제 허용 계정 또는 허용 도메인을 입력합니다.
-3. Firebase Console에서 Google 로그인과 Authorized domains를 확인합니다.
-4. Firestore Rules에 `firestore.rules` 내용을 실제 팀 계정 기준으로 수정해 배포합니다.
-5. 기존 계정 관리 데이터에 비밀번호가 남아 있다면, 계정 관리 화면에서 `기존 비밀번호 필드 제거`를 실행합니다.
-
-## 주요 파일
+실제 접속 허용 계정은 아래 파일에 넣어야 합니다.
 
 ```txt
-index.html
-brandlibrary.html
-brandlibrary.css
-calender.html
-promotion.html
-cs.html
-issue.html
-data.html
-account_issue.html
-login.html
-firebase.js
-app.secrets.example.js
-firestore.rules
-style.css
-layout.js
-app.config.js
+app.secrets.js
 ```
 
-## 주의
+이 파일은 `.gitignore`에 포함되어 있으므로 GitHub 같은 공개 저장소에는 올리지 않는 것을 권장합니다.
 
-Firebase config의 `apiKey`는 일반적인 프론트엔드 공개 식별자입니다. 하지만 데이터 접근 보안은 반드시 Firestore Rules로 막아야 합니다.
-클라이언트 코드에 적힌 허용 계정 체크만으로는 보안이 완성되지 않습니다.
+## app.secrets.js 생성 방법
+
+`app.secrets.example.js`를 복사해서 `app.secrets.js`로 이름을 바꾼 뒤, 실제 허용 이메일을 입력하세요.
+
+```js
+export const AUTHORIZED_EMAILS = [
+  "허용할_구글계정@example.com"
+];
+
+export const AUTHORIZED_DOMAINS = [];
+```
+
+회사 도메인을 통째로 허용할 때만 아래처럼 사용합니다.
+
+```js
+export const AUTHORIZED_EMAILS = [];
+export const AUTHORIZED_DOMAINS = ["company.co.kr"];
+```
+
+## 보안 기준
+
+프론트엔드 JS에 들어가는 이메일 목록은 브라우저에서 완전히 숨길 수 없습니다. 따라서 `app.secrets.js`는 공개 저장소에 계정 정보가 남지 않게 하는 용도이고, 실제 데이터 보호는 반드시 `firestore.rules`에서 처리해야 합니다.
+
+즉, 최종 구조는 아래처럼 운영해야 합니다.
+
+1. `app.secrets.js`에는 화면 접근용 허용 계정 입력
+2. Firebase Console의 Firestore Rules에는 같은 허용 계정 또는 도메인 조건 적용
+3. GitHub/공유 ZIP에는 실제 개인 이메일이 들어간 `app.secrets.js`를 포함하지 않음
+
+## 파일 구조
+
+```txt
+bubbit_hub_secure_v3/
+├─ index.html              # 01 통합 대시보드
+├─ brandlibrary.html       # 02 브랜드 라이브러리
+├─ calender.html           # 03 일정 및 캘린더
+├─ promotion.html          # 04 행사 및 프로모션
+├─ cs.html                 # 05 CS 및 VOC
+├─ issue.html              # 06 이슈 로그
+├─ data.html               # 07 빅데이터 연동
+├─ account_issue.html      # 08 계정 관리
+├─ login.html              # Google 로그인
+├─ firebase.js             # Firebase 공통 모듈
+├─ app.secrets.example.js  # 허용 계정 입력 예시
+├─ firestore.rules         # Firestore 보안 규칙 예시
+├─ style.css               # 공통 스타일
+├─ brandlibrary.css        # 브랜드 라이브러리 전용 스타일
+├─ app.config.js           # 메뉴/페이지 설정
+└─ layout.js               # 공통 레이아웃
+```
+
+## 이번 버전에서 수정된 문제
+
+- `login.html`이 구버전 `ALLOWED_EMAILS`를 import해서 생기던 로그인 오류 수정
+- `firebase.js`에는 구버전 호환 alias를 남겨 기존 코드가 깨지지 않도록 처리
+- 실제 허용 이메일은 `app.secrets.js`에서만 관리하도록 정리
+- README와 Firebase 세팅 문서에서 개인 이메일 예시 제거
+- 브랜드 라이브러리 계층 구조와 로딩 구조 개선 유지
+
+## 적용 순서
+
+1. ZIP 압축 해제
+2. `app.secrets.example.js`를 복사해 `app.secrets.js` 생성
+3. `app.secrets.js`에 실제 허용 Google 이메일 입력
+4. Firebase Console에서 Google 로그인 제공업체 ON
+5. Firebase Console → Authentication → Settings → Authorized domains에 배포 도메인 추가
+6. Firestore Rules에 `firestore.rules` 내용을 실제 허용 계정 기준으로 수정해 배포
+7. `index.html`로 접속
