@@ -1,11 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>계정 관리 - 버빗 허브</title>
-<link rel="stylesheet" href="style.css">
-<style>
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>계정 관리 - 버빗 허브</title><link href="style.css" rel="stylesheet"/><style>
   .pw-cell { position: relative; display: flex; align-items: center; gap: 8px; }
   .pw-masked { font-family: monospace; letter-spacing: 2px; color: var(--text-sub); user-select: none; }
   .pw-toggle {
@@ -15,62 +9,30 @@
     font-family: 'Pretendard', sans-serif;
   }
   .pw-toggle:hover { background: var(--bg-app); color: var(--text-main); }
-</style>
-</head>
-<body>
-<div id="app">
-  <nav class="sidebar">
-    <div class="brand-logo">Bubbit Hub</div>
-    <div class="nav-label">WORKSPACE</div>
-    <a href="index.html" class="nav-item">01 통합 대시보드</a>
-    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
-    <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
-    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
-    <div class="nav-label">MANAGEMENT</div>
-    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
-    <a href="issue.html" class="nav-item">06 이슈 로그</a>
-    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
-    <a href="data.html" class="nav-item">08 빅데이터 연동</a>
-    <a href="account_issue.html" class="nav-item active">09 계정 관리</a>
-  </nav>
-  <main class="main-content" style="visibility:hidden;">
-    <header class="topbar">
-      <div class="topbar-title">
-        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
-        <span>계정 관리</span>
-      </div>
-      <div style="display:flex; gap:12px;">
-        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="계정 검색" onkeyup="searchTable()">
-      </div>
-    </header>
-    <div class="view-container">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">브랜드 공용 계정 등록</span>
-        </div>
+</style></head><body><div id="app"><main class="main-content" data-page="account">
 
-        <!-- ⚠️ 보안 안내 배너 -->
-        <div style="background:#FFF8E6; border:1px solid #FDDFA0; border-radius:12px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:#7A5700; font-weight:600; display:flex; align-items:center; gap:8px;">
+<div class="view-container">
+<div class="card">
+<div class="card-header">
+<span class="card-title">브랜드 공용 계정 등록</span>
+</div>
+<!-- ⚠️ 보안 안내 배너 -->
+<div style="background:#FFF8E6; border:1px solid #FDDFA0; border-radius:12px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:#7A5700; font-weight:600; display:flex; align-items:center; gap:8px;">
           ⚠️ 비밀번호는 화면에 마스킹 처리됩니다. 보안을 위해 중요 계정은 별도 패스워드 매니저 사용을 권장합니다.
         </div>
-
-        <div class="input-group">
-          <input id="acc-service" class="input-field" placeholder="서비스명 (예: 인스타)">
-          <input id="acc-id" class="input-field" placeholder="아이디">
-          <input id="acc-pw" class="input-field" type="password" placeholder="비밀번호">
-          <button class="btn btn-primary" onclick="saveAccount()">등록</button>
-        </div>
-        <table class="data-table">
-          <thead><tr><th>서비스</th><th>아이디</th><th>비밀번호</th><th>관리</th></tr></thead>
-          <tbody id="account-list"></tbody>
-        </table>
-      </div>
-    </div>
-  </main>
+<div class="input-group">
+<input class="input-field" id="acc-service" placeholder="서비스명 (예: 인스타)"/>
+<input class="input-field" id="acc-id" placeholder="아이디"/>
+<input class="input-field" id="acc-pw" placeholder="비밀번호" type="password"/>
+<button class="btn btn-primary" onclick="saveAccount()">등록</button>
 </div>
-<div id="toast">메시지</div>
-
-<script type="module">
+<table class="data-table">
+<thead><tr><th>서비스</th><th>아이디</th><th>비밀번호</th><th>관리</th></tr></thead>
+<tbody id="account-list"></tbody>
+</table>
+</div>
+</div>
+</main></div><div id="toast">메시지</div><script src="./layout.js" type="module"></script><script type="module">
   import { db, requireAuth } from "./firebase.js";
   import { collection, addDoc, onSnapshot, doc, deleteDoc }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -137,6 +99,4 @@
     const t = document.getElementById("toast"); t.innerText = msg; t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2500);
   };
-</script>
-</body>
-</html>
+</script></body></html>

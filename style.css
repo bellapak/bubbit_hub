@@ -1222,3 +1222,40 @@ input[type="submit"]:disabled{
     grid-template-columns:repeat(7, minmax(96px, 1fr)) !important;
   }
 }
+
+
+/* =====================================================
+   Shared layout system
+   - Sidebar / topbar are rendered from app.config.js + layout.js
+   - Page files should keep only their unique contents and page logic
+   ===================================================== */
+.layout-ready .main-content { visibility: visible !important; }
+.main-content[data-page] { min-height: calc(100vh - 36px); }
+.topbar-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+.topbar-search { width:240px; margin:0; }
+.empty-state {
+  display:flex;
+  min-height:240px;
+  align-items:center;
+  justify-content:center;
+  border:1px dashed var(--line);
+  border-radius:var(--radius-lg);
+  background:var(--bg-panel);
+  color:var(--text-sub);
+  font-weight:600;
+  text-align:center;
+  padding:24px;
+}
+.page-note {
+  margin-top:12px;
+  color:var(--text-sub);
+  font-size:13px;
+  line-height:1.7;
+}
+@media (max-width: 860px) {
+  #app { flex-direction: column; overflow:auto; height:auto; }
+  body { overflow:auto; }
+  .sidebar { width:100%; max-height:none; }
+  .topbar { align-items:flex-start; flex-direction:column; }
+  .topbar-actions, .topbar-search { width:100%; }
+}

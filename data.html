@@ -1,68 +1,33 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>빅데이터 연동 - 버빗 허브</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="app">
-  <nav class="sidebar">
-    <div class="brand-logo">Bubbit Hub</div>
-    <div class="nav-label">WORKSPACE</div>
-    <a href="index.html" class="nav-item">01 통합 대시보드</a>
-    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
-    <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
-    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
-    <div class="nav-label">MANAGEMENT</div>
-    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
-    <a href="issue.html" class="nav-item">06 이슈 로그</a>
-    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
-    <a href="data.html" class="nav-item active">08 빅데이터 연동</a>
-    <a href="account_issue.html" class="nav-item">09 계정 관리</a>
-  </nav>
-  <main class="main-content" style="visibility:hidden;">
-    <header class="topbar">
-      <div class="topbar-title">
-        <a href="index.html" class="btn" style="padding:10px 14px;font-size:14px;">홈</a>
-        <span>빅데이터 연동 허브</span>
-      </div>
-      <div style="display:flex; gap:12px;">
-        <input type="text" id="search-input" class="input-field" style="width:240px; margin:0;" placeholder="내용 검색" onkeyup="searchTable()">
-      </div>
-    </header>
-    <div class="view-container">
-      <div class="grid-3">
-        <div class="card" style="padding:24px;">
-          <div style="color:var(--text-sub); font-weight:700; margin-bottom:12px;">Instagram (Mock)</div>
-          <div style="font-size:24px; font-weight:800;">45,000<span style="font-size:14px; color:var(--text-sub); font-weight:500;"> 도달</span></div>
-        </div>
-        <div class="card" style="padding:24px;">
-          <div style="color:var(--text-sub); font-weight:700; margin-bottom:12px;">Meta Ads (Mock)</div>
-          <div style="font-size:24px; font-weight:800;">₩1,200,000<span style="font-size:14px; color:var(--text-sub); font-weight:500;"> 지출</span></div>
-        </div>
-        <div class="card" style="padding:24px;">
-          <div style="color:var(--text-sub); font-weight:700; margin-bottom:12px;">Cafe24 (Mock)</div>
-          <div style="font-size:24px; font-weight:800;">154건<span style="font-size:14px; color:var(--text-sub); font-weight:500;"> 전환</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">외부 API 연동 상태</span>
-          <button class="btn btn-primary" onclick="addIntegration()">새 연동 설정</button>
-        </div>
-        <table class="data-table">
-          <thead><tr><th>플랫폼명</th><th>상태</th><th>연동 날짜</th><th>관리</th></tr></thead>
-          <tbody id="integration-list"></tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-</div>
-<div id="toast">메시지</div>
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>빅데이터 연동 - 버빗 허브</title><link href="style.css" rel="stylesheet"/></head><body><div id="app"><main class="main-content" data-page="data">
 
-<script type="module">
+<div class="view-container">
+<div class="grid-3">
+<div class="card" style="padding:24px;">
+<div style="color:var(--text-sub); font-weight:700; margin-bottom:12px;">Instagram (Mock)</div>
+<div style="font-size:24px; font-weight:800;">45,000<span style="font-size:14px; color:var(--text-sub); font-weight:500;"> 도달</span></div>
+</div>
+<div class="card" style="padding:24px;">
+<div style="color:var(--text-sub); font-weight:700; margin-bottom:12px;">Meta Ads (Mock)</div>
+<div style="font-size:24px; font-weight:800;">₩1,200,000<span style="font-size:14px; color:var(--text-sub); font-weight:500;"> 지출</span></div>
+</div>
+<div class="card" style="padding:24px;">
+<div style="color:var(--text-sub); font-weight:700; margin-bottom:12px;">Cafe24 (Mock)</div>
+<div style="font-size:24px; font-weight:800;">154건<span style="font-size:14px; color:var(--text-sub); font-weight:500;"> 전환</span></div>
+</div>
+</div>
+<div class="card">
+<div class="card-header">
+<span class="card-title">외부 API 연동 상태</span>
+<button class="btn btn-primary" onclick="addIntegration()">새 연동 설정</button>
+</div>
+<table class="data-table">
+<thead><tr><th>플랫폼명</th><th>상태</th><th>연동 날짜</th><th>관리</th></tr></thead>
+<tbody id="integration-list"></tbody>
+</table>
+</div>
+</div>
+</main></div><div id="toast">메시지</div><script src="./layout.js" type="module"></script><script type="module">
   import { db, requireAuth } from "./firebase.js";
   import { collection, addDoc, onSnapshot }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -102,6 +67,4 @@
     const t = document.getElementById("toast"); t.innerText = msg; t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2500);
   };
-</script>
-</body>
-</html>
+</script></body></html>

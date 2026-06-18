@@ -1,93 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>통합 대시보드 - 버빗 허브</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="app">
-  <nav class="sidebar">
-    <div class="brand-logo">Bubbit Hub</div>
-    <div class="nav-label">WORKSPACE</div>
-    <a href="index.html" class="nav-item active">01 통합 대시보드</a>
-    <a href="content.html" class="nav-item">02 제품 및 콘텐츠</a>
-    <a href="calender.html" class="nav-item">03 일정 및 캘린더</a>
-    <a href="promotion.html" class="nav-item">04 행사 및 프로모션</a>
-    <div class="nav-label">MANAGEMENT</div>
-    <a href="cs.html" class="nav-item">05 CS 및 VOC 관리</a>
-    <a href="issue.html" class="nav-item">06 이슈 로그</a>
-    <a href="guide.html" class="nav-item">07 브랜드 가이드라인</a>
-    <a href="data.html" class="nav-item">08 빅데이터 연동</a>
-    <a href="account_issue.html" class="nav-item">09 계정 관리</a>
-  </nav>
-  <main class="main-content">
-  <header class="topbar">
-    <h1 style="font-size: 18px; font-weight: 700;">통합 대시보드</h1>
-    <button class="btn btn-primary" onclick="openTaskModal()">+ 새 일정 등록</button>
-  </header>
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>통합 대시보드 - 버빗 허브</title><link href="style.css" rel="stylesheet"/></head><body><div id="app"><main class="main-content" data-page="dashboard">
 
-  <div class="view-container">
-    <div class="grid-3">
-      <div class="card">진행 중 일정<div style="font-size:24px; font-weight:700;"><span id="dash-active-cnt">0건</span></div></div>
-      <div class="card">높은 우선순위<div style="font-size:24px; font-weight:700;"><span id="dash-high-cnt">0건</span></div></div>
-      <div class="card">연동 계정<div style="font-size:24px; font-weight:700;"><span id="dash-acc-cnt">0개</span></div></div>
-    </div>
-    
-    <div class="grid-2">
-      <div class="card">
-        <h3>전체 일정 요약</h3>
-        <table class="data-table">
-          <thead><tr><th>정보</th><th>채널</th><th>우선순위</th></tr></thead>
-          <tbody id="dash-recent-list"></tbody>
-        </table>
-      </div>
-      <div class="card">
-        <h3>브랜드 계정</h3>
-        <table class="data-table">
-          <tbody id="dash-acc-list"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</main>
+<div class="view-container">
+<div class="grid-3">
+<div class="card">진행 중 일정<div style="font-size:24px; font-weight:700;"><span id="dash-active-cnt">0건</span></div></div>
+<div class="card">높은 우선순위<div style="font-size:24px; font-weight:700;"><span id="dash-high-cnt">0건</span></div></div>
+<div class="card">연동 계정<div style="font-size:24px; font-weight:700;"><span id="dash-acc-cnt">0개</span></div></div>
 </div>
-
-<div id="task-modal" class="modal-overlay">
-  <div class="modal-box" style="width: 440px;">
-    <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 등록</h3>
-    <input id="task-title" class="input-field" placeholder="일정 제목" style="margin-bottom: 12px;">
-    <input type="date" id="task-date" class="input-field" style="margin-bottom: 12px;" title="목표 기한">
-    <input id="task-owner" class="input-field" placeholder="담당자 이름" style="margin-bottom: 12px;">
-    <select id="task-status" class="input-field" style="margin-bottom: 12px;">
-      <option value="예정">예정</option>
-      <option value="진행중">진행중</option>
-      <option value="완료">완료</option>
-      <option value="보류">보류</option>
-    </select>
-    <select id="task-priority" class="input-field" style="margin-bottom: 12px;">
-      <option value="보통">보통</option>
-      <option value="높음">높음</option>
-      <option value="낮음">낮음</option>
-    </select>
-    <select id="task-channel" class="input-field" style="margin-bottom: 12px;">
-      <option value="Instagram">Instagram</option>
-      <option value="Meta Ads">Meta Ads</option>
-      <option value="자사몰">자사몰</option>
-      <option value="내부행사">내부행사</option>
-    </select>
-    <textarea id="task-desc" class="input-field" rows="4" placeholder="상세 내용 요약" style="margin-bottom: 24px; resize:vertical;"></textarea>
-    <div style="display: flex; gap: 10px; justify-content: flex-end;">
-      <button class="btn" onclick="closeTaskModal()">취소</button>
-      <button class="btn btn-primary" onclick="saveNewSchedule()">저장하기</button>
-    </div>
-  </div>
+<div class="grid-2">
+<div class="card">
+<h3>전체 일정 요약</h3>
+<table class="data-table">
+<thead><tr><th>정보</th><th>채널</th><th>우선순위</th></tr></thead>
+<tbody id="dash-recent-list"></tbody>
+</table>
 </div>
-
-<div id="toast">메시지</div>
-
-<script type="module">
+<div class="card">
+<h3>브랜드 계정</h3>
+<table class="data-table">
+<tbody id="dash-acc-list"></tbody>
+</table>
+</div>
+</div>
+</div>
+</main></div><div class="modal-overlay" id="task-modal">
+<div class="modal-box" style="width: 440px;">
+<h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 등록</h3>
+<input class="input-field" id="task-title" placeholder="일정 제목" style="margin-bottom: 12px;"/>
+<input class="input-field" id="task-date" style="margin-bottom: 12px;" title="목표 기한" type="date"/>
+<input class="input-field" id="task-owner" placeholder="담당자 이름" style="margin-bottom: 12px;"/>
+<select class="input-field" id="task-status" style="margin-bottom: 12px;">
+<option value="예정">예정</option>
+<option value="진행중">진행중</option>
+<option value="완료">완료</option>
+<option value="보류">보류</option>
+</select>
+<select class="input-field" id="task-priority" style="margin-bottom: 12px;">
+<option value="보통">보통</option>
+<option value="높음">높음</option>
+<option value="낮음">낮음</option>
+</select>
+<select class="input-field" id="task-channel" style="margin-bottom: 12px;">
+<option value="Instagram">Instagram</option>
+<option value="Meta Ads">Meta Ads</option>
+<option value="자사몰">자사몰</option>
+<option value="내부행사">내부행사</option>
+</select>
+<textarea class="input-field" id="task-desc" placeholder="상세 내용 요약" rows="4" style="margin-bottom: 24px; resize:vertical;"></textarea>
+<div style="display: flex; gap: 10px; justify-content: flex-end;">
+<button class="btn" onclick="closeTaskModal()">취소</button>
+<button class="btn btn-primary" onclick="saveNewSchedule()">저장하기</button>
+</div>
+</div>
+</div><div id="toast">메시지</div><script src="./layout.js" type="module"></script><script type="module">
   import { db, requireAuth } from "./firebase.js";
   import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -177,6 +142,4 @@
     const t = document.getElementById("toast"); t.innerText = msg; t.classList.add("show");
     setTimeout(() => t.classList.remove("show"), 2500);
   };
-</script>
-</body>
-</html>
+</script></body></html>
