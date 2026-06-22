@@ -754,3 +754,267 @@ main[data-page="brandlibrary"] .eyebrow{
   .shape-diagram{width:300px;transform:translate(-50%,-50%) scale(.82);}
   .shape-caption::after{width:30px;}
 }
+
+
+/* =====================================================
+   Brand Library revision — 260622 feedback
+   ===================================================== */
+main[data-page="brandlibrary"] .library-map{display:none;}
+
+main[data-page="brandlibrary"] .design-guideline-layout{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+main[data-page="brandlibrary"] .guideline-card{
+  min-height:320px;
+  padding:22px;
+  border:1px solid var(--lib-line);
+  border-radius:24px;
+  background:#fff;
+}
+
+main[data-page="brandlibrary"] .guideline-card h3{
+  margin:10px 0 18px;
+  font-size:24px;
+  line-height:1.14;
+  font-weight:650;
+}
+
+main[data-page="brandlibrary"] .guideline-card ul{
+  display:grid;
+  gap:10px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+main[data-page="brandlibrary"] .guideline-card li{
+  position:relative;
+  padding-left:16px;
+  color:var(--lib-ink);
+  font-size:11px;
+  line-height:1.65;
+}
+
+main[data-page="brandlibrary"] .guideline-card li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.72em;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:var(--lib-black);
+}
+
+main[data-page="brandlibrary"] .guideline-do{
+  background:var(--lib-pink-soft);
+}
+
+main[data-page="brandlibrary"] .guideline-dont{
+  background:var(--lib-black);
+  color:#fff;
+}
+
+main[data-page="brandlibrary"] .guideline-dont h3,
+main[data-page="brandlibrary"] .guideline-dont li{
+  color:#fff;
+}
+
+main[data-page="brandlibrary"] .guideline-dont li::before{
+  background:#FDBFC9;
+}
+
+main[data-page="brandlibrary"] .guideline-dont .eyebrow{
+  color:#FDBFC9;
+}
+
+main[data-page="brandlibrary"] .color-field{
+  padding:22px;
+}
+
+main[data-page="brandlibrary"] .core-color-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+main[data-page="brandlibrary"] .core-color{
+  min-height:128px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:4px;
+  padding:16px;
+  border:1px solid var(--lib-line);
+  border-radius:20px;
+  background:var(--c);
+}
+
+main[data-page="brandlibrary"] .core-color strong,
+main[data-page="brandlibrary"] .core-color span{
+  color:#111;
+  font-weight:650;
+}
+
+main[data-page="brandlibrary"] .core-color.is-black strong,
+main[data-page="brandlibrary"] .core-color.is-black span{
+  color:#fff;
+}
+
+main[data-page="brandlibrary"] .palette-group{
+  display:grid;
+  gap:8px;
+  margin-top:14px;
+}
+
+main[data-page="brandlibrary"] .palette-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+}
+
+main[data-page="brandlibrary"] .palette-head strong{
+  color:var(--lib-black);
+  font-size:13px;
+  line-height:1.2;
+}
+
+main[data-page="brandlibrary"] .palette-head span{
+  color:var(--lib-sub);
+  font-size:10px;
+}
+
+main[data-page="brandlibrary"] .palette-strip{
+  display:flex;
+  min-height:74px;
+  overflow:hidden;
+  border:1px solid var(--lib-line);
+  border-radius:0;
+  background:#fff;
+}
+
+main[data-page="brandlibrary"] .palette-strip span{
+  flex:1 1 0;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  min-width:0;
+  background:var(--c);
+}
+
+main[data-page="brandlibrary"] .palette-strip b{
+  position:absolute;
+  bottom:6px;
+  left:50%;
+  transform:translateX(-50%) rotate(-90deg);
+  transform-origin:center;
+  color:rgba(255,255,255,.85);
+  font-size:8px;
+  line-height:1;
+  white-space:nowrap;
+  text-shadow:0 1px 3px rgba(0,0,0,.28);
+}
+
+main[data-page="brandlibrary"] .palette-primary b,
+main[data-page="brandlibrary"] .palette-strip span:nth-last-child(-n+5) b{
+  color:#111;
+  text-shadow:none;
+}
+
+main[data-page="brandlibrary"] .palette-code-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px 6px;
+}
+
+main[data-page="brandlibrary"] .palette-code-list span{
+  padding:2px 0;
+  color:var(--lib-sub);
+  font-size:9.5px;
+  line-height:1.2;
+}
+
+main[data-page="brandlibrary"] .palette-marker-row{
+  display:flex;
+  gap:8px;
+  margin-top:-2px;
+}
+
+main[data-page="brandlibrary"] .palette-marker-row span{
+  padding:3px 8px;
+  border-radius:999px;
+  background:var(--lib-black);
+  color:#fff;
+  font-size:9px;
+  font-weight:650;
+  line-height:1;
+}
+
+main[data-page="brandlibrary"] .semantic-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+
+main[data-page="brandlibrary"] .semantic-chip{
+  display:grid;
+  gap:7px;
+  min-height:122px;
+  padding:12px;
+  border:1px solid var(--lib-line);
+  border-radius:18px;
+  background:#fff;
+}
+
+main[data-page="brandlibrary"] .semantic-chip i{
+  display:block;
+  height:52px;
+  background:var(--c);
+}
+
+main[data-page="brandlibrary"] .semantic-chip strong{
+  color:var(--lib-black);
+  font-size:11px;
+  line-height:1.2;
+}
+
+main[data-page="brandlibrary"] .semantic-chip span{
+  color:var(--lib-sub);
+  font-size:10px;
+}
+
+main[data-page="brandlibrary"] .product-copy-card{
+  grid-template-columns:180px 1fr;
+  background:#fff;
+}
+
+main[data-page="brandlibrary"] .product-copy-list{
+  display:grid;
+  gap:8px;
+}
+
+main[data-page="brandlibrary"] .product-copy-list p{
+  margin:0;
+  padding:0;
+  color:var(--lib-sub);
+  font-size:11px;
+  line-height:1.6;
+}
+
+main[data-page="brandlibrary"] .product-copy-list strong{
+  color:var(--lib-black);
+  font-weight:650;
+}
+
+@media (max-width:900px){
+  main[data-page="brandlibrary"] .design-guideline-layout,
+  main[data-page="brandlibrary"] .core-color-pair,
+  main[data-page="brandlibrary"] .semantic-grid,
+  main[data-page="brandlibrary"] .product-copy-card{grid-template-columns:1fr;}
+  main[data-page="brandlibrary"] .palette-strip{min-height:64px;}
+  main[data-page="brandlibrary"] .palette-strip b{display:none;}
+}
