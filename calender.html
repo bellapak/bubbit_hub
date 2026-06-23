@@ -59,7 +59,7 @@
 <div class="modal-box" style="width: 460px;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
 <h3 style="font-size: 18px; font-weight: 700; margin: 0;">일정 상세</h3>
-<button class="btn btn-danger" id="delete-btn" style="padding: 6px 12px; font-size: 12px;">삭제</button>
+<button class="btn btn-danger" id="delete-btn" type="button" style="padding: 6px 12px; font-size: 12px;">삭제</button>
 </div>
 <input id="detail-id" type="hidden"/>
 <div class="prop-grid">
@@ -114,6 +114,14 @@
   let currentSearchKeyword = "";
   const koreanHolidays = { "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-06-03": "지방선거일", "2026-06-06": "현충일" };
 
+  const safeText = (value = "") => String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+
   window.openCreateModal = (defaultDate = "") => { document.getElementById('create-modal').style.display = 'flex'; if(defaultDate) document.getElementById('new-date').value = defaultDate; };
   window.closeModal = (id) => document.getElementById(id).style.display = 'none';
 
@@ -127,14 +135,27 @@
 
   window.openDetailModal = (id) => {
     const item = allSchedules.find(s => s.id === id);
+    if (!item) {
+      showToast("일정을 찾지 못했습니다. 새로고침 후 다시 시도해 주세요.");
+      return;
+    }
+
     document.getElementById('detail-id').value = item.id;
-    document.getElementById('detail-title').value = item.title;
-    document.getElementById('detail-date').value = item.date;
+    document.getElementById('detail-title').value = item.title || "";
+    document.getElementById('detail-date').value = item.date || "";
     document.getElementById('detail-owner').value = item.owner || "";
-    document.getElementById('detail-status').value = item.status;
-    document.getElementById('detail-priority').value = item.priority;
-    document.getElementById('detail-channel').value = item.channel;
+    document.getElementById('detail-status').value = item.status || "예정";
+    document.getElementById('detail-priority').value = item.priority || "보통";
+    document.getElementById('detail-channel').value = item.channel || "Instagram";
     document.getElementById('detail-desc').value = item.desc || "";
+
+    const deleteBtn = document.getElementById('delete-btn');
+    if (deleteBtn) {
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = "삭제";
+      deleteBtn.dataset.scheduleId = item.id;
+    }
+
     document.getElementById('detail-modal').style.display = 'flex';
   };
 
@@ -144,7 +165,39 @@
     closeModal('detail-modal'); showToast("수정 완료");
   };
 
-  window.deleteSchedule = async (id) => { if(confirm("삭제할까요?")) { await deleteDoc(doc(db, "brand_schedules", id)); closeModal('detail-modal'); showToast("삭제 완료"); } };
+  window.deleteSchedule = async (id) => {
+    const targetId = id || document.getElementById('detail-id')?.value || document.getElementById('delete-btn')?.dataset?.scheduleId;
+    if (!targetId) {
+      showToast("삭제할 일정 ID를 찾지 못했습니다.");
+      return;
+    }
+    if (!confirm("이 일정을 삭제할까요? 삭제 후에는 되돌릴 수 없습니다.")) return;
+
+    const deleteBtn = document.getElementById('delete-btn');
+    if (deleteBtn) {
+      deleteBtn.disabled = true;
+      deleteBtn.textContent = "삭제 중...";
+    }
+
+    try {
+      await deleteDoc(doc(db, "brand_schedules", targetId));
+      closeModal('detail-modal');
+      showToast("삭제 완료");
+    } catch (error) {
+      console.error(error);
+      showToast("삭제 실패. Firebase 권한 또는 연결 상태를 확인해 주세요.");
+      if (deleteBtn) {
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = "삭제";
+      }
+    }
+  };
+
+  document.getElementById('delete-btn')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    deleteSchedule(event.currentTarget.dataset.scheduleId || document.getElementById('detail-id')?.value);
+  });
 
   function renderCalendar() {
     const year = currentDate.getFullYear();
@@ -161,9 +214,15 @@
 
     for(let day=1; day<=daysInMonth; day++) {
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      const dayTasks = allSchedules.filter(t => t.date === dateStr && (currentSearchKeyword ? t.title.toLowerCase().includes(currentSearchKeyword) : true));
+      const dayTasks = allSchedules.filter(t => {
+        const title = String(t.title || "").toLowerCase();
+        return t.date === dateStr && (currentSearchKeyword ? title.includes(currentSearchKeyword) : true);
+      });
       let taskHtml = '';
-      dayTasks.slice(0, 3).forEach(t => taskHtml += `<div class="cal-event ${t.channel === 'Instagram' ? 'insta' : t.channel === 'Meta Ads' ? 'meta' : 'mall'}" onclick="event.stopPropagation(); openDetailModal('${t.id}')">${t.title}</div>`);
+      dayTasks.slice(0, 3).forEach(t => {
+        const eventClass = t.channel === 'Instagram' ? 'insta' : t.channel === 'Meta Ads' ? 'meta' : 'mall';
+        taskHtml += `<div class="cal-event ${eventClass}" role="button" tabindex="0" onclick="event.stopPropagation(); openDetailModal('${t.id}')">${safeText(t.title || '제목 없음')}</div>`;
+      });
       
       grid.innerHTML += `
         <div class="calendar-day" onclick="openCreateModal('${dateStr}')">
