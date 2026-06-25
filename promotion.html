@@ -1,17 +1,51 @@
 <!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>행사 및 프로모션 - 버빗 허브</title><link href="style.css" rel="stylesheet"/></head><body><div id="app"><main class="main-content" data-page="promotion">
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>행사 및 프로모션 - 버빗 허브</title><link href="style.css" rel="stylesheet"/><style>
+  .promo-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+  .promo-form-grid .full{grid-column:1/-1;}
+  .slack-preview{white-space:pre-wrap;line-height:1.65;font-size:12px;color:var(--text-main);background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px;}
+  .copy-cell{min-width:220px;}
+  .copy-preview{white-space:pre-wrap;font-size:11px;line-height:1.55;color:var(--text-sub);max-height:118px;overflow:auto;margin-bottom:8px;}
+  @media(max-width:760px){.promo-form-grid{grid-template-columns:1fr;}}
+</style></head><body><div id="app"><main class="main-content" data-page="promotion">
 
 <div class="view-container">
 <div class="card">
 <div class="card-header"><span class="card-title">신규 행사 등록</span></div>
-<div class="input-group">
-<input class="input-field" id="promo-title" placeholder="기획전 행사명" style="flex:2;"/>
-<input class="input-field" id="promo-benefit" placeholder="혜택 (예: 20% 할인)"/>
-<input class="input-field" id="promo-period" placeholder="기간 (예: 5/1~5/10)"/>
+<div class="promo-form-grid">
+<input class="input-field" id="promo-start" type="date" title="시작 일"/>
+<input class="input-field" id="promo-end" type="date" title="종료 일"/>
+<select class="input-field" id="promo-channel">
+<option value="인스타그램">인스타그램</option>
+<option value="자사몰">자사몰</option>
+<option value="CRM">CRM</option>
+<option value="광고">광고</option>
+<option value="네이버">네이버</option>
+<option value="카카오">카카오</option>
+<option value="타사몰">타사몰</option>
+<option value="기타">기타</option>
+</select>
+<select class="input-field" id="promo-type">
+<option value="콘텐츠 운영">콘텐츠 운영</option>
+<option value="광고 집행">광고 집행</option>
+<option value="CRM 발송">CRM 발송</option>
+<option value="프로모션">프로모션</option>
+<option value="라이브/행사">라이브/행사</option>
+<option value="운영 공지">운영 공지</option>
+<option value="기타">기타</option>
+</select>
+<textarea class="input-field full" id="promo-detail" placeholder="상세내용 입력 (예: 버빗 인스타그램 컨텐츠 3월 1주차 업로드)" rows="3" style="resize:vertical;"></textarea>
+</div>
+<div style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:14px;">
+<button class="btn" onclick="previewPromoSlack()">슬랙 문구 미리보기</button>
 <button class="btn btn-primary" onclick="savePromo()">등록</button>
 </div>
+<div class="slack-preview" id="promo-slack-preview">시작일, 종료일, 채널, 구분, 상세내용을 입력하면 슬랙 공유 문구가 자동 생성됩니다.</div>
+</div>
+
+<div class="card">
+<div class="card-header"><span class="card-title">마케팅 실행 일정</span></div>
 <table class="data-table">
-<thead><tr><th>상태</th><th>행사명</th><th>혜택 내용</th><th>기간</th><th>관리</th></tr></thead>
+<thead><tr><th>시작 일</th><th>종료 일</th><th>진행 기간</th><th>진행 채널</th><th>마케팅 구분</th><th>상세내용</th><th>D-day</th><th>슬랙 공유 내용</th><th>관리</th></tr></thead>
 <tbody id="promo-list"></tbody>
 </table>
 </div>
@@ -21,39 +55,222 @@
   import { collection, addDoc, onSnapshot, doc, deleteDoc }
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  requireAuth(() => {
-    window.savePromo = async () => {
-      const title = document.getElementById("promo-title").value;
-      const benefit = document.getElementById("promo-benefit").value;
-      const period = document.getElementById("promo-period").value;
-      if (!title) return;
-      await addDoc(collection(db, "promotions"), { title, benefit, period, status: "기획중" });
-      document.querySelectorAll(".input-field").forEach(i => i.id !== "search-input" && (i.value = ""));
-      showToast("행사가 등록되었습니다");
-    };
+  const targetCollectionName = "brand_schedules";
+  let promoItems = [];
 
-    window.deletePromo = async (id) => {
-      if (confirm("삭제하시겠습니까?")) await deleteDoc(doc(db, "promotions", id));
-    };
+  const safeText = (value = "") => String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 
-    onSnapshot(collection(db, "promotions"), (snap) => {
-      const list = document.getElementById("promo-list");
-      list.innerHTML = "";
-      snap.forEach(docSnap => {
-        const d = docSnap.data();
-        list.innerHTML += `<tr class="searchable-row">
-          <td><span class="badge">${d.status}</span></td>
-          <td><strong>${d.title}</strong></td>
-          <td style="color:var(--text-sub)">${d.benefit}</td>
-          <td style="color:var(--text-sub)">${d.period}</td>
-          <td><button class="btn" style="padding:6px 12px;font-size:12px;" onclick="deletePromo('${docSnap.id}')">종료</button></td>
-        </tr>`;
+  function toLocalDate(ymd) {
+    if (!ymd) return null;
+    const [y, m, d] = String(ymd).split("-").map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+
+  function todayLocalDate() {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+
+  function diffDays(a, b) {
+    return Math.round((toLocalDate(b) - toLocalDate(a)) / 86400000);
+  }
+
+  function formatDateFull(ymd) {
+    const d = toLocalDate(ymd);
+    if (!d) return "-";
+    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+  function formatDateShort(ymd) {
+    const d = toLocalDate(ymd);
+    if (!d) return "-";
+    return `${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+  function getDurationText(startDate, endDate) {
+    if (!startDate) return "-";
+    const end = endDate || startDate;
+    const days = Math.max(1, diffDays(startDate, end) + 1);
+    const weeks = Math.round((days / 7) * 10) / 10;
+    return `${days}일간 (${weeks.toFixed(1)}주)`;
+  }
+
+  function getDdayStatus(startDate, endDate) {
+    if (!startDate) return "-";
+    const start = toLocalDate(startDate);
+    const end = toLocalDate(endDate || startDate);
+    const today = todayLocalDate();
+    if (today > end) return "✅ 종료";
+    if (today < start) return `D-${Math.max(1, Math.round((start - today) / 86400000))}`;
+    if (+today === +start) return "🚀 D-day";
+    return "🔵 진행중";
+  }
+
+  function getScheduleStatus(startDate, endDate) {
+    const dday = getDdayStatus(startDate, endDate);
+    if (dday.includes("종료")) return "완료";
+    if (dday.includes("진행중") || dday.includes("D-day")) return "진행중";
+    return "예정";
+  }
+
+  function buildSlackShareText({ startDate, endDate, channel, marketingType, detail }) {
+    const safeEnd = endDate || startDate;
+    return [
+      "🚀 [버빗 마케팅 실행 알림]",
+      "━━━━━━━━━━━━━━",
+      `📅 일정: ${formatDateFull(startDate)} ~ ${formatDateShort(safeEnd)} [${getDurationText(startDate, safeEnd)}]`,
+      `▫️ 상태: ${getDdayStatus(startDate, safeEnd)}`,
+      `▫️ 채널: ${channel || "-"}`,
+      `▫️ 구분: ${marketingType || "-"}`,
+      `▫️ 상세: ${detail || "-"}`
+    ].join("\n");
+  }
+
+  function getFormData() {
+    const startDate = document.getElementById("promo-start").value;
+    const endDate = document.getElementById("promo-end").value || startDate;
+    const channel = document.getElementById("promo-channel").value;
+    const marketingType = document.getElementById("promo-type").value;
+    const detail = document.getElementById("promo-detail").value.trim();
+    return { startDate, endDate, channel, marketingType, detail };
+  }
+
+  window.previewPromoSlack = () => {
+    const data = getFormData();
+    if (!data.startDate || !data.detail) {
+      document.getElementById("promo-slack-preview").innerText = "시작일과 상세내용을 입력하면 슬랙 공유 문구가 자동 생성됩니다.";
+      return;
+    }
+    document.getElementById("promo-slack-preview").innerText = buildSlackShareText(data);
+  };
+
+  window.savePromo = async () => {
+    const data = getFormData();
+    if (!data.startDate || !data.detail) {
+      alert("시작일과 상세내용은 필수입니다.");
+      return;
+    }
+    if (toLocalDate(data.endDate) < toLocalDate(data.startDate)) {
+      alert("종료일은 시작일보다 빠를 수 없습니다.");
+      return;
+    }
+
+    const durationText = getDurationText(data.startDate, data.endDate);
+    const ddayStatus = getDdayStatus(data.startDate, data.endDate);
+    const status = getScheduleStatus(data.startDate, data.endDate);
+    const slackShareText = buildSlackShareText(data);
+
+    await addDoc(collection(db, targetCollectionName), {
+      source: "promotion",
+      title: data.detail,
+      desc: data.detail,
+      date: data.startDate,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      durationText,
+      channel: data.channel,
+      marketingType: data.marketingType,
+      status,
+      ddayStatus,
+      priority: "보통",
+      slackShareText,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+
+    ["promo-start", "promo-end", "promo-detail"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("promo-slack-preview").innerText = "시작일, 종료일, 채널, 구분, 상세내용을 입력하면 슬랙 공유 문구가 자동 생성됩니다.";
+    showToast("행사 일정이 등록되었습니다.");
+  };
+
+  window.copySlackText = async (id) => {
+    const item = promoItems.find(v => v.id === id);
+    if (!item) return;
+    const text = buildSlackShareText({
+      startDate: item.startDate || item.date,
+      endDate: item.endDate || item.date,
+      channel: item.channel,
+      marketingType: item.marketingType,
+      detail: item.desc || item.title
+    });
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+    }
+    showToast("슬랙 공유 문구를 복사했습니다.");
+  };
+
+  window.deletePromo = async (id) => {
+    if (confirm("삭제하시겠습니까? 캘린더와 일정 요약에서도 함께 삭제됩니다.")) {
+      await deleteDoc(doc(db, targetCollectionName, id));
+      showToast("삭제되었습니다.");
+    }
+  };
+
+  function renderPromoList(docs) {
+    const list = document.getElementById("promo-list");
+    list.innerHTML = "";
+
+    if (!docs.length) {
+      list.innerHTML = `<tr><td colspan="9" style="color:var(--text-sub);text-align:center;">등록된 마케팅 실행 일정이 없습니다.</td></tr>`;
+      return;
+    }
+
+    docs.forEach(item => {
+      const startDate = item.startDate || item.date;
+      const endDate = item.endDate || item.date;
+      const detail = item.desc || item.title || "-";
+      const slackText = buildSlackShareText({
+        startDate,
+        endDate,
+        channel: item.channel,
+        marketingType: item.marketingType,
+        detail
       });
+
+      list.innerHTML += `<tr class="searchable-row">
+        <td>${formatDateFull(startDate)}</td>
+        <td>${formatDateFull(endDate)}</td>
+        <td style="color:var(--text-sub)">${getDurationText(startDate, endDate)}</td>
+        <td><span style="font-weight:600;">${safeText(item.channel || "-")}</span></td>
+        <td>${safeText(item.marketingType || "-")}</td>
+        <td><strong>${safeText(detail)}</strong></td>
+        <td><span class="badge">${safeText(getDdayStatus(startDate, endDate))}</span></td>
+        <td class="copy-cell">
+          <div class="copy-preview">${safeText(slackText)}</div>
+          <button class="btn" style="padding:6px 12px;font-size:12px;" onclick="copySlackText('${item.id}')">복사</button>
+        </td>
+        <td><button class="btn" style="padding:6px 12px;font-size:12px;" onclick="deletePromo('${item.id}')">삭제</button></td>
+      </tr>`;
+    });
+  }
+
+  requireAuth(() => {
+    onSnapshot(collection(db, targetCollectionName), (snap) => {
+      promoItems = snap.docs
+        .map(docSnap => ({ id: docSnap.id, ...docSnap.data() }))
+        .filter(d => d.source === "promotion" || d.marketingType)
+        .sort((a, b) => new Date(a.startDate || a.date || 0) - new Date(b.startDate || b.date || 0));
+      renderPromoList(promoItems);
     });
   });
 
   window.searchTable = function () {
-    const kw = document.getElementById("search-input").value.toLowerCase();
+    const input = document.getElementById("search-input");
+    const kw = input ? input.value.toLowerCase() : "";
     document.querySelectorAll(".searchable-row, .searchable-item").forEach(el => {
       el.style.display = el.innerText.toLowerCase().includes(kw) ? "" : "none";
     });

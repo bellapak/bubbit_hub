@@ -4,14 +4,14 @@
 <div class="view-container">
 <div class="grid-3">
 <div class="card">진행 중 일정<div style="font-size:24px; font-weight:700;"><span id="dash-active-cnt">0건</span></div></div>
-<div class="card">높은 우선순위<div style="font-size:24px; font-weight:700;"><span id="dash-high-cnt">0건</span></div></div>
+<div class="card">예정 일정<div style="font-size:24px; font-weight:700;"><span id="dash-high-cnt">0건</span></div></div>
 <div class="card">연동 계정<div style="font-size:24px; font-weight:700;"><span id="dash-acc-cnt">0개</span></div></div>
 </div>
 <div class="grid-2">
 <div class="card">
 <h3>전체 일정 요약</h3>
 <table class="data-table">
-<thead><tr><th>정보</th><th>채널</th><th>우선순위</th></tr></thead>
+<thead><tr><th>정보</th><th>채널</th><th>구분</th><th>상태</th></tr></thead>
 <tbody id="dash-recent-list"></tbody>
 </table>
 </div>
@@ -27,7 +27,8 @@
 <div class="modal-box" style="width: 440px;">
 <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 등록</h3>
 <input class="input-field" id="task-title" placeholder="일정 제목" style="margin-bottom: 12px;"/>
-<input class="input-field" id="task-date" style="margin-bottom: 12px;" title="목표 기한" type="date"/>
+<input class="input-field" id="task-date" style="margin-bottom: 12px;" title="시작일" type="date"/>
+<input class="input-field" id="task-end-date" style="margin-bottom: 12px;" title="종료일" type="date"/>
 <input class="input-field" id="task-owner" placeholder="담당자 이름" style="margin-bottom: 12px;"/>
 <select class="input-field" id="task-status" style="margin-bottom: 12px;">
 <option value="예정">예정</option>
@@ -35,16 +36,24 @@
 <option value="완료">완료</option>
 <option value="보류">보류</option>
 </select>
-<select class="input-field" id="task-priority" style="margin-bottom: 12px;">
-<option value="보통">보통</option>
-<option value="높음">높음</option>
-<option value="낮음">낮음</option>
-</select>
 <select class="input-field" id="task-channel" style="margin-bottom: 12px;">
-<option value="Instagram">Instagram</option>
-<option value="Meta Ads">Meta Ads</option>
+<option value="인스타그램">인스타그램</option>
 <option value="자사몰">자사몰</option>
+<option value="CRM">CRM</option>
+<option value="광고">광고</option>
+<option value="네이버">네이버</option>
+<option value="카카오">카카오</option>
+<option value="타사몰">타사몰</option>
 <option value="내부행사">내부행사</option>
+</select>
+<select class="input-field" id="task-marketing-type" style="margin-bottom: 12px;">
+<option value="콘텐츠 운영">콘텐츠 운영</option>
+<option value="광고 집행">광고 집행</option>
+<option value="CRM 발송">CRM 발송</option>
+<option value="프로모션">프로모션</option>
+<option value="라이브/행사">라이브/행사</option>
+<option value="운영 공지">운영 공지</option>
+<option value="기타">기타</option>
 </select>
 <textarea class="input-field" id="task-desc" placeholder="상세 내용 요약" rows="4" style="margin-bottom: 24px; resize:vertical;"></textarea>
 <div style="display: flex; gap: 10px; justify-content: flex-end;">
@@ -56,7 +65,53 @@
   import { db, requireAuth } from "./firebase.js";
   import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // ✅ 인증 가드 — 통과해야만 아래 로직 실행
+  const safeText = (value = "") => String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+  function toLocalDate(ymd) {
+    if (!ymd) return null;
+    const [y, m, d] = String(ymd).split("-").map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+  function todayLocalDate() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+  function formatDateFull(ymd) { const d = toLocalDate(ymd); if (!d) return "-"; return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
+  function formatDateShort(ymd) { const d = toLocalDate(ymd); if (!d) return "-"; return `${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
+  function diffDays(a, b) { return Math.round((toLocalDate(b) - toLocalDate(a)) / 86400000); }
+  function getDurationText(startDate, endDate) { if (!startDate) return "-"; const end = endDate || startDate; const days = Math.max(1, diffDays(startDate, end) + 1); const weeks = Math.round((days / 7) * 10) / 10; return `${days}일간 (${weeks.toFixed(1)}주)`; }
+  function getDdayStatus(startDate, endDate) {
+    if (!startDate) return "-";
+    const start = toLocalDate(startDate), end = toLocalDate(endDate || startDate), today = todayLocalDate();
+    if (today > end) return "✅ 종료";
+    if (today < start) return `D-${Math.max(1, Math.round((start - today) / 86400000))}`;
+    if (+today === +start) return "🚀 D-day";
+    return "🔵 진행중";
+  }
+  function getScheduleStatus(item) {
+    if (item.status && !item.source) return item.status;
+    const dday = getDdayStatus(item.startDate || item.date, item.endDate || item.date);
+    if (dday.includes("종료")) return "완료";
+    if (dday.includes("진행중") || dday.includes("D-day")) return "진행중";
+    return "예정";
+  }
+  function buildSlackShareText(item) {
+    const startDate = item.startDate || item.date;
+    const endDate = item.endDate || item.date;
+    return [
+      "🚀 [버빗 마케팅 실행 알림]",
+      "━━━━━━━━━━━━━━",
+      `📅 일정: ${formatDateFull(startDate)} ~ ${formatDateShort(endDate)} [${getDurationText(startDate, endDate)}]`,
+      `▫️ 상태: ${getDdayStatus(startDate, endDate)}`,
+      `▫️ 채널: ${item.channel || "-"}`,
+      `▫️ 구분: ${item.marketingType || item.priority || "-"}`,
+      `▫️ 상세: ${item.desc || item.title || "-"}`
+    ].join("\n");
+  }
+
   requireAuth(() => {
     window.openTaskModal = () => document.getElementById("task-modal").style.display = "flex";
     window.closeTaskModal = () => document.getElementById("task-modal").style.display = "none";
@@ -64,52 +119,58 @@
     window.saveNewSchedule = async () => {
       const title = document.getElementById("task-title").value.trim();
       const date = document.getElementById("task-date").value;
+      const endDate = document.getElementById("task-end-date").value || date;
       const owner = document.getElementById("task-owner").value.trim();
       const status = document.getElementById("task-status").value;
-      const priority = document.getElementById("task-priority").value;
       const channel = document.getElementById("task-channel").value;
+      const marketingType = document.getElementById("task-marketing-type").value;
       const desc = document.getElementById("task-desc").value.trim();
-      if (!title || !date) { alert("제목과 날짜를 입력해주세요."); return; }
+      if (!title || !date) { alert("제목과 시작일을 입력해주세요."); return; }
+      if (toLocalDate(endDate) < toLocalDate(date)) { alert("종료일은 시작일보다 빠를 수 없습니다."); return; }
       try {
-        await addDoc(collection(db, "brand_schedules"), {
-          title, date, owner, status, priority, channel, desc, createdAt: new Date().toISOString()
-        });
+        const item = { title, date, startDate: date, endDate, owner, status, channel, marketingType, desc: desc || title, priority: "보통", source: "dashboard", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+        await addDoc(collection(db, "brand_schedules"), { ...item, durationText: getDurationText(date, endDate), ddayStatus: getDdayStatus(date, endDate), slackShareText: buildSlackShareText(item) });
         closeTaskModal();
         showToast("저장되었습니다.");
-        ["task-title","task-date","task-owner","task-desc"].forEach(id => document.getElementById(id).value = "");
+        ["task-title","task-date","task-end-date","task-owner","task-desc"].forEach(id => document.getElementById(id).value = "");
       } catch (e) { showToast("저장에 실패했습니다."); }
     };
 
     onSnapshot(collection(db, "brand_schedules"), (snap) => {
       const docs = snap.docs.map(d => d.data());
-
       const activeCnt = document.getElementById("dash-active-cnt");
       const highCnt = document.getElementById("dash-high-cnt");
       const tbody = document.getElementById("dash-recent-list");
 
-      if (activeCnt) activeCnt.innerText = docs.filter(d => d.status === "진행중").length + "건";
-      if (highCnt) highCnt.innerText = docs.filter(d => d.priority === "높음").length + "건";
+      if (activeCnt) activeCnt.innerText = docs.filter(d => getScheduleStatus(d) === "진행중").length + "건";
+      if (highCnt) highCnt.innerText = docs.filter(d => getScheduleStatus(d) === "예정").length + "건";
 
       if (!tbody) return;
       tbody.innerHTML = "";
 
-      docs
-        .sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0))
-        .slice(0, 5)
-        .forEach(d => {
-          let ps = "background:#F2F4F6;color:#8B95A1;";
-          if (d.priority === "높음") ps = "background:#FEECEF;color:#F04452;";
-          if (d.priority === "낮음") ps = "background:#F2F4F6;color:#B0B8C1;";
+      if (!docs.length) {
+        tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-sub);text-align:center;">등록된 일정이 없습니다.</td></tr>`;
+        return;
+      }
 
+      docs
+        .sort((a, b) => new Date(a.startDate || a.date || 0) - new Date(b.startDate || b.date || 0))
+        .slice(0, 7)
+        .forEach(d => {
+          const startDate = d.startDate || d.date;
+          const endDate = d.endDate || d.date;
+          const statusText = getDdayStatus(startDate, endDate);
+          const detail = d.desc || d.title || "-";
+          const type = d.marketingType || d.priority || "-";
           tbody.innerHTML += `<tr class="searchable-row">
-            <td><strong style="font-size:15px;">${d.title || "-"}</strong>
+            <td><strong style="font-size:15px;">${safeText(detail)}</strong>
               <div style="font-size:12px;color:var(--text-sub);margin-top:4px;font-weight:500;">
-                기한: ${d.date || "-"} | 담당: ${d.owner || "-"}
+                일정: ${formatDateFull(startDate)} ~ ${formatDateShort(endDate)} | ${getDurationText(startDate, endDate)}
               </div>
             </td>
-            <td><span style="font-weight:600;">${d.channel || "-"}</span></td>
-            <td><span class="badge" style="${ps}">${d.priority || "보통"}</span></td>
-            <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${d.status || "예정"}</span></td>
+            <td><span style="font-weight:600;">${safeText(d.channel || "-")}</span></td>
+            <td>${safeText(type)}</td>
+            <td><span class="badge" style="background:#E8F3FF;color:#3182F6;">${safeText(statusText)}</span></td>
           </tr>`;
         });
     });
@@ -125,15 +186,16 @@
       snap.docs.slice(0, 5).forEach(doc => {
         const d = doc.data();
         tbody.innerHTML += `<tr class="searchable-row">
-          <td><strong>${d.service || "-"}</strong></td>
-          <td style="color:var(--text-sub)">${d.id || "-"}</td>
+          <td><strong>${safeText(d.service || "-")}</strong></td>
+          <td style="color:var(--text-sub)">${safeText(d.id || "-")}</td>
         </tr>`;
       });
     });
   });
 
   window.searchTable = function () {
-    const kw = document.getElementById("search-input").value.toLowerCase();
+    const input = document.getElementById("search-input");
+    const kw = input ? input.value.toLowerCase() : "";
     document.querySelectorAll(".searchable-row, .searchable-item").forEach(el => {
       el.style.display = el.innerText.toLowerCase().includes(kw) ? "" : "none";
     });

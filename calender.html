@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>일정 및 캘린더 - 버빗 허브</title><link href="style.css" rel="stylesheet"/><style>
-  /* 캘린더 내 상세 속성 입력창 스타일 */
   .prop-grid { display: grid; grid-template-columns: 100px 1fr; gap: 12px; margin-bottom: 20px; align-items: center; }
   .prop-label { color: var(--text-sub); font-weight: 600; font-size: 14px; }
   .day-header { display: flex; justify-content: space-between; align-items: center; }
   .add-inline-btn { opacity: 0; font-size: 12px; color: var(--blue); cursor: pointer; transition: 0.1s; }
   .calendar-day:hover .add-inline-btn { opacity: 1; }
+  .readonly-box{white-space:pre-wrap;line-height:1.6;font-size:12px;color:var(--text-main);background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;}
 </style></head><body><div id="app"><main class="main-content" data-page="calendar">
 
 <div class="view-container">
@@ -19,54 +19,59 @@
 </div>
 </div>
 </main></div><div class="modal-overlay" id="create-modal">
-<div class="modal-box" style="width: 460px;">
+<div class="modal-box" style="width: 500px;">
 <h3 style="margin-bottom: 24px; font-size: 18px; font-weight: 700;">새 일정 항목 추가</h3>
 <div class="prop-grid">
-<div class="prop-label">제목</div>
-<input class="input-field" id="new-title" placeholder="일정 제목 입력"/>
-<div class="prop-label">날짜</div>
+<div class="prop-label">상세내용</div>
+<input class="input-field" id="new-title" placeholder="예: 버빗 인스타그램 컨텐츠 3월 1주차 업로드"/>
+<div class="prop-label">시작일</div>
 <input class="input-field" id="new-date" type="date"/>
-<div class="prop-label">담당자</div>
-<input class="input-field" id="new-owner" placeholder="이름 입력"/>
-<div class="prop-label">상태</div>
-<select class="input-field" id="new-status">
-<option value="예정">예정</option>
-<option value="진행중">진행중</option>
-<option value="완료">완료</option>
-<option value="보류">보류</option>
-</select>
-<div class="prop-label">우선순위</div>
-<select class="input-field" id="new-priority">
-<option value="보통">보통</option>
-<option value="높음">높음</option>
-<option value="낮음">낮음</option>
-</select>
+<div class="prop-label">종료일</div>
+<input class="input-field" id="new-end-date" type="date"/>
 <div class="prop-label">채널</div>
 <select class="input-field" id="new-channel">
-<option value="Instagram">Instagram</option>
-<option value="Meta Ads">Meta Ads</option>
+<option value="인스타그램">인스타그램</option>
 <option value="자사몰">자사몰</option>
+<option value="CRM">CRM</option>
+<option value="광고">광고</option>
+<option value="네이버">네이버</option>
+<option value="카카오">카카오</option>
+<option value="타사몰">타사몰</option>
 <option value="내부행사">내부행사</option>
 </select>
+<div class="prop-label">구분</div>
+<select class="input-field" id="new-marketing-type">
+<option value="콘텐츠 운영">콘텐츠 운영</option>
+<option value="광고 집행">광고 집행</option>
+<option value="CRM 발송">CRM 발송</option>
+<option value="프로모션">프로모션</option>
+<option value="라이브/행사">라이브/행사</option>
+<option value="운영 공지">운영 공지</option>
+<option value="기타">기타</option>
+</select>
+<div class="prop-label">담당자</div>
+<input class="input-field" id="new-owner" placeholder="이름 입력"/>
 </div>
-<textarea class="input-field" id="new-desc" placeholder="세부 내용 기술" rows="4" style="margin-bottom: 24px; resize: vertical;"></textarea>
+<textarea class="input-field" id="new-desc" placeholder="메모가 있으면 입력" rows="3" style="margin-bottom: 24px; resize: vertical;"></textarea>
 <div style="display: flex; gap: 10px; justify-content: flex-end;">
 <button class="btn" onclick="closeModal('create-modal')">취소</button>
 <button class="btn btn-primary" onclick="saveNewSchedule()">생성</button>
 </div>
 </div>
 </div><div class="modal-overlay" id="detail-modal">
-<div class="modal-box" style="width: 460px;">
+<div class="modal-box" style="width: 520px;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
 <h3 style="font-size: 18px; font-weight: 700; margin: 0;">일정 상세</h3>
 <button class="btn btn-danger" id="delete-btn" type="button" style="padding: 6px 12px; font-size: 12px;">삭제</button>
 </div>
 <input id="detail-id" type="hidden"/>
 <div class="prop-grid">
-<div class="prop-label">제목</div>
+<div class="prop-label">상세내용</div>
 <input class="input-field" id="detail-title"/>
-<div class="prop-label">날짜</div>
+<div class="prop-label">시작일</div>
 <input class="input-field" id="detail-date" type="date"/>
+<div class="prop-label">종료일</div>
+<input class="input-field" id="detail-end-date" type="date"/>
 <div class="prop-label">담당자</div>
 <input class="input-field" id="detail-owner"/>
 <div class="prop-label">상태</div>
@@ -76,22 +81,26 @@
 <option value="완료">완료</option>
 <option value="보류">보류</option>
 </select>
-<div class="prop-label">우선순위</div>
-<select class="input-field" id="detail-priority">
-<option value="보통">보통</option>
-<option value="높음">높음</option>
-<option value="낮음">낮음</option>
-</select>
 <div class="prop-label">채널</div>
 <select class="input-field" id="detail-channel">
+<option value="인스타그램">인스타그램</option>
 <option value="Instagram">Instagram</option>
 <option value="Meta Ads">Meta Ads</option>
 <option value="자사몰">자사몰</option>
+<option value="CRM">CRM</option>
+<option value="광고">광고</option>
+<option value="네이버">네이버</option>
+<option value="카카오">카카오</option>
+<option value="타사몰">타사몰</option>
 <option value="내부행사">내부행사</option>
 </select>
+<div class="prop-label">구분</div>
+<input class="input-field" id="detail-marketing-type" placeholder="예: 콘텐츠 운영"/>
 </div>
-<textarea class="input-field" id="detail-desc" rows="4" style="margin-bottom: 24px; resize: vertical;"></textarea>
+<textarea class="input-field" id="detail-desc" rows="3" style="margin-bottom: 12px; resize: vertical;"></textarea>
+<div class="readonly-box" id="detail-slack-text" style="margin-bottom:12px;"></div>
 <div style="display: flex; gap: 10px; justify-content: flex-end;">
+<button class="btn" onclick="copyDetailSlackText()">슬랙 문구 복사</button>
 <button class="btn" onclick="closeModal('detail-modal')">닫기</button>
 <button class="btn btn-primary" onclick="updateSchedule()">수정 저장</button>
 </div>
@@ -112,7 +121,6 @@
   let currentDate = new Date();
   let allSchedules = [];
   let currentSearchKeyword = "";
-  const koreanHolidays = { "2026-05-01": "노동절", "2026-05-05": "어린이날", "2026-05-24": "부처님오신날", "2026-06-03": "지방선거일", "2026-06-06": "현충일" };
 
   const safeText = (value = "") => String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -121,16 +129,97 @@
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 
+  function toLocalDate(ymd) {
+    if (!ymd) return null;
+    const [y, m, d] = String(ymd).split("-").map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  }
+  function todayLocalDate() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+  function diffDays(a, b) { return Math.round((toLocalDate(b) - toLocalDate(a)) / 86400000); }
+  function formatDateFull(ymd) { const d = toLocalDate(ymd); if (!d) return "-"; return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
+  function formatDateShort(ymd) { const d = toLocalDate(ymd); if (!d) return "-"; return `${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`; }
+  function getDurationText(startDate, endDate) { if (!startDate) return "-"; const end = endDate || startDate; const days = Math.max(1, diffDays(startDate, end) + 1); const weeks = Math.round((days / 7) * 10) / 10; return `${days}일간 (${weeks.toFixed(1)}주)`; }
+  function getDdayStatus(startDate, endDate) {
+    if (!startDate) return "-";
+    const start = toLocalDate(startDate), end = toLocalDate(endDate || startDate), today = todayLocalDate();
+    if (today > end) return "✅ 종료";
+    if (today < start) return `D-${Math.max(1, Math.round((start - today) / 86400000))}`;
+    if (+today === +start) return "🚀 D-day";
+    return "🔵 진행중";
+  }
+  function getScheduleStatus(startDate, endDate) {
+    const dday = getDdayStatus(startDate, endDate);
+    if (dday.includes("종료")) return "완료";
+    if (dday.includes("진행중") || dday.includes("D-day")) return "진행중";
+    return "예정";
+  }
+  function buildSlackShareText(item) {
+    const startDate = item.startDate || item.date;
+    const endDate = item.endDate || item.date;
+    return [
+      "🚀 [버빗 마케팅 실행 알림]",
+      "━━━━━━━━━━━━━━",
+      `📅 일정: ${formatDateFull(startDate)} ~ ${formatDateShort(endDate)} [${getDurationText(startDate, endDate)}]`,
+      `▫️ 상태: ${getDdayStatus(startDate, endDate)}`,
+      `▫️ 채널: ${item.channel || "-"}`,
+      `▫️ 구분: ${item.marketingType || item.priority || "-"}`,
+      `▫️ 상세: ${item.desc || item.title || "-"}`
+    ].join("\n");
+  }
+  function isDateInRange(dateStr, startDate, endDate) {
+    const day = toLocalDate(dateStr), start = toLocalDate(startDate), end = toLocalDate(endDate || startDate);
+    return day >= start && day <= end;
+  }
+  function getEventClass(channel = "") {
+    const c = String(channel).toLowerCase();
+    if (c.includes("insta") || c.includes("인스타")) return "insta";
+    if (c.includes("meta") || c.includes("광고")) return "meta";
+    return "mall";
+  }
+  function normalizeScheduleInput({ title, date, endDate, owner, channel, marketingType, desc, source = "calendar" }) {
+    const detail = desc || title;
+    const item = { title, date, startDate: date, endDate: endDate || date, owner, channel, marketingType, desc: detail, source };
+    return {
+      ...item,
+      status: getScheduleStatus(item.startDate, item.endDate),
+      priority: "보통",
+      durationText: getDurationText(item.startDate, item.endDate),
+      ddayStatus: getDdayStatus(item.startDate, item.endDate),
+      slackShareText: buildSlackShareText(item),
+      updatedAt: new Date().toISOString()
+    };
+  }
 
-  window.openCreateModal = (defaultDate = "") => { document.getElementById('create-modal').style.display = 'flex'; if(defaultDate) document.getElementById('new-date').value = defaultDate; };
+  window.openCreateModal = (defaultDate = "") => {
+    document.getElementById('create-modal').style.display = 'flex';
+    if(defaultDate) {
+      document.getElementById('new-date').value = defaultDate;
+      document.getElementById('new-end-date').value = defaultDate;
+    }
+  };
   window.closeModal = (id) => document.getElementById(id).style.display = 'none';
 
   window.saveNewSchedule = async () => {
     const title = document.getElementById('new-title').value.trim();
     const date = document.getElementById('new-date').value;
-    if(!title || !date) return alert("제목과 날짜는 필수입니다.");
-    await addDoc(targetCollection, { title, date, owner: document.getElementById('new-owner').value, status: document.getElementById('new-status').value, priority: document.getElementById('new-priority').value, channel: document.getElementById('new-channel').value, desc: document.getElementById('new-desc').value, createdAt: new Date().toISOString() });
-    closeModal('create-modal'); showToast("등록 완료");
+    const endDate = document.getElementById('new-end-date').value || date;
+    if(!title || !date) return alert("상세내용과 시작일은 필수입니다.");
+    if (toLocalDate(endDate) < toLocalDate(date)) return alert("종료일은 시작일보다 빠를 수 없습니다.");
+    const data = normalizeScheduleInput({
+      title,
+      date,
+      endDate,
+      owner: document.getElementById('new-owner').value,
+      channel: document.getElementById('new-channel').value,
+      marketingType: document.getElementById('new-marketing-type').value,
+      desc: document.getElementById('new-desc').value || title,
+      source: "calendar"
+    });
+    await addDoc(targetCollection, { ...data, createdAt: new Date().toISOString() });
+    closeModal('create-modal');
+    showToast("등록 완료");
+    ["new-title", "new-date", "new-end-date", "new-owner", "new-desc"].forEach(id => document.getElementById(id).value = "");
   };
 
   window.openDetailModal = (id) => {
@@ -141,13 +230,15 @@
     }
 
     document.getElementById('detail-id').value = item.id;
-    document.getElementById('detail-title').value = item.title || "";
-    document.getElementById('detail-date').value = item.date || "";
+    document.getElementById('detail-title').value = item.title || item.desc || "";
+    document.getElementById('detail-date').value = item.startDate || item.date || "";
+    document.getElementById('detail-end-date').value = item.endDate || item.date || "";
     document.getElementById('detail-owner').value = item.owner || "";
-    document.getElementById('detail-status').value = item.status || "예정";
-    document.getElementById('detail-priority').value = item.priority || "보통";
-    document.getElementById('detail-channel').value = item.channel || "Instagram";
-    document.getElementById('detail-desc').value = item.desc || "";
+    document.getElementById('detail-status').value = item.status || getScheduleStatus(item.startDate || item.date, item.endDate || item.date);
+    document.getElementById('detail-channel').value = item.channel || "인스타그램";
+    document.getElementById('detail-marketing-type').value = item.marketingType || item.priority || "";
+    document.getElementById('detail-desc').value = item.desc || item.title || "";
+    document.getElementById('detail-slack-text').innerText = buildSlackShareText(item);
 
     const deleteBtn = document.getElementById('delete-btn');
     if (deleteBtn) {
@@ -161,8 +252,42 @@
 
   window.updateSchedule = async () => {
     const id = document.getElementById('detail-id').value;
-    await updateDoc(doc(db, "brand_schedules", id), { title: document.getElementById('detail-title').value, date: document.getElementById('detail-date').value, owner: document.getElementById('detail-owner').value, status: document.getElementById('detail-status').value, priority: document.getElementById('detail-priority').value, channel: document.getElementById('detail-channel').value, desc: document.getElementById('detail-desc').value });
-    closeModal('detail-modal'); showToast("수정 완료");
+    const title = document.getElementById('detail-title').value.trim();
+    const date = document.getElementById('detail-date').value;
+    const endDate = document.getElementById('detail-end-date').value || date;
+    if(!title || !date) return alert("상세내용과 시작일은 필수입니다.");
+    if (toLocalDate(endDate) < toLocalDate(date)) return alert("종료일은 시작일보다 빠를 수 없습니다.");
+    const data = normalizeScheduleInput({
+      title,
+      date,
+      endDate,
+      owner: document.getElementById('detail-owner').value,
+      channel: document.getElementById('detail-channel').value,
+      marketingType: document.getElementById('detail-marketing-type').value,
+      desc: document.getElementById('detail-desc').value || title,
+      source: "calendar"
+    });
+    data.status = document.getElementById('detail-status').value || data.status;
+    await updateDoc(doc(db, "brand_schedules", id), data);
+    document.getElementById('detail-slack-text').innerText = buildSlackShareText(data);
+    closeModal('detail-modal');
+    showToast("수정 완료");
+  };
+
+  window.copyDetailSlackText = async () => {
+    const text = document.getElementById('detail-slack-text').innerText;
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+    }
+    showToast("슬랙 공유 문구를 복사했습니다.");
   };
 
   window.deleteSchedule = async (id) => {
@@ -209,25 +334,29 @@
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const sysDate = new Date();
+    const todayStr = `${sysDate.getFullYear()}-${String(sysDate.getMonth()+1).padStart(2,'0')}-${String(sysDate.getDate()).padStart(2,'0')}`;
 
     for(let i=0; i<firstDay; i++) grid.innerHTML += `<div class="calendar-day empty"></div>`;
 
     for(let day=1; day<=daysInMonth; day++) {
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
       const dayTasks = allSchedules.filter(t => {
-        const title = String(t.title || "").toLowerCase();
-        return t.date === dateStr && (currentSearchKeyword ? title.includes(currentSearchKeyword) : true);
+        const start = t.startDate || t.date;
+        const end = t.endDate || t.date;
+        const searchable = `${t.title || ""} ${t.desc || ""} ${t.channel || ""} ${t.marketingType || ""}`.toLowerCase();
+        return start && isDateInRange(dateStr, start, end) && (currentSearchKeyword ? searchable.includes(currentSearchKeyword) : true);
       });
       let taskHtml = '';
       dayTasks.slice(0, 3).forEach(t => {
-        const eventClass = t.channel === 'Instagram' ? 'insta' : t.channel === 'Meta Ads' ? 'meta' : 'mall';
-        taskHtml += `<div class="cal-event ${eventClass}" role="button" tabindex="0" onclick="event.stopPropagation(); openDetailModal('${t.id}')">${safeText(t.title || '제목 없음')}</div>`;
+        const eventClass = getEventClass(t.channel);
+        const label = t.marketingType ? `${t.marketingType} · ${t.title || t.desc || '제목 없음'}` : (t.title || t.desc || '제목 없음');
+        taskHtml += `<div class="cal-event ${eventClass}" role="button" tabindex="0" title="${safeText(label)}" onclick="event.stopPropagation(); openDetailModal('${t.id}')">${safeText(label)}</div>`;
       });
       
       grid.innerHTML += `
         <div class="calendar-day" onclick="openCreateModal('${dateStr}')">
           <div class="day-header">
-            <div class="day-num ${dateStr === sysDate.toISOString().split('T')[0] ? 'today' : ''}">${day}</div>
+            <div class="day-num ${dateStr === todayStr ? 'today' : ''}">${day}</div>
             <span class="day-count">${dayTasks.length > 0 ? dayTasks.length : ''}</span>
           </div>
           ${taskHtml}${dayTasks.length > 3 ? '<div class="cal-event-more">...</div>' : ''}
@@ -236,7 +365,7 @@
   }
 
   window.changeMonth = (dir) => { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); };
-  window.searchCalendar = () => { currentSearchKeyword = document.getElementById('search-input').value.toLowerCase().trim(); renderCalendar(); };
+  window.searchCalendar = () => { const input = document.getElementById('search-input'); currentSearchKeyword = input ? input.value.toLowerCase().trim() : ""; renderCalendar(); };
   window.showToast = (msg) => { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); };
 
   onSnapshot(targetCollection, (snap) => { allSchedules = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderCalendar(); });
